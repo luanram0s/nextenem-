@@ -15,7 +15,7 @@ export default function App() {
   });
   
   const [hasGoal, setHasGoal] = useState(() => {
-    return !!localStorage.getItem('next_enem_goal');
+    return !!localStorage.getItem('next_enem_meta');
   });
 
   const [activeTab, setActiveTab] = useState(() => {
@@ -37,9 +37,9 @@ export default function App() {
     localStorage.setItem('next_enem_auth', 'false');
   };
 
-  const handleSetGoal = (goal: { course: string; university: string }) => {
-    localStorage.setItem('next_enem_goal', JSON.stringify(goal));
-    localStorage.setItem('next_enem_course', `${goal.course} - ${goal.university.split(' ')[0]}`);
+  const handleSetGoal = (goal: { course: string; institution: string }) => {
+    localStorage.setItem('next_enem_meta', JSON.stringify(goal));
+    localStorage.setItem('next_enem_course', `${goal.course} - ${goal.institution}`);
     setHasGoal(true);
     // Force storage event to update other components if needed
     window.dispatchEvent(new Event('storage'));

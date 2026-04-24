@@ -29,10 +29,10 @@ const item = {
 
 export default function Dashboard() {
   const [course, setCourse] = useState(() => {
-    const saved = localStorage.getItem('next_enem_goal');
+    const saved = localStorage.getItem('next_enem_meta');
     if (saved) {
       const data = JSON.parse(saved);
-      return `${data.course} - ${data.university.split(' ')[0]}`;
+      return `${data.course} - ${data.institution}`;
     }
     return 'Medicina - USP';
   });
@@ -51,10 +51,10 @@ export default function Dashboard() {
     setQuote(randomQuote);
 
     const handleStorage = () => {
-      const saved = localStorage.getItem('next_enem_goal');
+      const saved = localStorage.getItem('next_enem_meta');
       if (saved) {
         const data = JSON.parse(saved);
-        setCourse(`${data.course} - ${data.university.split(' ')[0]}`);
+        setCourse(`${data.course} - ${data.institution}`);
       }
     };
 

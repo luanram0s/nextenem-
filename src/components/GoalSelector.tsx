@@ -1,151 +1,106 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { GraduationCap, School, Check } from 'lucide-react';
-import { cn } from '@/src/lib/utils';
-
-interface Course {
-  name: string;
-  id: string;
-}
-
-const COURSES: Course[] = [
-  { name: 'Medicina', id: 'med' },
-  { name: 'Direito', id: 'dir' },
-  { name: 'Engenharia de Computação', id: 'eng' },
-  { name: 'Psicologia', id: 'psi' },
-  { name: 'Administração', id: 'adm' },
-  { name: 'Arquitetura', id: 'arq' },
-  { name: 'Odontologia', id: 'odo' },
-  { name: 'Enfermagem', id: 'enf' },
-];
-
-const UNIVERSITIES = [
-  'USP - São Paulo',
-  'UFMG - Belo Horizonte',
-  'UFRJ - Rio de Janeiro',
-  'UNICAMP - Campinas',
-  'UNESP - Bauru',
-  'UFRGS - Porto Alegre',
-  'UFSC - Florianópolis'
-];
+import { motion, AnimatePresence } from 'motion/react';
+import { Search, Building2, CheckCircle2, X } from 'lucide-react';
 
 interface GoalSelectorProps {
-  onConfirm: (goal: { course: string; university: string }) => void;
+  onConfirm: (goal: { course: string; institution: string }) => void;
 }
 
-export default function GoalSelector({ onConfirm }: GoalSelectorProps) {
-  const [selectedCourse, setSelectedCourse] = useState<string>('');
-  const [selectedUni, setSelectedUni] = useState<string>('');
+const courses = ["Medicina", "Direito", "Engenharia", "Psicologia", "Administração", "Enfermagem", "Veterinária", "Arquitetura"];
+const institutions = ["USP", "UNICAMP", "UFRJ", "UFMG", "UFBA", "UNB", "UFSC"];
 
-  const handleConfirm = () => {
-    if (selectedCourse && selectedUni) {
-      onConfirm({ course: selectedCourse, university: selectedUni });
-    }
-  };
+const GoalSelector: React.FC<GoalSelectorProps> = ({ onConfirm }) => {
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [search, setSearch] = useState("");
+  const [selectedInst, setSelectedInst] = useState("");
+
+  const filtered = institutions.filter(i => i.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className="fixed inset-0 bg-white z-[500] flex flex-col font-sans overflow-y-auto">
-      {/* Header */}
-      <header className="py-12 flex flex-col items-center">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-3 mb-4"
-        >
-          <div className="w-12 h-12 bg-next-blue rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <span className="text-white font-black text-2xl">N</span>
-          </div>
-          <span className="text-2xl font-black text-slate-900 tracking-tighter">NEXT ENEM</span>
-        </motion.div>
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Defina sua Meta</h1>
-        <p className="text-slate-500 font-medium mt-2">Personalize sua experiência de estudoadaptativo.</p>
-      </header>
+    <div className="fixed inset-0 z-[999] bg-white flex flex-col items-center justify-center p-6 overflow-y-auto">
+      <div className="w-full max-w-xl space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-black text-[#007BFF]">NEXT ENEM</h1>
+          <p className="text-slate-500 font-medium">Defina sua meta para começar.</p>
+        </div>
 
-      <main className="flex-1 max-w-4xl mx-auto w-full px-6 pb-24 space-y-16">
-        {/* Course Section */}
-        <section className="space-y-8">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-500">
-              <GraduationCap size={18} />
-            </div>
-            <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">1. Qual o seu curso alvo?</h2>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {COURSES.map((course) => (
-              <motion.button
-                key={course.id}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedCourse(course.name)}
-                className={cn(
-                  "p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 text-center",
-                  selectedCourse === course.name
-                    ? "border-next-blue bg-blue-50/50 shadow-xl shadow-blue-500/10 text-next-blue"
-                    : "border-slate-100 bg-white text-slate-600 hover:border-slate-200"
-                )}
+        {/* 1. CURSO */}
+        <div className="space-y-4">
+          <h2 className="font-bold text-slate-800 flex items-center gap-2">1. Qual seu curso?</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {courses.map(c => (
+              <button 
+                key={c} 
+                onClick={() => setSelectedCourse(c)} 
+                className={`p-3 rounded-xl border-2 transition-all font-bold text-xs uppercase tracking-tight ${selectedCourse === c ? "border-[#007BFF] bg-blue-50 text-[#007BFF] shadow-sm" : "border-slate-100 text-slate-600 hover:border-slate-200"}`}
               >
-                <div className={cn(
-                  "w-12 h-12 rounded-2xl flex items-center justify-center mb-1",
-                  selectedCourse === course.name ? "bg-next-blue text-white" : "bg-slate-50 text-slate-400"
-                )}>
-                  <GraduationCap size={24} />
-                </div>
-                <span className="text-sm font-black uppercase tracking-tight leading-tight">{course.name}</span>
-                {selectedCourse === course.name && (
-                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute top-3 right-3 bg-next-blue text-white rounded-full p-1">
-                    <Check size={12} />
-                  </motion.div>
-                )}
-              </motion.button>
-            ))}
-          </div>
-        </section>
-
-        {/* University Section */}
-        <section className="space-y-8">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-500">
-              <School size={18} />
-            </div>
-            <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">2. Onde você quer estudar?</h2>
-          </div>
-          
-          <div className="space-y-3">
-            {UNIVERSITIES.map((uni) => (
-              <button
-                key={uni}
-                onClick={() => setSelectedUni(uni)}
-                className={cn(
-                  "w-full p-6 rounded-2xl border-2 text-left transition-all flex items-center justify-between",
-                  selectedUni === uni
-                    ? "border-next-blue bg-blue-50/50 text-next-blue"
-                    : "border-slate-100 bg-white text-slate-600 hover:border-slate-200"
-                )}
-              >
-                <span className="font-bold text-sm">{uni}</span>
-                {selectedUni === uni && <Check size={20} />}
+                {c}
               </button>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* Confirm Button */}
-        <div className="flex justify-center pt-8">
-          <button
-            onClick={handleConfirm}
-            disabled={!selectedCourse || !selectedUni}
-            className={cn(
-              "h-16 px-16 rounded-full font-black uppercase tracking-widest text-sm transition-all shadow-2xl active:scale-95",
-              selectedCourse && selectedUni
-                ? "bg-next-blue text-white hover:bg-blue-600 shadow-blue-500/30"
-                : "bg-slate-200 text-slate-400 cursor-not-allowed"
-            )}
+        {/* 2. INSTITUIÇÃO COM BADGE */}
+        <div className="space-y-4">
+          <h2 className="font-bold text-slate-800">2. Onde quer estudar?</h2>
+          
+          <div className="min-h-[40px]">
+            <AnimatePresence>
+              {selectedInst && (
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0 }} 
+                  animate={{ scale: 1, opacity: 1 }} 
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  className="flex items-center gap-2 bg-[#007BFF] text-white px-4 py-2 rounded-full w-fit shadow-lg shadow-blue-500/20 mb-4"
+                >
+                  <Building2 size={16} /> <span className="font-bold text-sm">{selectedInst}</span>
+                  <X size={14} className="cursor-pointer hover:scale-125 transition-transform" onClick={() => setSelectedInst("")} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <input 
+              type="text" 
+              placeholder="Busque sua faculdade..." 
+              value={search} 
+              onChange={(e) => setSearch(e.target.value)} 
+              className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#007BFF] focus:bg-white outline-none transition-all font-medium text-slate-800" 
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {filtered.slice(0, 4).map(i => (
+              <button 
+                key={i} 
+                onClick={() => setSelectedInst(i)} 
+                className={`px-4 py-2 text-xs font-bold border-2 rounded-full transition-all ${selectedInst === i ? "bg-blue-50 border-[#007BFF] text-[#007BFF]" : "bg-white border-slate-100 text-slate-500 hover:border-slate-200"}`}
+              >
+                {i}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-6">
+          <button 
+            disabled={!selectedCourse || !selectedInst}
+            onClick={() => {
+              const goal = { course: selectedCourse, institution: selectedInst };
+              // We'll use 'next_enem_meta' as requested by the provided code
+              localStorage.setItem('next_enem_meta', JSON.stringify(goal));
+              onConfirm(goal);
+            }}
+            className={`w-full py-5 rounded-2xl font-black text-white transition-all uppercase tracking-widest text-xs ${selectedCourse && selectedInst ? "bg-[#007BFF] shadow-2xl shadow-blue-500/30 hover:scale-[1.02] active:scale-95" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
           >
-            Confirmar Meta
+            CONFIRMAR META
           </button>
         </div>
-      </main>
+      </div>
     </div>
   );
-}
+};
+
+export default GoalSelector;
