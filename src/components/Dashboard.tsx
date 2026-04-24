@@ -27,6 +27,7 @@ import StudyRoom from './StudyRoom';
 import Profile from './Profile';
 import SupportChat from './SupportChat';
 import MasterPanel from './MasterPanel';
+import RedacaoLab from './RedacaoLab';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -219,6 +220,8 @@ const Dashboard = () => {
         );
       case 'estudo':
         return <StudyRoom />;
+      case 'redacao':
+        return <RedacaoLab />;
       case 'perfil':
         return <Profile />;
       case 'suporte':
