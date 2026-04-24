@@ -114,10 +114,13 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen, on
           </div>
 
           <button 
-            onClick={onLogout}
-            className="mt-4 w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-semibold text-slate-400 hover:bg-red-50 hover:text-red-500"
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+            }}
+            className="flex items-center gap-2 p-3 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all font-bold w-full mt-4"
           >
-            <LogOut size={18} />
+            <LogOut size={20} />
             <span>Sair da Conta</span>
           </button>
         </div>
