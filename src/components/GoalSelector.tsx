@@ -43,6 +43,10 @@ export default function GoalSelector() {
       const data = JSON.parse(saved);
       setSelectedCourse(data.course);
       setSelectedUni(data.university);
+    } else {
+      // Auto-open if no meta exists
+      const timer = setTimeout(() => setIsOpen(true), 1000);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -101,7 +105,7 @@ export default function GoalSelector() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
             />
             
             <motion.div 
@@ -207,10 +211,10 @@ export default function GoalSelector() {
                     onClick={handleSave}
                     disabled={!selectedCourse || !selectedUni}
                     className={cn(
-                      "h-14 px-10 rounded-2xl font-black uppercase tracking-widest transition-all overflow-hidden relative",
+                      "h-14 px-10 rounded-2xl font-black uppercase tracking-widest transition-all overflow-hidden relative shadow-lg active:scale-95",
                       isSaved 
                         ? "bg-emerald-500 text-white w-full" 
-                        : "bg-slate-900 text-white hover:bg-next-blue disabled:bg-slate-200"
+                        : "bg-next-blue text-white hover:bg-blue-600 disabled:bg-slate-200 disabled:shadow-none shadow-blue-500/20"
                     )}
                   >
                     {isSaved ? (

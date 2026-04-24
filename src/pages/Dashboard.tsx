@@ -58,31 +58,31 @@ export default function Dashboard() {
   }, [course]);
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 bg-transparent max-w-[1400px] mx-auto">
-      {/* Bloco 1: Boas-vindas e Motivação */}
-      <header className="relative py-12 px-10 bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200">
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="space-y-4">
+    <div className="space-y-10 animate-in fade-in duration-700 bg-transparent max-w-[1400px] mx-auto pb-20">
+      {/* Bloco 1: Boas-vindas e Motivação - Sticky Header */}
+      <header className="sticky top-4 z-30 py-8 px-10 bg-slate-900/95 backdrop-blur-md rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200/50 border border-white/5 transition-all">
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-next-blue">Dashboard Oficial</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-next-blue">Plataforma Oficial</span>
               <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter">
+            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
               Bons estudos, <span className="text-next-blue">Luan</span>.
             </h1>
-            <p className="text-slate-400 font-medium italic opacity-80">
+            <p className="text-slate-400 text-xs font-medium italic opacity-70">
               "{quote}"
             </p>
           </div>
-          <div className="flex flex-col items-end gap-2 text-right">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Sua Meta Principal</span>
-            <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl">
-              <span className="text-lg font-black text-white">{course}</span>
+          <div className="flex flex-col items-end gap-1 text-right">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Meta de Aprovação</span>
+            <div className="px-5 py-2 bg-white/5 border border-white/10 rounded-xl">
+              <span className="text-sm font-black text-white uppercase tracking-tight">{course}</span>
             </div>
           </div>
         </div>
         
-        <div className="absolute top-[-20%] right-[-10%] w-96 h-96 bg-next-blue/10 rounded-full blur-3xl" />
+        <div className="absolute top-[-50%] right-[-10%] w-64 h-64 bg-next-blue/10 rounded-full blur-[80px]" />
       </header>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
