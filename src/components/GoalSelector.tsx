@@ -64,9 +64,15 @@ const GoalSelector: React.FC<GoalSelectorProps> = ({ onConfirm }) => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
               type="text" 
-              placeholder="Busque sua faculdade..." 
+              placeholder="Digite e pressione Enter..." 
               value={search} 
-              onChange={(e) => setSearch(e.target.value)} 
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && search.length > 2) {
+                  setSelectedInst(search); // Transforma o texto em Badge ao dar Enter
+                  setSearch(""); 
+                }
+              }}
               className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#007BFF] focus:bg-white outline-none transition-all font-medium text-slate-800" 
             />
           </div>
