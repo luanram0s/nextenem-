@@ -26,7 +26,7 @@ const Dashboard = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('next_enem_meta');
+    localStorage.clear();
     window.location.reload();
   };
 

@@ -10,7 +10,7 @@ import GoalSelector from './components/GoalSelector';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('next_enem_auth') === 'true';
   });
   
@@ -28,7 +28,7 @@ export default function App() {
   }, [activeTab]);
 
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    setIsAuthenticated(true);
     localStorage.setItem('next_enem_auth', 'true');
   };
 
@@ -39,7 +39,7 @@ export default function App() {
     window.dispatchEvent(new Event('storage'));
   };
 
-  if (!isLoggedIn) {
+  if (!isAuthenticated) {
     return (
       <AnimatePresence mode="wait">
         <motion.div
