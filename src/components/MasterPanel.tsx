@@ -1,5 +1,6 @@
 import React from 'react';
-import { Users, ClipboardCheck, MessageSquare, ArrowUpRight, TrendingUp, Search, MoreHorizontal } from 'lucide-react';
+import { Users, ClipboardCheck, MessageSquare, ArrowUpRight, TrendingUp, Search, MoreHorizontal, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const stats = [
   { label: 'Alunos Ativos', value: '1,284', trend: '+12%', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -15,8 +16,18 @@ const students = [
 ];
 
 export default function MasterPanel() {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-6xl mx-auto space-y-12 pb-20">
+      <div className="mb-8">
+        <button 
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 text-zinc-400 hover:text-zinc-950 font-black text-[10px] uppercase tracking-widest transition-colors mb-4"
+        >
+          <ArrowLeft size={14} /> Voltar ao Dashboard
+        </button>
+      </div>
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black text-zinc-950 tracking-tighter mb-2">Painel de Controle Master</h1>

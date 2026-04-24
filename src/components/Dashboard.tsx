@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   LogOut, 
   LayoutDashboard, 
@@ -24,6 +25,7 @@ import SupportChat from './SupportChat';
 import MasterPanel from './MasterPanel';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [goal, setGoal] = useState<{ course: string, institution: string } | null>(null);
   const [activeTab, setActiveTab] = useState('inicio');
   const [user, setUser] = useState<any>(null);
@@ -40,12 +42,15 @@ const Dashboard = () => {
       setUser(JSON.parse(savedUser));
     } else {
       // Default mock for testing if no user exists
-      setUser({ name: 'Luan Luis', role: 'admin' });
+      const mockUser = { name: 'Luan Luis', role: 'admin' };
+      setUser(mockUser);
+      localStorage.setItem('next_enem_user', JSON.stringify(mockUser));
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
+    navigate('/login');
     window.location.reload();
   };
 
@@ -174,8 +179,6 @@ const Dashboard = () => {
         return <Profile />;
       case 'suporte':
         return <SupportChat />;
-      case 'master':
-        return <MasterPanel />;
       default:
         return null;
     }
@@ -247,7 +250,7 @@ const Dashboard = () => {
 
             {user?.role === 'admin' && (
               <button 
-                onClick={() => setActiveTab('master')}
+                onClick={() => navigate('/admin')}
                 className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'master' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
               >
                 <ShieldCheck size={20} className={activeTab === 'master' ? 'text-blue-400' : ''} />
