@@ -67,7 +67,7 @@ export default function LaraChat() {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-[100]">
+    <div className="fixed bottom-8 right-8 z-[100] lara-chat-wrapper transition-all duration-300 [.goal-modal-open_&]:opacity-0 [.goal-modal-open_&]:pointer-events-none">
       <AnimatePresence>
         {isOpen && (
           <motion.div

@@ -38,6 +38,14 @@ export default function GoalSelector() {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('goal-modal-open');
+    } else {
+      document.body.classList.remove('goal-modal-open');
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     const saved = localStorage.getItem('next_enem_goal');
     if (saved) {
       const data = JSON.parse(saved);

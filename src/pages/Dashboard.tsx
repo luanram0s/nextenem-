@@ -102,6 +102,10 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div 
                 whileHover={{ y: -5 }}
+                animate={{ 
+                  boxShadow: ["0 0 0px rgba(0, 123, 255, 0)", "0 0 15px rgba(0, 123, 255, 0.1)", "0 0 0px rgba(0, 123, 255, 0)"]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 className="group relative p-8 bg-white border border-slate-100 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-blue-500/5 hover:border-next-blue/20 transition-all overflow-hidden"
               >
                 <div className="relative z-10">
@@ -122,6 +126,10 @@ export default function Dashboard() {
 
               <motion.div 
                 whileHover={{ y: -5 }}
+                animate={{ 
+                  boxShadow: ["0 0 0px rgba(16, 185, 129, 0)", "0 0 15px rgba(16, 185, 129, 0.1)", "0 0 0px rgba(16, 185, 129, 0)"]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                 className="group relative p-8 bg-white border border-slate-100 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-blue-500/5 hover:border-next-blue/20 transition-all overflow-hidden"
               >
                 <div className="relative z-10">
