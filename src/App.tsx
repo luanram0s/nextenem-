@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/layout/Sidebar';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './components/Dashboard';
 import StudyRoom from './pages/StudyRoom';
 import Simulados from './pages/Simulados';
 import Redacao from './pages/Redacao';
@@ -71,43 +71,9 @@ export default function App() {
     );
   }
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'study':
-        return <StudyRoom />;
-      case 'simulados':
-        return <Simulados />;
-      case 'redacao':
-        return <Redacao />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-next-bg text-slate-900 selection:bg-next-blue selection:text-white">
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        isOpen={isSidebarOpen}
-        setIsOpen={setIsSidebarOpen}
-      />
-
-      <main className="transition-all duration-300 md:ml-[280px] p-8 lg:p-16 max-w-[1600px] mx-auto">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-          >
-            {renderContent()}
-          </motion.div>
-        </AnimatePresence>
-      </main>
+    <div className="min-h-screen bg-[#F8FAFC]">
+      <Dashboard />
       <LaraChat />
     </div>
   );
