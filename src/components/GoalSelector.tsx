@@ -105,44 +105,44 @@ export default function GoalSelector() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
             
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-2xl bg-white rounded-[3rem] shadow-2xl overflow-hidden"
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative w-full max-w-2xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden"
             >
-              <div className="p-10 space-y-10">
+              <div className="p-10 space-y-8">
                 <div className="flex justify-between items-start">
-                  <div>
-                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">Defina sua Meta</h2>
-                    <p className="text-slate-500 font-medium mt-2">A LARA usará estes dados para calibrar seus simulados.</p>
+                  <div className="space-y-1">
+                    <h2 className="text-2xl font-black text-slate-900 tracking-tight">Defina sua Meta</h2>
+                    <p className="text-slate-500 text-sm font-medium">A LARA precisa disso para calibrar seu plano.</p>
                   </div>
                   <button 
                     onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-slate-50 rounded-full transition-colors"
+                    className="p-2 hover:bg-slate-100 rounded-full transition-colors"
                   >
-                    <X size={24} className="text-slate-400" />
+                    <X size={20} className="text-slate-400" />
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Curso */}
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Escolha o Curso</label>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Carreira</label>
                     <div className="relative">
-                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                       <input 
                         type="text"
-                        placeholder="Ex: Medicina"
+                        placeholder="Buscar curso..."
                         value={searchCourse}
                         onChange={(e) => setSearchCourse(e.target.value)}
-                        className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:bg-white focus:border-next-blue/30 focus:ring-4 focus:ring-next-blue/5 transition-all font-medium text-slate-700"
+                        className="w-full h-12 pl-10 pr-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-next-blue transition-all font-medium text-slate-700 text-sm"
                       />
                     </div>
-                    <div className="max-h-48 overflow-y-auto space-y-2 pr-2 scrollbar-thin">
+                    <div className="max-h-40 overflow-y-auto space-y-1 pr-1 scrollbar-thin">
                       {filteredCourses.map((c) => (
                         <button
                           key={c.name}
@@ -151,36 +151,36 @@ export default function GoalSelector() {
                             setSearchCourse(c.name);
                           }}
                           className={cn(
-                            "w-full p-4 rounded-xl text-left text-sm font-bold transition-all flex items-center justify-between",
+                            "w-full p-3 rounded-xl text-left text-xs font-bold transition-all flex items-center justify-between truncate",
                             selectedCourse === c.name 
-                              ? "bg-next-blue text-white shadow-lg shadow-blue-500/20" 
+                              ? "bg-next-blue text-white shadow-md shadow-blue-500/20" 
                               : "bg-white border border-slate-100 text-slate-600 hover:border-next-blue/20"
                           )}
                         >
-                          <div className="flex items-center gap-3">
-                            <GraduationCap size={16} />
-                            {c.name}
+                          <div className="flex items-center gap-2 truncate">
+                            <GraduationCap size={14} className="flex-shrink-0" />
+                            <span className="truncate">{c.name}</span>
                           </div>
-                          {selectedCourse === c.name && <Check size={16} />}
+                          {selectedCourse === c.name && <Check size={14} className="flex-shrink-0" />}
                         </button>
                       ))}
                     </div>
                   </div>
 
                   {/* Universidade */}
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Instituição Alvo</label>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Universidade</label>
                     <div className="relative">
-                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                       <input 
                         type="text"
-                        placeholder="Ex: USP"
+                        placeholder="Buscar instituição..."
                         value={searchUni}
                         onChange={(e) => setSearchUni(e.target.value)}
-                        className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:bg-white focus:border-next-blue/30 focus:ring-4 focus:ring-next-blue/5 transition-all font-medium text-slate-700"
+                        className="w-full h-12 pl-10 pr-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-next-blue transition-all font-medium text-slate-700 text-sm"
                       />
                     </div>
-                    <div className="max-h-48 overflow-y-auto space-y-2 pr-2 scrollbar-thin">
+                    <div className="max-h-40 overflow-y-auto space-y-1 pr-1 scrollbar-thin">
                       {filteredUnis.map((u) => (
                         <button
                           key={u}
@@ -189,37 +189,37 @@ export default function GoalSelector() {
                             setSearchUni(u);
                           }}
                           className={cn(
-                            "w-full p-4 rounded-xl text-left text-sm font-bold transition-all flex items-center justify-between",
+                            "w-full p-3 rounded-xl text-left text-xs font-bold transition-all flex items-center justify-between truncate",
                             selectedUni === u 
-                              ? "bg-next-blue text-white shadow-lg shadow-blue-500/20" 
+                              ? "bg-next-blue text-white shadow-md shadow-blue-500/20" 
                               : "bg-white border border-slate-100 text-slate-600 hover:border-next-blue/20"
                           )}
                         >
-                          <div className="flex items-center gap-3">
-                            <School size={16} />
-                            {u}
+                          <div className="flex items-center gap-2 truncate">
+                            <School size={14} className="flex-shrink-0" />
+                            <span className="truncate">{u}</span>
                           </div>
-                          {selectedUni === u && <Check size={16} />}
+                          {selectedUni === u && <Check size={14} className="flex-shrink-0" />}
                         </button>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-6 border-t border-slate-100 flex justify-end">
+                <div className="pt-6 border-t border-slate-100">
                   <button
                     onClick={handleSave}
                     disabled={!selectedCourse || !selectedUni}
                     className={cn(
-                      "h-14 px-10 rounded-2xl font-black uppercase tracking-widest transition-all overflow-hidden relative shadow-lg active:scale-95",
+                      "w-full h-14 rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl active:scale-[0.98]",
                       isSaved 
-                        ? "bg-emerald-500 text-white w-full" 
-                        : "bg-next-blue text-white hover:bg-blue-600 disabled:bg-slate-200 disabled:shadow-none shadow-blue-500/20"
+                        ? "bg-emerald-500 text-white" 
+                        : "bg-next-blue text-white hover:bg-blue-600 disabled:bg-slate-200 disabled:shadow-none shadow-blue-500/30"
                     )}
                   >
                     {isSaved ? (
                       <div className="flex items-center justify-center gap-2">
-                        <Check size={20} /> Meta Salva com Sucesso
+                        <Check size={20} /> Sucesso
                       </div>
                     ) : (
                       "Confirmar Meta"
