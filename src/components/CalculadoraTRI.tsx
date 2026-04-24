@@ -1,64 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, Sparkles, TrendingUp, ChevronRight } from 'lucide-react';
+import { Calculator, Sparkles, TrendingUp, ChevronRight, BarChart3, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/src/lib/utils';
 
-const areas = [
-  { id: 'LC', label: 'Linguagens', color: 'bg-blue-500' },
-  { id: 'CH', label: 'Humanas', color: 'bg-amber-500' },
-  { id: 'CN', label: 'Natureza', color: 'bg-emerald-500' },
-  { id: 'MT', label: 'Matemática', color: 'bg-next-blue' },
+interface AreaConfig {
+  id: string;
+  label: string;
+  max: number;
+  weight: number;
+  color: string;
+}
+
+const areas: AreaConfig[] = [
+  { id: 'lin', label: 'Linguagens', max: 45, weight: 15, color: 'bg-blue-500' },
+  { id: 'hum', label: 'Humanas', max: 45, weight: 16, color: 'bg-amber-500' },
+  { id: 'nat', label: 'Natureza', max: 45, weight: 18, color: 'bg-emerald-500' },
+  { id: 'mat', label: 'Matemática', max: 45, weight: 22, color: 'bg-indigo-600' },
+  { id: 'red', label: 'Redação', max: 1000, weight: 1, color: 'bg-rose-500' },
 ];
 
 export default function CalculadoraTRI() {
-  const [acertos, setAcertos] = useState<Record<string, number>>(() => {
-    const saved = localStorage.getItem('next_enem_acertos');
-    return saved ? JSON.parse(saved) : { LC: 30, CH: 35, CN: 25, MT: 32 };
+  const [scores, setScores] = useState<Record<string, number>>(() => {
+    const saved = localStorage.getItem('next_enem_scores');
+    return saved ? JSON.parse(saved) : { lin: 30, hum: 32, nat: 28, mat: 35, red: 800 };
   });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [goal, setGoal] = useState<{ course: string, institution: string } | null>(null);
 
   useEffect(() => {
-    localStorage.setItem('next_enem_acertos', JSON.stringify(acertos));
-  }, [acertos]);
+    localStorage.setItem('next_enem_scores', JSON.stringify(scores));
+  }, [scores]);
 
-  // Simplified TRI projection heuristic
-  const calculateProjection = (area: string, count: number) => {
-    const base = count * 15;
-    const offset = area === 'MT' ? 120 : 80;
-    const min = base + offset;
-    const max = base + offset + 150;
-    return { min, max };
+  useEffect(() => {
+    const savedGoal = localStorage.getItem('next_enem_meta');
+    if (savedGoal) setGoal(JSON.parse(savedGoal));
+  }, []);
+
+  const calculateTotal = () => {
+    let total = 0;
+    areas.forEach(area => {
+      if (area.id === 'red') {
+        total += scores[area.id];
+      } else {
+        // Lógica TRI solicitada: acertos * peso + base 350
+        total += Math.round(scores[area.id] * area.weight + 350);
+      }
+    });
+    return Math.round(total / 5);
   };
 
-  const totalProjection = (Object.entries(acertos) as [string, number][]).reduce((acc, [area, count]) => {
-    const { min, max } = calculateProjection(area, count);
-    return { min: acc.min + min, max: acc.max + max };
-  }, { min: 0, max: 0 });
-
-  const finalAvg = {
-    min: Math.round(totalProjection.min / 4),
-    max: Math.round(totalProjection.max / 4)
-  };
+  const notaTotal = calculateTotal();
+  const corteEstimado = 780; // Placeholder para nota de corte baseada na meta
 
   return (
     <div className="space-y-6">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-8 bg-slate-900 border border-slate-800 rounded-[2rem] text-white flex items-center justify-between group hover:bg-slate-800 transition-all shadow-xl"
+        className="w-full p-8 bg-zinc-950 border border-zinc-800 rounded-[2.5rem] text-white flex items-center justify-between group hover:bg-zinc-900 transition-all shadow-2xl shadow-zinc-950/20"
       >
         <div className="flex items-center gap-6">
-          <div className="w-14 h-14 bg-next-blue/20 rounded-2xl flex items-center justify-center text-next-blue group-hover:scale-110 transition-transform">
+          <div className="w-14 h-14 bg-blue-600/20 rounded-2xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
             <Calculator size={28} />
           </div>
           <div className="text-left">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1 block">PLATAFORMA NEXT ENEM</span>
-            <h3 className="text-xl font-black tracking-tight uppercase">Simulador de Nota TRI</h3>
-            <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mt-1">Calcule sua probabilidade de aprovação</p>
+            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-1 block">SIMULADOR ELITE NEXT ENEM</span>
+            <h3 className="text-xl font-black tracking-tight uppercase">Simulador de Notas TRI</h3>
+            <p className="text-xs text-zinc-400 font-medium uppercase tracking-widest mt-1">Calcule sua aprovação em tempo real</p>
           </div>
         </div>
         <div className={cn("transition-transform duration-500", isOpen ? "rotate-90" : "")}>
-          <ChevronRight size={24} className="text-slate-600" />
+          <ChevronRight size={24} className="text-zinc-600" />
         </div>
       </button>
 
@@ -70,49 +82,72 @@ export default function CalculadoraTRI() {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="p-10 bg-white border border-slate-100 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 space-y-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {areas.map((area) => (
-                  <div key={area.id} className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{area.label}</label>
-                      <span className="text-sm font-black text-slate-800">{acertos[area.id]} / 45</span>
-                    </div>
-                    <input 
-                      type="range" 
-                      min="0" 
-                      max="45" 
-                      value={acertos[area.id]}
-                      onChange={(e) => setAcertos({...acertos, [area.id]: parseInt(e.target.value)})}
-                      className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-next-blue"
-                    />
-                    <div className="flex justify-between text-[9px] font-bold text-slate-300">
-                      <span>Projeção:</span>
-                      <span className="text-next-blue">{calculateProjection(area.id, acertos[area.id]).min} - {calculateProjection(area.id, acertos[area.id]).max}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-10 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sparkles size={16} className="text-amber-500" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Projeção de Média Geral</span>
-                  </div>
-                  <div className="flex items-end gap-3">
-                    <span className="text-6xl font-black text-slate-800 tracking-tighter">{finalAvg.min}</span>
-                    <span className="text-2xl font-bold text-slate-300 mb-2">~ {finalAvg.max}</span>
+            <div className="p-10 bg-white border-2 border-zinc-50 rounded-[3rem] shadow-2xl shadow-zinc-200/50 space-y-12 backdrop-blur-xl bg-white/80">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="space-y-8">
+                  <h4 className="font-black text-zinc-950 uppercase tracking-widest text-xs flex items-center gap-2">
+                    <BarChart3 size={16} className="text-blue-600" /> Ajuste seus acertos
+                  </h4>
+                  
+                  <div className="space-y-8">
+                    {areas.map((area) => (
+                      <div key={area.id} className="space-y-4">
+                        <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
+                          <span className="text-zinc-400">{area.label}</span>
+                          <span className="text-zinc-950 bg-zinc-50 px-3 py-1 rounded-full border border-zinc-100">
+                            {scores[area.id]} {area.id === 'red' ? 'pts' : 'acertos'}
+                          </span>
+                        </div>
+                        <div className="relative flex items-center">
+                          <input 
+                            type="range" 
+                            min="0" 
+                            max={area.max} 
+                            value={scores[area.id]}
+                            onChange={(e) => setScores({...scores, [area.id]: parseInt(e.target.value)})}
+                            className="w-full h-2 bg-zinc-100 rounded-full appearance-none cursor-pointer accent-blue-600"
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="bg-slate-50 p-6 rounded-2xl flex items-center gap-6 border border-slate-100">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-next-blue">
-                    <TrendingUp size={24} />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-widest mb-1">Status de Aprovação</h4>
-                    <p className="text-xs font-bold text-emerald-500 uppercase">Probabilidade Alta em 82% das Federais</p>
+                <div className="space-y-8">
+                  <div className="bg-zinc-50 p-10 rounded-[2.5rem] border border-zinc-100 relative overflow-hidden h-full flex flex-col justify-center">
+                    <div className="absolute top-0 right-0 p-8 opacity-10">
+                      <TrendingUp size={120} />
+                    </div>
+                    
+                    <div className="relative z-10 space-y-6">
+                      <div>
+                        <div className="flex items-center gap-2 mb-4">
+                          <Sparkles size={18} className="text-amber-500" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Nota Final Estimada</span>
+                        </div>
+                        <div className="flex items-end gap-3">
+                          <span className="text-8xl font-black text-blue-600 tracking-tighter">{notaTotal}</span>
+                          <span className="text-2xl font-bold text-zinc-300 mb-4 uppercase tracking-widest">pts</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                            <span>Sua Chance em {goal?.institution || 'SIU'}</span>
+                            <span>{Math.round((notaTotal / corteEstimado) * 100)}%</span>
+                         </div>
+                         <div className="h-3 bg-zinc-200 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(37,99,235,0.4)]" 
+                              style={{ width: `${Math.min((notaTotal / corteEstimado) * 100, 100)}%` }}
+                            />
+                         </div>
+                         <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 mt-2">
+                           <Info size={12} />
+                           <span>Nota de corte base estimada: {corteEstimado} pts</span>
+                         </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
