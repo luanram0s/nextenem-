@@ -4,10 +4,15 @@ import Dashboard from './pages/Dashboard';
 import StudyRoom from './pages/StudyRoom';
 import Simulados from './pages/Simulados';
 import Redacao from './pages/Redacao';
+import Login from './pages/Login';
 import LaraChat from './components/LaraChat';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('next_enem_auth') === 'true';
+  });
+  
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem('next_enem_active_tab') || 'dashboard';
   });
@@ -16,6 +21,20 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('next_enem_active_tab', activeTab);
   }, [activeTab]);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    localStorage.setItem('next_enem_auth', 'true');
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.setItem('next_enem_auth', 'false');
+  };
+
+  if (!isLoggedIn) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   const renderContent = () => {
     switch (activeTab) {
@@ -44,9 +63,10 @@ export default function App() {
         setActiveTab={setActiveTab} 
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
+        onLogout={handleLogout}
       />
 
-      <main className="transition-all duration-300 md:ml-[280px] p-8 lg:p-16 max-w-7xl mx-auto">
+      <main className="transition-all duration-300 md:ml-[280px] p-8 lg:p-16 max-w-[1600px] mx-auto">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

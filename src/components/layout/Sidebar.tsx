@@ -7,7 +7,8 @@ import {
   Settings, 
   Menu,
   X,
-  Zap
+  Zap,
+  LogOut
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
@@ -17,6 +18,7 @@ interface SidebarProps {
   setActiveTab: (tab: string) => void;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  onLogout?: () => void;
 }
 
 const navItems = [
@@ -27,7 +29,7 @@ const navItems = [
   { id: 'settings', label: 'Configurações', icon: Settings },
 ];
 
-export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: SidebarProps) {
+export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen, onLogout }: SidebarProps) {
   return (
     <>
       <button 
@@ -110,6 +112,14 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
               <div className="h-full bg-next-blue w-3/4 rounded-full" />
             </div>
           </div>
+
+          <button 
+            onClick={onLogout}
+            className="mt-4 w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-semibold text-slate-400 hover:bg-red-50 hover:text-red-500"
+          >
+            <LogOut size={18} />
+            <span>Sair da Conta</span>
+          </button>
         </div>
       </motion.aside>
 
