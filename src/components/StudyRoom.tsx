@@ -1,92 +1,176 @@
-import React from 'react';
-import { BookOpen, Play, Clock, ChevronRight, Bookmark } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+  BookOpen, 
+  Play, 
+  Clock, 
+  ChevronRight, 
+  Bookmark, 
+  PlayCircle, 
+  CheckCircle, 
+  Save, 
+  ChevronLeft 
+} from 'lucide-react';
 
-const modules = [
-  { id: 1, title: 'Matemática e suas Tecnologias', lessons: 24, progress: 65, color: 'bg-indigo-500' },
-  { id: 2, title: 'Ciências da Natureza', lessons: 18, progress: 40, color: 'bg-emerald-500' },
-  { id: 3, title: 'Linguagens e Códigos', lessons: 12, progress: 80, color: 'bg-blue-500' },
-  { id: 4, title: 'Ciências Humanas', lessons: 15, progress: 50, color: 'bg-amber-500' },
+const lessons = [
+  { id: 1, title: 'Prismas: Definições e Propriedades', duration: '12:45', completed: true },
+  { id: 2, title: 'Cilindros e suas Aplicações', duration: '15:20', completed: true },
+  { id: 3, title: 'Pirâmides e Troncos', duration: '18:10', completed: false },
+  { id: 4, title: 'Cones: Área e Volume', duration: '14:30', completed: false },
+  { id: 5, title: 'Esferas: A Geometria Perfeita', duration: '20:00', completed: false },
 ];
 
 export default function StudyRoom() {
+  const [currentLesson, setCurrentLesson] = useState(lessons[2]);
+  const [note, setNote] = useState('');
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
-      {/* LEFT: MODULES LIST */}
-      <div className="lg:col-span-4 space-y-6 overflow-y-auto pr-2 custom-scrollbar">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xl font-black text-zinc-950 tracking-tight">Meus Módulos</h2>
-          <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">4 Ativos</span>
-        </div>
-        
-        {modules.map((mod) => (
-          <button 
-            key={mod.id}
-            className="w-full text-left bg-zinc-50 hover:bg-white hover:shadow-xl hover:shadow-zinc-200/50 border border-zinc-100 rounded-[2rem] p-6 transition-all group"
-          >
-            <div className="flex items-start gap-4">
-              <div className={`w-12 h-12 ${mod.color} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
-                <BookOpen size={20} />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-black text-zinc-800 text-sm mb-1 group-hover:text-blue-600 transition-colors leading-tight">{mod.title}</h3>
-                <div className="flex items-center gap-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-                  <span className="flex items-center gap-1"><Clock size={10} /> {mod.lessons} Aulas</span>
-                  <span>•</span>
-                  <span>{mod.progress}% Concluído</span>
-                </div>
-              </div>
-              <ChevronRight size={16} className="text-zinc-300 group-hover:text-blue-400 transition-colors self-center" />
-            </div>
-            
-            <div className="mt-4 h-1.5 bg-zinc-200 rounded-full overflow-hidden">
-              <div 
-                className={`h-full ${mod.color} rounded-full transition-all duration-1000`}
-                style={{ width: `${mod.progress}%` }}
-              />
-            </div>
+    <div className="flex flex-col h-full bg-white">
+      {/* HEADER: MODULE INFO */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-4">
+          <button className="p-3 bg-zinc-50 rounded-xl text-zinc-400 hover:text-zinc-950 hover:bg-zinc-100 transition-all">
+            <ChevronLeft size={20} />
           </button>
-        ))}
+          <div>
+            <h2 className="text-2xl font-black text-zinc-950 tracking-tighter">Matemática: Geometria Espacial</h2>
+            <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Módulo 04 • 12/24 Aulas Concluídas</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+           <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-widest">Premium Access</span>
+        </div>
       </div>
 
-      {/* RIGHT: PLAYER AREA */}
-      <div className="lg:col-span-8 flex flex-col gap-6">
-        <div className="aspect-video bg-zinc-950 rounded-[3rem] relative overflow-hidden group shadow-2xl shadow-zinc-950/20">
-          <img 
-            src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1000" 
-            alt="Current Lesson" 
-            className="w-full h-full object-cover opacity-40"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <button className="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-2xl shadow-blue-600/40 hover:scale-110 active:scale-95 transition-all">
-              <Play size={32} fill="white" className="ml-1" />
-            </button>
-            <div className="absolute bottom-10 left-10 right-10 flex justify-between items-end">
-              <div>
-                <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-2">Reproduzindo Agora</p>
-                <h2 className="text-2xl font-black text-white tracking-tight">Geometria Espacial: Prismas e Cilindros</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 min-h-0">
+        {/* LEFT: LESSONS LIST (SIDEBAR) */}
+        <div className="lg:col-span-4 space-y-3 overflow-y-auto pr-2 custom-scrollbar lg:max-h-[750px]">
+          <h3 className="text-xs font-black text-zinc-400 uppercase tracking-widest mb-4 px-2">Conteúdo do Módulo</h3>
+          
+          {lessons.map((lesson) => (
+            <button 
+              key={lesson.id}
+              onClick={() => setCurrentLesson(lesson)}
+              className={`w-full text-left p-4 rounded-2xl transition-all duration-300 group flex items-center justify-between border ${
+                currentLesson.id === lesson.id 
+                  ? 'bg-zinc-900 border-zinc-900 text-white shadow-xl shadow-zinc-900/20' 
+                  : 'bg-zinc-50 border-zinc-100 hover:bg-zinc-100 text-zinc-600'
+              }`}
+            >
+              <div className="flex items-center gap-4">
+                <div className={`${
+                  currentLesson.id === lesson.id ? 'text-blue-400' : lesson.completed ? 'text-emerald-500' : 'text-zinc-300'
+                }`}>
+                  {lesson.completed ? <CheckCircle size={20} /> : <PlayCircle size={20} />}
+                </div>
+                <div>
+                  <h4 className={`text-sm font-bold tracking-tight ${
+                    currentLesson.id === lesson.id ? 'text-white' : 'text-zinc-800'
+                  }`}>
+                    {lesson.title}
+                  </h4>
+                  <p className={`text-[10px] font-black uppercase tracking-widest ${
+                    currentLesson.id === lesson.id ? 'text-white/40' : 'text-zinc-400'
+                  }`}>
+                    Aula {lesson.id < 10 ? `0${lesson.id}` : lesson.id}
+                  </p>
+                </div>
               </div>
-              <button className="p-4 bg-white/10 backdrop-blur-md rounded-2xl text-white hover:bg-white/20 transition-all">
-                <Bookmark size={20} />
+              <span className={`text-[10px] font-black ${
+                currentLesson.id === lesson.id ? 'text-white/40' : 'text-zinc-400'
+              }`}>
+                {lesson.duration}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* RIGHT: PLAYER & NOTES */}
+        <div className="lg:col-span-8 flex flex-col gap-8">
+          {/* PLAYER CONTAINER */}
+          <div className="space-y-6">
+            <div className="aspect-video bg-zinc-950 rounded-3xl relative overflow-hidden group shadow-2xl shadow-zinc-950/20 border border-zinc-800">
+              <img 
+                src={`https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1000&seed=${currentLesson.id}`} 
+                alt={currentLesson.title} 
+                className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-1000"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <button className="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-2xl shadow-blue-600/40 hover:scale-110 active:scale-95 transition-all">
+                  <Play size={32} fill="white" className="ml-1" />
+                </button>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-8 bg-black/40 backdrop-blur-md border-t border-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-6">
+                    <button className="text-white/60 hover:text-white transition-colors">
+                      <Clock size={20} />
+                    </button>
+                    <div className="w-48 h-1 bg-white/20 rounded-full">
+                      <div className="w-1/3 h-full bg-blue-500 rounded-full" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button className="p-2 text-white/60 hover:text-white transition-colors">
+                      <Bookmark size={20} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-2">Assistindo Agora</p>
+                <h2 className="text-3xl font-black text-zinc-950 tracking-tighter mb-2">{currentLesson.title}</h2>
+                <p className="text-sm text-zinc-500 font-medium max-w-2xl leading-relaxed">
+                  Nesta aula, exploramos profundamente os conceitos geométricos fundamentais que são cobrados recorrentemente no ENEM. Focamos em visualização espacial e fórmulas práticas para resolução rápida.
+                </p>
+              </div>
+              <button className="flex flex-col items-center gap-2 group">
+                <div className="w-12 h-12 bg-zinc-50 rounded-2xl flex items-center justify-center text-zinc-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-all">
+                  <CheckCircle size={20} />
+                </div>
+                <span className="text-[9px] font-black uppercase text-zinc-400 group-hover:text-blue-600 tracking-widest transition-all">Concluir</span>
               </button>
             </div>
           </div>
-        </div>
 
-        <div className="flex-1 bg-zinc-50 rounded-[3.5rem] border border-zinc-100 p-10">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-lg font-black text-zinc-950 tracking-tight">Anotações da Aula</h3>
-            <button className="text-[10px] font-black text-zinc-400 uppercase tracking-widest hover:text-blue-600 transition-colors">Limpar Notas</button>
-          </div>
-          <textarea 
-            placeholder="Comece a digitar suas anotações aqui..."
-            className="w-full h-48 bg-transparent border-none focus:ring-0 text-zinc-600 font-medium leading-relaxed resize-none placeholder:text-zinc-300"
-          />
-          <div className="mt-8 flex justify-end">
-            <button className="px-8 py-4 bg-blue-600 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all">Salvar Aula</button>
+          {/* NOTES MODULE */}
+          <div className="flex-1 bg-zinc-950 rounded-3xl p-8 border border-zinc-800 shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-black text-white tracking-tight flex items-center gap-3">
+                <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center text-blue-500">
+                  <BookOpen size={16} />
+                </div>
+                Suas Anotações
+              </h3>
+              <div className="flex items-center gap-4">
+                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Aula {currentLesson.id}</span>
+                <button className="text-[10px] font-black text-zinc-500 uppercase tracking-widest hover:text-white transition-colors">Limpar</button>
+              </div>
+            </div>
+            
+            <textarea 
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Comece a digitar os pontos chaves desta aula..."
+              className="flex-1 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 text-zinc-300 font-medium leading-relaxed resize-none placeholder:text-zinc-600 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none mb-6 min-h-[150px]"
+            />
+            
+            <div className="flex justify-end gap-4">
+              <button className="px-8 py-4 bg-zinc-800 text-zinc-300 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-700 transition-all">
+                Exportar PDF
+              </button>
+              <button className="px-8 py-4 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                <Save size={14} />
+                Salvar Nota
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
