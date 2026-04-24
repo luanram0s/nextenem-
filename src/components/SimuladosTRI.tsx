@@ -1,18 +1,17 @@
+// Build Version: 2.0 - Forced Update (BERRANTE RED BUTTON TEST)
 import React, { useState, useEffect } from 'react';
 import { 
   Clock, 
   ChevronLeft, 
   ChevronRight, 
   Flag, 
-  CheckCircle2, 
-  AlertCircle,
-  XCircle,
   Layout,
   PenTool,
   Brain,
   ChevronDown,
   ChevronUp,
-  X
+  X,
+  ClipboardList
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import 'katex/dist/katex.min.css';
@@ -28,7 +27,7 @@ interface Question {
 const mockQuestions: Question[] = [
   {
     id: 1,
-    enunciado: "O Enem utiliza a Teoria de Resposta ao Item (TRI) para o cálculo das proficiências dos participantes. Esse modelo matemático leva em consideração três parâmetros fundamentais para cada questão. Qual destes parâmetros é crucial para evitar que o acerto por 'chute' eleve desproporcionalmente a nota do aluno?\n\nExemplo de Fórmula LaTeX: $f(x) = \\sqrt{x^2 + 1}$",
+    enunciado: "O Enem utiliza a Teoria de Resposta ao Item (TRI) para o cálculo das proficiências dos participantes. Esse modelo matemático leva em consideração três parâmetros fundamentais para cada questão. Qual destes parâmetros é crucial para evitar que o acerto por 'chute' eleve desproporcionalmente a nota do aluno?\n\nExemplo de Fórmula LaTeX (VERIFICAÇÃO): $f(x) = \\sqrt{x^2 + 1}$",
     alternativas: [
       { id: 'A', text: 'Parâmetro de Discriminação (a)' },
       { id: 'B', text: 'Parâmetro de Dificuldade (b)' },
@@ -97,7 +96,7 @@ export default function SimuladosTRI() {
 
   return (
     <div className="flex flex-col h-full bg-white text-zinc-950 font-sans relative">
-      {/* 📝 LOUSA DE CÁLCULO (SCRATCHPAD) */}
+      {/* 🛑 SCRATCHPAD DRAWER 🛑 */}
       <AnimatePresence>
         {showScratchpad && (
           <>
@@ -106,49 +105,49 @@ export default function SimuladosTRI() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowScratchpad(false)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[60]"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[999]"
             />
             <motion.div 
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-zinc-900 border-l border-zinc-800 z-[70] p-8 shadow-2xl flex flex-col"
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-zinc-950 text-white z-[1000] p-10 shadow-2xl flex flex-col border-l border-zinc-800"
             >
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3 text-white">
-                  <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/30">
-                    <PenTool size={20} />
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center shadow-lg shadow-red-600/30">
+                    <PenTool size={28} />
                   </div>
                   <div>
-                    <h3 className="font-black text-sm uppercase tracking-widest">Rascunho de Guerra</h3>
-                    <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Ativo e Pronto</p>
+                    <h3 className="text-xl font-black italic tracking-tighter">RASCO DE GUERRA</h3>
+                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Organize seu ataque aqui</p>
                   </div>
                 </div>
-                <button onClick={() => setShowScratchpad(false)} className="p-3 bg-zinc-800 rounded-xl text-zinc-500 hover:text-white transition-colors">
-                  <X size={20} />
+                <button onClick={() => setShowScratchpad(false)} className="p-4 bg-zinc-900 rounded-xl hover:bg-zinc-800 transition-all">
+                  <X size={24} />
                 </button>
               </div>
 
               <textarea 
                 value={scratchpadText}
                 onChange={(e) => setScratchpadText(e.target.value)}
-                placeholder="Organize sua lógica agora..."
-                className="flex-1 w-full bg-zinc-950 border border-zinc-800 rounded-2xl p-6 text-sm font-medium text-zinc-300 placeholder:text-zinc-800 focus:ring-2 focus:ring-blue-600 outline-none transition-all resize-none shadow-inner"
+                placeholder="Esculpa sua lógica aqui..."
+                className="flex-1 w-full bg-zinc-900 border border-zinc-800 rounded-3xl p-8 text-lg font-medium text-white placeholder:text-zinc-800 focus:ring-4 focus:ring-red-600/20 outline-none transition-all resize-none shadow-inner"
               />
               
-              <div className="mt-8 flex items-center justify-between">
+              <div className="mt-10 flex items-center justify-between">
                  <button 
                   onClick={() => setScratchpadText('')}
-                  className="text-[10px] font-black uppercase tracking-widest text-zinc-600 hover:text-rose-500 transition-colors"
+                  className="text-xs font-black uppercase tracking-widest text-zinc-600 hover:text-red-500 transition-colors"
                 >
-                  Limpar Área
+                  Dizimar Rascunho
                 </button>
                 <button 
                   onClick={() => setShowScratchpad(false)}
-                  className="px-6 py-4 bg-white text-zinc-950 rounded-xl font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+                  className="px-10 py-5 bg-red-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-red-700 transition-all hover:scale-[1.05] active:scale-95"
                 >
-                  Voltar para Questão
+                  Voltar ao Combate
                 </button>
               </div>
             </motion.div>
@@ -157,76 +156,66 @@ export default function SimuladosTRI() {
       </AnimatePresence>
 
       {/* HEADER */}
-      <header className="flex items-center justify-between mb-8 border-b border-zinc-100 pb-6 shrink-0">
-        <div className="flex items-center gap-4">
-          <button className="p-3 bg-zinc-50 rounded-xl text-zinc-400 hover:text-zinc-950 transition-all">
-            <ChevronLeft size={20} />
-          </button>
+      <header className="flex items-center justify-between mb-10 border-b border-zinc-100 pb-8 shrink-0">
+        <div className="flex items-center gap-5">
+          <div className="w-12 h-12 bg-zinc-950 rounded-2xl flex items-center justify-center text-white shadow-xl">
+             <ClipboardList size={24} />
+          </div>
           <div>
-            <h1 className="text-2xl font-black text-zinc-950 tracking-tighter">Simulado Ativo</h1>
-            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-1 italic tracking-widest">Ambiente de Alta Performance</p>
+            <h1 className="text-3xl font-black text-zinc-950 tracking-tighter italic">Simulado <span className="text-red-600">TRI</span></h1>
+            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-1">Nível de Dificuldade: Dinâmico</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-8">
-          <div className="hidden md:flex flex-col items-end">
-            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Status de Carga</span>
-            <div className="w-48 h-2 bg-zinc-100 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-blue-600 rounded-full transition-all duration-500" 
-                style={{ width: `${(currentIdx + 1) / mockQuestions.length * 100}%` }}
-              />
-            </div>
-          </div>
-          
+        <div className="flex items-center gap-10">
           <div className="flex flex-col items-end">
-            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Timebox</span>
-            <div className={`flex items-center gap-2 font-mono text-xl font-black ${timeLeft < 900 ? 'text-rose-500 animate-pulse' : 'text-zinc-950'}`}>
-              <Clock size={18} />
-              {formatTime(timeLeft)}
-            </div>
+             <span className="text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em] mb-1">Tempo de Prova</span>
+             <div className={`flex items-center gap-3 text-2xl font-black ${timeLeft < 600 ? 'text-red-600 animate-pulse' : 'text-zinc-950'}`}>
+                <Clock size={20} />
+                {formatTime(timeLeft)}
+             </div>
           </div>
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 min-h-0 overflow-hidden">
-        {/* LEFT: QUESTION CONTENT */}
+      <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-10">
+        {/* LADO ESQUERDO: QUESTÃO */}
         <div className="lg:col-span-8 flex flex-col h-full overflow-hidden">
-          <div className="flex-1 overflow-y-auto space-y-8 pr-4 custom-scrollbar pb-12">
+          <div className="flex-1 overflow-y-auto space-y-10 pr-6 custom-scrollbar pb-20">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentQuestion.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="space-y-8"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="space-y-10"
               >
-                <div className="bg-zinc-900 rounded-3xl p-10 border border-zinc-800 shadow-2xl relative">
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="px-4 py-1.5 bg-blue-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest">Questão {currentQuestion.id}</span>
-                    <span className="text-zinc-500 text-[10px] uppercase font-black tracking-widest">TRI Hard Mode</span>
-                  </div>
-                  <div className="text-lg font-medium text-zinc-100 leading-relaxed tracking-tight prose prose-invert max-w-none">
-                    {renderTextWithMath(currentQuestion.enunciado)}
-                  </div>
+                <div className="bg-zinc-50 border border-zinc-100 p-10 rounded-[2.5rem] shadow-inner relative overflow-hidden">
+                   <div className="absolute top-0 left-0 w-2 h-full bg-red-600" />
+                   <div className="flex items-center gap-3 mb-8">
+                      <span className="px-5 py-2 bg-zinc-950 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full">Questão {currentQuestion.id}</span>
+                   </div>
+                   <div className="text-xl font-bold text-zinc-800 leading-relaxed tracking-tight">
+                      {renderTextWithMath(currentQuestion.enunciado)}
+                   </div>
                 </div>
 
-                {/* IA TIP */}
-                <div className="bg-zinc-50 rounded-2xl border border-zinc-200 overflow-hidden">
+                {/* DICA IA */}
+                <div className="bg-white border-2 border-zinc-100 rounded-3xl overflow-hidden shadow-sm hover:border-blue-600/30 transition-all">
                   <button 
                     onClick={() => setShowTip(!showTip)}
-                    className="w-full flex items-center justify-between p-6 hover:bg-zinc-100 transition-all"
+                    className="w-full flex items-center justify-between p-8"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20">
-                        <Brain size={20} />
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                        <Brain size={24} />
                       </div>
                       <div className="text-left">
-                        <h4 className="text-sm font-black text-zinc-950 tracking-tight">Cérebro do Professor Next</h4>
-                        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest italic">Análise Cognitiva Iniciada</p>
+                        <h4 className="text-sm font-black text-zinc-950 uppercase tracking-widest">Insights do Next AI</h4>
+                        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Análise de Redução de Erros</p>
                       </div>
                     </div>
-                    {showTip ? <ChevronUp size={20} className="text-zinc-400" /> : <ChevronDown size={20} className="text-zinc-400" />}
+                    {showTip ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
                   </button>
                   <AnimatePresence>
                     {showTip && (
@@ -234,35 +223,35 @@ export default function SimuladosTRI() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="bg-zinc-100/50 border-t border-zinc-200 px-8 py-8"
+                        className="bg-zinc-50 border-t border-zinc-100 p-10"
                       >
-                        <p className="text-sm font-medium text-zinc-700 leading-relaxed italic">
-                          {renderTextWithMath(currentQuestion.dica)}
+                        <p className="text-lg font-medium text-zinc-600 italic leading-relaxed">
+                           {renderTextWithMath(currentQuestion.dica)}
                         </p>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-4">
                   {currentQuestion.alternativas.map((alt) => (
                     <button
                       key={alt.id}
                       onClick={() => handleSelect(alt.id)}
-                      className={`w-full text-left p-6 rounded-2xl border-2 transition-all group flex items-start gap-4 ${
+                      className={`flex items-start gap-6 p-8 rounded-3xl border-2 text-left transition-all group ${
                         answers[currentQuestion.id] === alt.id
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-xl shadow-blue-600/20'
-                          : 'bg-white border-zinc-100 hover:border-zinc-200 hover:shadow-lg'
+                          ? 'bg-zinc-950 border-zinc-950 text-white shadow-2xl scale-[1.02]'
+                          : 'bg-white border-zinc-100 hover:border-zinc-200 hover:bg-zinc-50'
                       }`}
                     >
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black transition-all shrink-0 ${
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-lg transition-all shrink-0 ${
                         answers[currentQuestion.id] === alt.id
-                          ? 'bg-white text-blue-600 shadow-inner'
-                          : 'bg-zinc-50 border border-zinc-100 text-zinc-400 group-hover:text-blue-600'
+                          ? 'bg-red-600 text-white rotate-12 shadow-lg shadow-red-600/30'
+                          : 'bg-zinc-100 text-zinc-400 group-hover:rotate-6 group-hover:text-zinc-600'
                       }`}>
                         {alt.id}
                       </div>
-                      <span className={`text-sm font-bold tracking-tight mt-2 flex-1 ${
+                      <span className={`text-lg font-black tracking-tight mt-2 flex-1 ${
                         answers[currentQuestion.id] === alt.id ? 'text-white' : 'text-zinc-700'
                       }`}>
                         {renderTextWithMath(alt.text)}
@@ -273,97 +262,94 @@ export default function SimuladosTRI() {
               </motion.div>
             </AnimatePresence>
           </div>
-
-          {/* BARRA INFERIOR DE COMANDOS */}
-          <div className="mt-auto py-6 border-t border-zinc-100 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-4">
-              <button 
-                onClick={() => setCurrentIdx(Math.max(0, currentIdx - 1))}
-                disabled={currentIdx === 0}
-                className="flex items-center gap-2 px-6 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest text-zinc-400 hover:text-zinc-950 hover:bg-zinc-50 transition-all disabled:opacity-20"
-              >
-                <ChevronLeft size={16} /> Anterior
-              </button>
-
-              {/* 🎯 BOTÃO DE RASCUNHO EXIGIDO PELO USUÁRIO */}
-              <button 
-                id="btn-rascunho-guerra"
-                onClick={() => setShowScratchpad(true)}
-                className="flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all z-10"
-              >
-                <PenTool size={16} /> 📝 Rascunho de Guerra
-              </button>
-
-              <button 
-                onClick={() => setCurrentIdx(Math.min(mockQuestions.length - 1, currentIdx + 1))}
-                disabled={currentIdx === mockQuestions.length - 1}
-                className="flex items-center gap-2 px-8 py-4 bg-zinc-950 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 shadow-xl transition-all disabled:opacity-20"
-              >
-                Próxima <ChevronRight size={16} />
-              </button>
-            </div>
-            
-            <button className="p-4 text-zinc-300 hover:text-rose-500 transition-colors">
-              <Flag size={20} />
-            </button>
-          </div>
         </div>
 
-        {/* RIGHT: MAPA DE NAVEGAÇÃO */}
-        <div className="lg:col-span-4 h-full flex flex-col pt-2 pb-6">
-          <div className="bg-zinc-50 border border-zinc-100 rounded-[2.5rem] p-8 flex flex-col h-full shadow-inner">
-            <h3 className="font-black text-zinc-950 uppercase tracking-widest text-xs mb-8 flex items-center justify-between">
-              Painel de Questões
-              <span className="text-[10px] text-zinc-400 font-bold">Total: 45</span>
-            </h3>
+        {/* LADO DIREITO: DASHBOARD LOCAL */}
+        <div className="lg:col-span-4 h-full flex flex-col overflow-hidden">
+            <div className="bg-zinc-950 rounded-[3rem] p-10 flex flex-col h-full shadow-2xl relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-10 opacity-5 rotate-12 pointer-events-none">
+                  <PenTool size={200} />
+               </div>
 
-            <div className="grid grid-cols-5 gap-3 h-fit overflow-y-auto pr-2 custom-scrollbar">
-              {Array.from({ length: 45 }).map((_, i) => {
-                const qNum = i + 1;
-                const isCurrent = qNum === currentIdx + 1;
-                const isAnswered = answers[qNum] !== undefined;
+               <div className="mb-12">
+                  <h3 className="text-white text-xs font-black uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                     <span className="w-2 h-2 bg-red-600 rounded-full animate-ping" />
+                     Seu Alvo
+                  </h3>
+                  <div className="grid grid-cols-5 gap-3">
+                     {Array.from({ length: 45 }).map((_, i) => {
+                        const num = i+1;
+                        const active = num === currentIdx + 1;
+                        const done = answers[num] !== undefined;
+                        return (
+                           <button 
+                              key={i}
+                              onClick={() => i < mockQuestions.length && setCurrentIdx(i)}
+                              className={`aspect-square rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${
+                                 active ? 'bg-red-600 text-white shadow-xl shadow-red-600/30 scale-125 z-10' :
+                                 done ? 'bg-white text-zinc-950' : 
+                                 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'
+                              }`}
+                           >
+                              {num}
+                           </button>
+                        )
+                     })}
+                  </div>
+               </div>
 
-                return (
-                  <button
-                    key={i}
-                    onClick={() => {
-                        if (i < mockQuestions.length) setCurrentIdx(i);
-                    }}
-                    className={`aspect-square rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${
-                      isCurrent 
-                        ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20 scale-110 z-10' 
-                        : isAnswered 
-                          ? 'bg-emerald-500 text-white' 
-                          : 'bg-white border border-zinc-200 text-zinc-400 hover:border-zinc-950 hover:text-zinc-950'
-                    }`}
+               <div className="mt-auto space-y-6">
+                  <div className="flex items-center justify-between text-white">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Respondidas</span>
+                      <span className="text-2xl font-black">{Object.keys(answers).length}/45</span>
+                  </div>
+                  <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                     <div className="h-full bg-red-600 transition-all duration-1000" style={{ width: `${(Object.keys(answers).length/45)*100}%` }} />
+                  </div>
+
+                  <button 
+                    onClick={() => { if(window.confirm('Assinar termo de entrega final?')) setIsFinished(true) }}
+                    className="w-full py-6 bg-white text-zinc-950 rounded-2xl font-black text-sm uppercase tracking-[0.3em] hover:bg-zinc-100 transition-all active:scale-95 mt-10 shadow-2xl"
                   >
-                    {qNum}
+                    ENTREGAR PROVA
                   </button>
-                );
-              })}
+               </div>
             </div>
-
-            <div className="mt-8 pt-8 border-t border-zinc-200/50 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Resolvidas</span>
-                <span className="text-sm font-black text-zinc-950">{Object.keys(answers).length}</span>
-              </div>
-              <div className="h-1.5 bg-zinc-200 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full transition-all duration-700" style={{ width: `${(Object.keys(answers).length / 45) * 100}%` }} />
-              </div>
-            </div>
-
-            <button 
-              className="mt-12 w-full py-5 bg-zinc-950 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:bg-zinc-800 transition-all active:scale-95"
-              onClick={() => {
-                if (window.confirm('Confirmar entrega do simulado?')) setIsFinished(true);
-              }}
-            >
-              Finalizar Agora
-            </button>
-          </div>
         </div>
       </div>
+
+      {/* 🚀 BARRA DE COMANDO BOTTOM 🚀 */}
+      <footer className="mt-10 pt-10 border-t border-zinc-100 flex items-center justify-between shrink-0 mb-4">
+          <div className="flex items-center gap-6">
+             <button 
+                onClick={() => setCurrentIdx(Math.max(0, currentIdx - 1))}
+                disabled={currentIdx === 0}
+                className="flex items-center gap-3 px-8 py-5 rounded-2xl text-xs font-black uppercase tracking-widest text-zinc-400 hover:text-zinc-950 hover:bg-zinc-50 transition-all disabled:opacity-30"
+             >
+                <ChevronLeft size={20} /> Anterior
+             </button>
+
+             {/* 🎯 BOTÃO BERRANTE RED TEST 🎯 */}
+             <button 
+                onClick={() => setShowScratchpad(true)}
+                className="flex items-center gap-4 px-12 py-5 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-red-600/30 hover:scale-105 active:scale-95 transition-all outline-none ring-4 ring-red-600/20"
+             >
+                <PenTool size={20} /> 📝 Rascunho de Guerra
+             </button>
+
+             <button 
+                onClick={() => setCurrentIdx(Math.min(mockQuestions.length - 1, currentIdx + 1))}
+                disabled={currentIdx === mockQuestions.length - 1}
+                className="flex items-center gap-3 px-8 py-5 bg-zinc-950 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all disabled:opacity-30 flex-row-reverse"
+             >
+                <ChevronRight size={20} /> Próxima
+             </button>
+          </div>
+
+          <button className="p-5 text-zinc-200 hover:text-red-600 transition-all">
+             <Flag size={24} />
+          </button>
+      </footer>
     </div>
   );
 }
