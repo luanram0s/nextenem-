@@ -7,14 +7,22 @@ import {
   CheckCircle2, 
   AlertCircle,
   XCircle,
-  Layout
+  Layout,
+  PenTool,
+  Brain,
+  ChevronDown,
+  ChevronUp,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
 
 interface Question {
   id: number;
   enunciado: string;
   alternativas: { id: string; text: string }[];
+  dica: string;
 }
 
 const mockQuestions: Question[] = [
@@ -27,18 +35,20 @@ const mockQuestions: Question[] = [
       { id: 'C', text: 'Parâmetro de Acerto Casual (c)' },
       { id: 'D', text: 'Parâmetro de Inflexão (d)' },
       { id: 'E', text: 'Parâmetro de Assintota (k)' }
-    ]
+    ],
+    dica: "O parâmetro de acerto casual (c) modela a probabilidade de um aluno com baixa proficiência acertar a questão por sorte."
   },
   {
     id: 2,
-    enunciado: "Considere uma função quadrática de forma f(x) = ax² + bx + c. Se os coeficientes a, b e c são tais que o discriminante (Δ) é maior que zero, o que podemos afirmar sobre o gráfico desta função?",
+    enunciado: "Considere uma função quadrática de forma $f(x) = ax^2 + bx + c$. Se os coeficientes $a, b$ e $c$ são tais que o discriminante $\\Delta = b^2 - 4ac$ é maior que zero, o que podemos afirmar sobre o gráfico desta função?",
     alternativas: [
-      { id: 'A', text: 'O gráfico não toca o eixo x.' },
-      { id: 'B', text: 'O gráfico toca o eixo x em exatamente um ponto.' },
-      { id: 'C', text: 'O gráfico toca o eixo x em dois pontos distintos.' },
+      { id: 'A', text: 'O gráfico não toca o eixo $x$.' },
+      { id: 'B', text: 'O gráfico toca o eixo $x$ em exatamente um ponto.' },
+      { id: 'C', text: 'O gráfico toca o eixo $x$ em dois pontos distintos.' },
       { id: 'D', text: 'O gráfico é uma reta.' },
       { id: 'E', text: 'A parábola tem concavidade voltada para baixo obrigatoriamente.' }
-    ]
+    ],
+    dica: "Quando $\\Delta > 0$, a equação do segundo grau possui duas raízes reais e distintas, o que significa que a parábola intercepta o eixo $x$ em dois pontos."
   }
 ];
 
@@ -47,6 +57,14 @@ export default function SimuladosTRI() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [timeLeft, setTimeLeft] = useState(7200); // 2 hours
   const [isFinished, setIsFinished] = useState(false);
+  const [showScratchpad, setShowScratchpad] = useState(false);
+  const [scratchpadText, setScratchpadText] = useState('');
+  const [showTip, setShowTip] = useState(false);
+
+  useEffect(() => {
+    // Reset tip state when question changes
+    setShowTip(false);
+  }, [currentIdx]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -69,8 +87,76 @@ export default function SimuladosTRI() {
     setAnswers({ ...answers, [currentQuestion.id]: altId });
   };
 
+  const renderTextWithMath = (text: string) => {
+    const parts = text.split(/(\$.*?\$)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('$') && part.endsWith('$')) {
+        return <InlineMath key={i} math={part.slice(1, -1)} />;
+      }
+      return part;
+    });
+  };
+
   return (
-    <div className="flex flex-col h-full bg-white text-zinc-950 font-sans">
+    <div className="flex flex-col h-full bg-white text-zinc-950 font-sans relative">
+      {/* SCRATCHPAD OVERLAY */}
+      <AnimatePresence>
+        {showScratchpad && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowScratchpad(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40"
+            />
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-zinc-900 border-l border-zinc-800 z-50 p-8 shadow-2xl flex flex-col"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3 text-white">
+                  <div className="w-10 h-10 bg-blue-600/20 text-blue-500 rounded-xl flex items-center justify-center">
+                    <PenTool size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-sm uppercase tracking-widest">Lousa de Cálculo</h3>
+                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Rascunho Digital</p>
+                  </div>
+                </div>
+                <button onClick={() => setShowScratchpad(false)} className="p-3 bg-zinc-800 rounded-xl text-zinc-500 hover:text-white transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <textarea 
+                value={scratchpadText}
+                onChange={(e) => setScratchpadText(e.target.value)}
+                placeholder="Organize seu raciocínio aqui..."
+                className="flex-1 w-full bg-zinc-950 border border-zinc-800 rounded-2xl p-6 text-sm font-medium text-zinc-300 placeholder:text-zinc-700 focus:ring-2 focus:ring-blue-600 outline-none transition-all resize-none shadow-inner"
+              />
+              
+              <div className="mt-8 flex items-center justify-between">
+                 <button 
+                  onClick={() => setScratchpadText('')}
+                  className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-rose-500 transition-colors"
+                >
+                  Limpar Lousa
+                </button>
+                <button 
+                  onClick={() => setShowScratchpad(false)}
+                  className="px-6 py-3 bg-white text-zinc-950 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+                >
+                  Continuar Questão
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
       {/* HEADER */}
       <header className="flex items-center justify-between mb-8 border-b border-zinc-100 pb-6">
         <div className="flex items-center gap-4">
@@ -124,9 +210,43 @@ export default function SimuladosTRI() {
                   <span className="px-4 py-1.5 bg-blue-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest">Questão {currentQuestion.id}</span>
                   <span className="text-zinc-500 text-[10px] uppercase font-black tracking-widest">Nível Médio</span>
                 </div>
-                <p className="text-lg font-medium text-zinc-100 leading-relaxed tracking-tight">
-                  {currentQuestion.enunciado}
-                </p>
+                <div className="text-lg font-medium text-zinc-100 leading-relaxed tracking-tight">
+                  {renderTextWithMath(currentQuestion.enunciado)}
+                </div>
+              </div>
+
+              {/* AI STUDY TIP */}
+              <div className="bg-zinc-50 rounded-2xl border border-zinc-100 overflow-hidden">
+                <button 
+                  onClick={() => setShowTip(!showTip)}
+                  className="w-full flex items-center justify-between p-6 hover:bg-zinc-100/50 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-blue-600/10 text-blue-600 rounded-xl flex items-center justify-center">
+                      <Brain size={20} />
+                    </div>
+                    <div className="text-left">
+                      <h4 className="text-sm font-black text-zinc-950 tracking-tight">Dica do Professor Next</h4>
+                      <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Insight Estratégico</p>
+                    </div>
+                  </div>
+                  {showTip ? <ChevronUp size={20} className="text-zinc-400" /> : <ChevronDown size={20} className="text-zinc-400" />}
+                </button>
+                
+                <AnimatePresence>
+                  {showTip && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden bg-white border-t border-zinc-100"
+                    >
+                      <div className="p-8 text-sm font-medium text-zinc-600 leading-relaxed italic">
+                        {renderTextWithMath(currentQuestion.dica)}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               <div className="space-y-4 pb-20">
@@ -150,7 +270,7 @@ export default function SimuladosTRI() {
                     <span className={`flex-1 text-sm font-bold tracking-tight mt-2 ${
                       answers[currentQuestion.id] === alt.id ? 'text-zinc-950' : 'text-zinc-600'
                     }`}>
-                      {alt.text}
+                      {renderTextWithMath(alt.text)}
                     </span>
                   </button>
                 ))}
@@ -161,6 +281,13 @@ export default function SimuladosTRI() {
           {/* FOOTER CONTROLS */}
           <div className="mt-auto pt-6 border-t border-zinc-100 flex items-center justify-between pb-8">
             <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setShowScratchpad(true)}
+                className="flex items-center gap-2 px-6 py-4 bg-zinc-50 text-zinc-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-zinc-950 hover:text-white transition-all shadow-sm"
+              >
+                <PenTool size={16} /> Rascunho
+              </button>
+              <div className="h-10 w-[1px] bg-zinc-100 mx-2" />
               <button 
                 onClick={() => setCurrentIdx(Math.max(0, currentIdx - 1))}
                 disabled={currentIdx === 0}

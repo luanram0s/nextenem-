@@ -28,6 +28,10 @@ export default function Profile() {
     
     const updatedUser = { ...userData, name, phone };
     localStorage.setItem('next_enem_user', JSON.stringify(updatedUser));
+
+    if (goal) {
+      localStorage.setItem('next_enem_meta', JSON.stringify(goal));
+    }
     
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
@@ -115,6 +119,29 @@ export default function Profile() {
                 placeholder="(00) 00000-0000"
                 className="w-full bg-zinc-900 text-white rounded-xl p-4 text-sm font-bold border border-zinc-800 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none"
               />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Curso Desejado</label>
+                <input 
+                  type="text" 
+                  value={goal?.course || ''}
+                  onChange={(e) => setGoal(prev => ({ ...prev!, course: e.target.value }))}
+                  placeholder="Ex: Medicina"
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-xs font-bold text-white focus:ring-2 focus:ring-blue-600 outline-none"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Universidade Alvo</label>
+                <input 
+                  type="text" 
+                  value={goal?.institution || ''}
+                  onChange={(e) => setGoal(prev => ({ ...prev!, institution: e.target.value }))}
+                  placeholder="Ex: USP"
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-xs font-bold text-white focus:ring-2 focus:ring-blue-600 outline-none"
+                />
+              </div>
             </div>
           </div>
 

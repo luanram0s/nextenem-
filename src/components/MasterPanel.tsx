@@ -31,6 +31,14 @@ const tickets = [
   { id: 3, student: 'João Souza', plan: 'Elite', subject: 'Correção de Redação', status: 'Resolvido', responsible: 'Prof. Ricardo', priority: 'medium' },
 ];
 
+const students = [
+  { id: 1, name: 'Luan Luis', email: 'luan@nextenem.com', plan: 'Premium', status: 'Ativo', progress: '74%' },
+  { id: 2, name: 'Maria Silva', email: 'maria@gmail.com', plan: 'Basic', status: 'Inativo', progress: '12%' },
+  { id: 3, name: 'João Souza', email: 'joao@outlook.com', plan: 'Premium', status: 'Ativo', progress: '89%' },
+  { id: 4, name: 'Ana Costa', email: 'ana@univise.br', plan: 'Premium', status: 'Ativo', progress: '34%' },
+  { id: 5, name: 'Pedro Alves', email: 'pedro.alves@gmail.com', plan: 'Premium', status: 'Ativo', progress: '65%' },
+];
+
 export default function MasterPanel() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'operacional' | 'estudantes' | 'ia'>('operacional');
