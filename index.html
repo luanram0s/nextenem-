@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXT ENEM</title>
+    <script>
+      // Prevent libraries from trying to overwrite read-only fetch getter
+      (function() {
+        try {
+          const original = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() { return original; },
+            set: function() { /* ignore or log if needed */ },
+            configurable: true
+          });
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
