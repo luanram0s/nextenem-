@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PlayCircle, FileText, CheckCircle, Lock, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/src/lib/utils';
+import LessonView from '../components/LessonView';
 
 const categories = [
   { id: 'all', label: 'Todos' },
@@ -22,10 +23,15 @@ const modules = [
 
 export default function StudyRoom() {
   const [activeFilter, setActiveFilter] = useState('all');
+  const [viewingLesson, setViewingLesson] = useState(false);
 
   const filteredModules = activeFilter === 'all' 
     ? modules 
     : modules.filter(m => m.category === activeFilter);
+
+  if (viewingLesson) {
+    return <LessonView onBack={() => setViewingLesson(false)} />;
+  }
 
   return (
     <div className="space-y-12 max-w-6xl mx-auto animate-in fade-in duration-700 pb-20">
@@ -73,6 +79,7 @@ export default function StudyRoom() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               whileHover={mod.status !== 'locked' ? { y: -8 } : {}}
+              onClick={() => mod.status !== 'locked' && setViewingLesson(true)}
               className={cn(
                 "p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm transition-all relative overflow-hidden flex flex-col h-full",
                 mod.status === 'locked' ? "opacity-60 bg-slate-50/50" : "hover:border-next-blue/20 cursor-pointer shadow-xl shadow-slate-200/40",
@@ -123,10 +130,16 @@ export default function StudyRoom() {
                   )}
                 </div>
 
-                <button className={cn(
-                  "w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-xs transition-all uppercase tracking-widest",
-                  mod.status === 'locked' ? "bg-slate-100 text-slate-400 cursor-not-allowed" : "bg-slate-900 text-white hover:bg-next-blue shadow-lg hover:shadow-blue-200"
-                )}>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (mod.status !== 'locked') setViewingLesson(true);
+                  }}
+                  className={cn(
+                    "w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-xs transition-all uppercase tracking-widest",
+                    mod.status === 'locked' ? "bg-slate-100 text-slate-400 cursor-not-allowed" : "bg-slate-900 text-white hover:bg-next-blue shadow-lg hover:shadow-blue-200"
+                  )}
+                >
                   {mod.status === 'locked' ? 'Nível Insuficiente' : <><PlayCircle size={16} /> Continuar Estudo</>}
                 </button>
               </div>
