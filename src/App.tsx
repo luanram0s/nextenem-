@@ -6,6 +6,7 @@ import Simulados from './pages/Simulados';
 import Redacao from './pages/Redacao';
 import Login from './pages/Login';
 import LaraChat from './components/LaraChat';
+import GoalSelector from './components/GoalSelector';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
@@ -13,6 +14,10 @@ export default function App() {
     return localStorage.getItem('next_enem_auth') === 'true';
   });
   
+  const [hasGoal, setHasGoal] = useState(() => {
+    return !!localStorage.getItem('next_enem_goal');
+  });
+
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem('next_enem_active_tab') || 'dashboard';
   });
@@ -32,9 +37,17 @@ export default function App() {
     localStorage.setItem('next_enem_auth', 'false');
   };
 
+  const handleSetGoal = (goal: { course: string; university: string }) => {
+    localStorage.setItem('next_enem_goal', JSON.stringify(goal));
+    localStorage.setItem('next_enem_course', `${goal.course} - ${goal.university.split(' ')[0]}`);
+    setHasGoal(true);
+    // Force storage event to update other components if needed
+    window.dispatchEvent(new Event('storage'));
+  };
+
   if (!isLoggedIn) {
     return (
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         <motion.div
           key="login-page"
           initial={{ opacity: 0 }}
@@ -43,6 +56,22 @@ export default function App() {
           className="w-full h-full"
         >
           <Login onLogin={handleLogin} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
+  if (!hasGoal) {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key="goal-selector"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="w-full h-full"
+        >
+          <GoalSelector onConfirm={handleSetGoal} />
         </motion.div>
       </AnimatePresence>
     );

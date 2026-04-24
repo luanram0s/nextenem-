@@ -29,7 +29,12 @@ const item = {
 
 export default function Dashboard() {
   const [course, setCourse] = useState(() => {
-    return localStorage.getItem('next_enem_course') || 'Medicina - USP';
+    const saved = localStorage.getItem('next_enem_goal');
+    if (saved) {
+      const data = JSON.parse(saved);
+      return `${data.course} - ${data.university.split(' ')[0]}`;
+    }
+    return 'Medicina - USP';
   });
 
   const [quote, setQuote] = useState("O sucesso é a soma de pequenos esforços repetidos dia após dia.");
@@ -46,165 +51,160 @@ export default function Dashboard() {
     setQuote(randomQuote);
 
     const handleStorage = () => {
-      setCourse(localStorage.getItem('next_enem_course') || 'Medicina - USP');
+      const saved = localStorage.getItem('next_enem_goal');
+      if (saved) {
+        const data = JSON.parse(saved);
+        setCourse(`${data.course} - ${data.university.split(' ')[0]}`);
+      }
     };
 
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('next_enem_course', course);
-  }, [course]);
-
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 bg-transparent max-w-[1400px] mx-auto pb-20">
-      {/* Bloco 1: Boas-vindas e Motivação - Sticky Header */}
-      <header className="sticky top-4 z-30 py-8 px-10 bg-slate-900/95 backdrop-blur-md rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200/50 border border-white/5 transition-all">
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-next-blue">Plataforma Oficial</span>
-              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-            </div>
-            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
-              Bons estudos, <span className="text-next-blue">Luan</span>.
-            </h1>
-            <p className="text-slate-400 text-xs font-medium italic opacity-70">
-              "{quote}"
-            </p>
+    <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 animate-in fade-in duration-700 max-w-[1500px] mx-auto pb-20">
+      {/* Coluna 2: Main Content (8/12) */}
+      <div className="xl:col-span-8 space-y-12">
+        {/* Header Fixo Interno */}
+        <header className="space-y-4">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-next-blue">Dashboard Oficial</span>
+            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
           </div>
-          <div className="flex flex-col items-end gap-1 text-right">
-            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Meta de Aprovação</span>
-            <div className="px-5 py-2 bg-white/5 border border-white/10 rounded-xl">
-              <span className="text-sm font-black text-white uppercase tracking-tight">{course}</span>
-            </div>
-          </div>
-        </div>
-        
-        <div className="absolute top-[-50%] right-[-10%] w-64 h-64 bg-next-blue/10 rounded-full blur-[80px]" />
-      </header>
+          <h1 className="text-5xl font-black text-slate-900 tracking-tighter">
+            Bons estudos, <span className="text-next-blue">Luan</span>.
+          </h1>
+          <p className="text-slate-500 font-medium italic opacity-80 max-w-xl">
+            "{quote}"
+          </p>
+        </header>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
-        {/* Main Content Area (8/12) */}
-        <div className="xl:col-span-8 space-y-10">
-          
-          {/* Bloco 2: Próxima Aula (Blue Glow) */}
-          <section className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-6 bg-next-blue rounded-full" />
-                <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight">Foco de Hoje</h3>
+        {/* Cards de Foco Atual (Alta Incidência) */}
+        <section className="space-y-8">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+            <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight">Foco de Hoje</h3>
+            <span className="text-xs font-bold text-next-blue uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Alta Incidência</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <motion.div 
+              whileHover={{ y: -5 }}
+              animate={{ 
+                boxShadow: ["0 0 0px rgba(0, 123, 255, 0)", "0 0 20px rgba(0, 123, 255, 0.15)", "0 0 0px rgba(0, 123, 255, 0)"]
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="group relative p-10 bg-white border border-slate-100 rounded-[3rem] shadow-sm hover:shadow-2xl hover:border-next-blue transition-all overflow-hidden"
+            >
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-next-blue mb-8 group-hover:scale-110 transition-transform">
+                  <GraduationCap size={28} />
+                </div>
+                <h4 className="text-2xl font-black text-slate-900 mb-2">Geometria Espacial</h4>
+                <p className="text-sm text-slate-500 font-medium mb-10 leading-relaxed">
+                  Foco em Poliedros. Assunto com <span className="text-next-blue font-bold">15% de recorrência</span> na prova de Matemática.
+                </p>
+                <button className="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-next-blue group-hover:gap-5 transition-all">
+                  Continuar Estudo <ArrowRight size={16} />
+                </button>
               </div>
-              <span className="text-xs font-bold text-next-blue uppercase tracking-widest">Baseado em sua Incidência</span>
+              <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-next-blue/5 rounded-full blur-3xl group-hover:bg-next-blue/10 transition-all" />
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ y: -5 }}
+              animate={{ 
+                boxShadow: ["0 0 0px rgba(0, 123, 255, 0)", "0 0 20px rgba(0, 123, 255, 0.1)", "0 0 0px rgba(0, 123, 255, 0)"]
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+              className="group relative p-10 bg-white border border-slate-100 rounded-[3rem] shadow-sm hover:shadow-2xl hover:border-next-blue/20 transition-all overflow-hidden"
+            >
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 mb-8 group-hover:scale-110 transition-transform">
+                  <Sparkles size={28} />
+                </div>
+                <h4 className="text-2xl font-black text-slate-900 mb-2">Estequiometria</h4>
+                <p className="text-sm text-slate-500 font-medium mb-10 leading-relaxed">
+                  O pilar da Natureza. Pratique cálculos de massa e volume para garantir sua consistência TRI.
+                </p>
+                <button className="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-purple-600 group-hover:gap-5 transition-all">
+                  Assistir Aula <Play size={16} fill="currentColor" />
+                </button>
+              </div>
+              <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl group-hover:bg-purple-500/10 transition-all" />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
+          {stats.slice(0, 3).map((stat, idx) => (
+            <div key={idx} className="p-8 bg-slate-50 border border-slate-100 rounded-[2.5rem] transition-colors hover:bg-slate-100/50">
+              <div className="flex justify-between items-start mb-6">
+                <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{stat.label}</span>
+                <stat.icon size={18} className="text-slate-400" />
+              </div>
+              <p className="text-4xl font-black text-slate-900 tracking-tighter">{stat.value}</p>
             </div>
+          ))}
+        </div>
+      </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <motion.div 
-                whileHover={{ y: -5 }}
-                animate={{ 
-                  boxShadow: ["0 0 0px rgba(0, 123, 255, 0)", "0 0 15px rgba(0, 123, 255, 0.1)", "0 0 0px rgba(0, 123, 255, 0)"]
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="group relative p-8 bg-white border border-slate-100 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-blue-500/5 hover:border-next-blue/20 transition-all overflow-hidden"
-              >
-                <div className="relative z-10">
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-next-blue mb-6 group-hover:scale-110 transition-transform">
-                    <GraduationCap size={24} />
+      {/* Coluna 3: Widgets (4/12) */}
+      <div className="xl:col-span-4 space-y-12">
+        <div className="sticky top-12 space-y-12">
+          {/* Radar Sisu Widget */}
+          <section className="p-10 bg-white border border-slate-100 rounded-[3rem] shadow-xl shadow-slate-200/40">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="w-12 h-12 bg-next-blue/10 rounded-2xl flex items-center justify-center text-next-blue">
+                <Target size={24} />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Radar Sisu</h3>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">Vaga Alvo: {course}</p>
+              </div>
+            </div>
+            
+            <div className="space-y-10">
+              <div className="space-y-4">
+                <div className="flex justify-between items-end">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Status da Vaga</span>
+                    <h4 className="text-lg font-black text-slate-900">{course}</h4>
                   </div>
-                  <h4 className="text-lg font-black text-slate-800 mb-2">Geometria Espacial</h4>
-                  <p className="text-xs text-slate-500 font-medium mb-8 leading-relaxed">
-                    Poliedros e Sólidos de Revolução. Assunto com <span className="text-next-blue font-bold">15% de recorrência</span> na prova de MT.
-                  </p>
-                  <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-next-blue group-hover:gap-4 transition-all">
-                    Acessar Módulo <ArrowRight size={14} />
-                  </button>
+                  <div className="text-right">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Seu TRI</span>
+                    <p className="text-lg font-black text-next-blue">745.8</p>
+                  </div>
                 </div>
-                {/* Glow effect */}
-                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-next-blue/5 rounded-full blur-2xl group-hover:bg-next-blue/10 transition-all" />
-              </motion.div>
+                
+                <div className="relative h-4 bg-slate-100 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: "78%" }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                    className="absolute inset-y-0 left-0 bg-next-blue rounded-full"
+                  />
+                </div>
+                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">
+                  <span>Início</span>
+                  <span className="text-next-blue">78% da Meta</span>
+                  <span>Aprovação</span>
+                </div>
+              </div>
 
-              <motion.div 
-                whileHover={{ y: -5 }}
-                animate={{ 
-                  boxShadow: ["0 0 0px rgba(16, 185, 129, 0)", "0 0 15px rgba(16, 185, 129, 0.1)", "0 0 0px rgba(16, 185, 129, 0)"]
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                className="group relative p-8 bg-white border border-slate-100 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-blue-500/5 hover:border-next-blue/20 transition-all overflow-hidden"
-              >
-                <div className="relative z-10">
-                  <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 mb-6 group-hover:scale-110 transition-transform">
-                    <Sparkles size={24} />
-                  </div>
-                  <h4 className="text-lg font-black text-slate-800 mb-2">Estequiometria</h4>
-                  <p className="text-xs text-slate-500 font-medium mb-8 leading-relaxed">
-                    O pilar da Natureza. Pratique cálculos de massa e volume para garantir sua consistência TRI.
-                  </p>
-                  <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500 group-hover:gap-4 transition-all">
-                    Assistir Aula <Play size={14} fill="currentColor" />
-                  </button>
+              <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 space-y-4">
+                <p className="text-xs font-bold text-slate-600 leading-relaxed">
+                  Faltam aproximadamente <span className="text-next-blue">67 pontos</span> para atingir a nota de corte média do Sisu 2024.
+                </p>
+                <div className="flex items-center gap-2 text-[10px] font-black text-next-blue uppercase tracking-widest">
+                  <Sparkles size={14} /> Ver Insights de Evolução
                 </div>
-                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all" />
-              </motion.div>
+              </div>
             </div>
           </section>
 
-          {/* Stats Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {stats.slice(0, 3).map((stat, idx) => (
-              <div key={idx} className="p-6 bg-slate-50/50 border border-slate-100 rounded-3xl">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{stat.label}</span>
-                  <stat.icon size={16} className="text-slate-400" />
-                </div>
-                <p className="text-3xl font-black text-slate-800 tracking-tighter">{stat.value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Sidebar Widgets (4/12) */}
-        <div className="xl:col-span-4 space-y-10">
-          {/* Bloco 3: Calculadora TRI Widget */}
-          <div className="sticky top-10 space-y-10">
-            <GoalSelector />
-            <CalculadoraTRI />
-            
-            <section className="p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 bg-next-blue/10 rounded-xl flex items-center justify-center text-next-blue">
-                  <Target size={20} />
-                </div>
-                <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Radar Sisu</h3>
-              </div>
-              
-              <div className="space-y-6">
-                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-xs font-bold text-slate-600">Medicina - USP</span>
-                    <span className="text-xs font-black text-next-blue">812.5</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-next-blue w-[78%] rounded-full" />
-                  </div>
-                </div>
-
-                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-xs font-bold text-slate-600">Medicina - UNESP</span>
-                    <span className="text-xs font-black text-next-blue">795.0</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-emerald-500 w-[84%] rounded-full" />
-                  </div>
-                </div>
-              </div>
-
-              <p className="mt-8 text-[10px] text-slate-400 font-medium leading-relaxed">
-                * As notas de corte são baseadas no último SISU. Ajuste sua meta TRI para acompanhar a evolução.
-              </p>
-            </section>
-          </div>
+          <CalculadoraTRI />
         </div>
       </div>
     </div>
