@@ -1,120 +1,169 @@
 import React, { useState } from 'react';
-import { Send, User, MessageCircle, HelpCircle, ChevronRight, Search } from 'lucide-react';
+import { 
+  Send, 
+  HelpCircle, 
+  Mail, 
+  Phone, 
+  Clock, 
+  MessageSquare,
+  ChevronDown
+} from 'lucide-react';
 
 const faq = [
-  { q: "Como funciona a nota TRI?", a: "A Teoria de Resposta ao Item avalia o nível de dificuldade de cada questão..." },
-  { q: "Posso refazer os simulados?", a: "Sim, você pode refazer qualquer simulado após 7 dias da primeira tentativa." },
-  { q: "Como entrar em contato com um mentor?", a: "Mentores estão disponíveis via chat das 08h às 22h." }
+  { q: "Como funciona a nota TRI?", a: "A Teoria de Resposta ao Item avalia o nível de dificuldade de cada questão. Acertar questões difíceis e errar fáceis pode baixar sua nota por inconsistência, enquanto um padrão coerente valoriza sua pontuação." },
+  { q: "Os simulados são baseados em provas reais?", a: "Sim, todos os nossos simulados utilizam questões de anos anteriores do ENEM ou questões inéditas desenvolvidas por especialistas seguindo rigorosamente a Matriz de Referência do INEP." },
+  { q: "Como cancelar minha assinatura?", a: "Você pode gerenciar sua assinatura diretamente no painel 'Meu Perfil' > 'Plano & Cobrança'. O cancelamento é imediato e você mantém o acesso até o fim do período já pago." },
+  { q: "Tenho direito a monitoria individual?", a: "Assinantes do plano Premium têm acesso a sessões coletivas de tirar dúvidas e suporte via chat prioritário com nossos mentores pedagógicos." }
 ];
 
 export default function SupportChat() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Olá! Como posso ajudar na sua jornada rumo à aprovação hoje?", sender: 'ai', time: '10:00' }
-  ]);
-  const [input, setInput] = useState('');
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
-
-    setMessages([...messages, { id: Date.now(), text: input, sender: 'user', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
-    setInput('');
-    
-    // Simple echo/bot response
-    setTimeout(() => {
-      setMessages(prev => [...prev, { 
-        id: Date.now() + 1, 
-        text: "Entendi! Vou encaminhar sua dúvida para um de nossos mentores especialistas. Eles responderão em breve.", 
-        sender: 'ai', 
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
-      }]);
-    }, 1000);
+    setFormStatus('sending');
+    setTimeout(() => setFormStatus('sent'), 1500);
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
-      {/* CHAT AREA */}
-      <div className="lg:col-span-8 flex flex-col bg-zinc-50 rounded-[3rem] border border-zinc-100 overflow-hidden h-[700px]">
-        <div className="p-8 bg-white border-b border-zinc-100 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
-              <MessageCircle size={22} />
-            </div>
-            <div>
-              <h3 className="font-black text-zinc-950 tracking-tight">Suporte Next Enem</h3>
-              <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Operacional Agora
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="max-w-6xl mx-auto space-y-12 pb-20">
+      {/* HEADER */}
+      <header>
+        <h1 className="text-4xl font-black text-zinc-950 tracking-tighter mb-2">Suporte & Ajuda</h1>
+        <p className="text-zinc-500 font-medium tracking-tight">Estamos aqui para garantir sua aprovação. Escolha o melhor canal para você.</p>
+      </header>
 
-        <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
-          {messages.map((msg) => (
-            <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] p-5 rounded-[2rem] text-sm font-medium shadow-sm ${
-                msg.sender === 'user' 
-                  ? 'bg-zinc-900 text-white rounded-tr-none' 
-                  : 'bg-white text-zinc-600 rounded-tl-none border border-zinc-100'
-              }`}>
-                {msg.text}
-                <p className={`text-[9px] mt-2 font-black uppercase tracking-widest ${msg.sender === 'user' ? 'text-white/40' : 'text-zinc-400'}`}>
-                  {msg.time}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <form onSubmit={handleSend} className="p-6 bg-white border-t border-zinc-100">
-          <div className="relative flex items-center">
-            <input 
-              type="text" 
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Digite sua dúvida aqui..."
-              className="w-full p-6 pr-20 bg-zinc-50 border-none rounded-[2rem] text-sm font-bold placeholder:text-zinc-300 focus:ring-2 focus:ring-blue-600 transition-all"
-            />
-            <button 
-              type="submit"
-              className="absolute right-2 p-4 bg-blue-600 text-white rounded-[1.5rem] hover:scale-105 active:scale-95 transition-all shadow-lg shadow-blue-600/20"
-            >
-              <Send size={20} />
-            </button>
+      {/* QUICK SHORTCUTS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a 
+          href="https://wa.me/5511999999999" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="bg-zinc-50 p-8 rounded-2xl border border-zinc-100 hover:bg-white hover:shadow-2xl hover:shadow-zinc-200/50 transition-all group flex flex-col items-center text-center"
+        >
+          <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform mb-6">
+            <Phone size={32} />
           </div>
-        </form>
+          <h3 className="text-xl font-black text-zinc-950 tracking-tight mb-2">WhatsApp</h3>
+          <p className="text-xs text-zinc-500 font-medium mb-6">Fale com um consultor em tempo real para dúvidas urgentes.</p>
+          <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-4 py-2 rounded-full uppercase tracking-widest">Abrir Conversa</span>
+        </a>
+
+        <a 
+          href="mailto:suporte@nextenem.com" 
+          className="bg-zinc-50 p-8 rounded-2xl border border-zinc-100 hover:bg-white hover:shadow-2xl hover:shadow-zinc-200/50 transition-all group flex flex-col items-center text-center"
+        >
+          <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform mb-6">
+            <Mail size={32} />
+          </div>
+          <h3 className="text-xl font-black text-zinc-950 tracking-tight mb-2">E-mail</h3>
+          <p className="text-xs text-zinc-500 font-medium mb-6">Envie sugestões ou problemas técnicos detalhados.</p>
+          <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-4 py-2 rounded-full uppercase tracking-widest">suporte@nextenem.com</span>
+        </a>
+
+        <button 
+          onClick={() => document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth' })}
+          className="bg-zinc-950 p-8 rounded-2xl border border-zinc-900 hover:shadow-2xl hover:shadow-zinc-950/20 transition-all group flex flex-col items-center text-center"
+        >
+          <div className="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center text-white group-hover:scale-110 transition-transform mb-6">
+            <HelpCircle size={32} />
+          </div>
+          <h3 className="text-xl font-black text-white tracking-tight mb-2">Central de FAQ</h3>
+          <p className="text-xs text-zinc-500 font-medium mb-6">Encontre respostas rápidas para as perguntas mais comuns.</p>
+          <span className="text-[10px] font-black text-zinc-400 bg-zinc-900 px-4 py-2 rounded-full uppercase tracking-widest">Acessar Banco de Dados</span>
+        </button>
       </div>
 
-      {/* FAQ SIDEBAR */}
-      <div className="lg:col-span-4 space-y-8">
-        <div className="bg-white p-8 rounded-[3rem] border-2 border-zinc-50 shadow-sm">
-          <div className="flex items-center gap-3 mb-8">
-            <HelpCircle size={20} className="text-blue-600" />
-            <h3 className="font-black text-zinc-950 uppercase tracking-widest text-xs">Dúvidas Frequentes</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* CONTACT FORM */}
+        <div className="lg:col-span-12 xl:col-span-5 bg-white p-10 rounded-2xl border border-zinc-100 shadow-sm space-y-8 h-fit">
+          <div className="flex items-center gap-3">
+             <MessageSquare size={20} className="text-blue-600" />
+             <h3 className="font-black text-zinc-950 uppercase tracking-widest text-xs">Mensagem Direta</h3>
           </div>
-          <div className="space-y-4">
-            {faq.map((item, i) => (
-              <details key={i} className="group border-b border-zinc-100 pb-4 last:border-0 hover:border-blue-100 transition-colors">
-                <summary className="list-none flex items-center justify-between cursor-pointer font-bold text-sm text-zinc-800 tracking-tight group-hover:text-blue-600 transition-colors">
-                  {item.q}
-                  <ChevronRight size={14} className="group-open:rotate-90 transition-transform text-zinc-300" />
-                </summary>
-                <p className="mt-3 text-xs text-zinc-500 leading-relaxed font-medium">
-                  {item.a}
-                </p>
-              </details>
-            ))}
-          </div>
-          <button className="w-full mt-8 py-4 bg-zinc-50 text-zinc-400 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-100 hover:text-zinc-600 transition-all">Ver FAQ Completo</button>
+          
+          <form onSubmit={handleFormSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Assunto do Contato</label>
+              <select className="w-full bg-zinc-50 border border-zinc-100 rounded-xl p-4 text-sm font-bold focus:ring-2 focus:ring-blue-600 outline-none transition-all">
+                <option>Problemas Técnicos</option>
+                <option>Dúvidas Pedagógicas</option>
+                <option>Sugestões de Conteúdo</option>
+                <option>Financeiro / Assinatura</option>
+              </select>
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Sua Mensagem</label>
+              <textarea 
+                required
+                placeholder="Descreva o que está acontecendo..."
+                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl p-4 text-sm font-bold min-h-[150px] resize-none focus:ring-2 focus:ring-blue-600 outline-none transition-all"
+              />
+            </div>
+
+            <button 
+              disabled={formStatus !== 'idle'}
+              className={`w-full py-5 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${
+                formStatus === 'sent' 
+                  ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20' 
+                  : 'bg-blue-600 text-white shadow-xl shadow-blue-600/30 hover:bg-blue-700 hover:scale-[1.02] active:scale-95'
+              }`}
+            >
+              {formStatus === 'idle' && <><Send size={18} /> Enviar Mensagem</>}
+              {formStatus === 'sending' && <span className="animate-pulse">Enviando...</span>}
+              {formStatus === 'sent' && <>Mensagem Enviada!</>}
+            </button>
+          </form>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-[3rem] shadow-2xl shadow-blue-600/30 relative overflow-hidden group">
-          <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
-          <h4 className="text-xl font-black tracking-tight mb-2">Gosta de ajudar?</h4>
-          <p className="text-xs font-bold text-white/70 leading-relaxed mb-6">Torne-se um monitor embaixador e ganhe benefícios no plano anual.</p>
-          <button className="w-full py-4 bg-white text-blue-600 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg hover:translate-y-[-2px] transition-all">Saiba Mais</button>
+        {/* ACCORDION FAQ */}
+        <div id="faq-section" className="lg:col-span-12 xl:col-span-7 bg-zinc-950 p-10 rounded-2xl border border-zinc-900 shadow-2xl space-y-8">
+          <div className="flex items-center gap-3">
+             <HelpCircle size={20} className="text-blue-500" />
+             <h3 className="font-black text-white uppercase tracking-widest text-xs">Perguntas Frequentes</h3>
+          </div>
+
+          <div className="space-y-4">
+            {faq.map((item, i) => (
+              <div 
+                key={i} 
+                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-700 transition-all"
+              >
+                <button 
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full p-6 flex items-center justify-between text-left group"
+                >
+                  <span className="text-sm font-bold text-zinc-100 tracking-tight group-hover:text-blue-400 transition-colors">{item.q}</span>
+                  <ChevronDown 
+                    size={18} 
+                    className={`text-zinc-500 transition-transform duration-300 ${openFaq === i ? 'rotate-180 text-blue-500' : ''}`} 
+                  />
+                </button>
+                <div className={`transition-all duration-300 ease-in-out ${
+                  openFaq === i ? 'max-h-40 p-6 pt-0 border-t border-zinc-800' : 'max-h-0'
+                }`}>
+                  <p className="text-xs text-zinc-400 font-medium leading-relaxed px-6 pb-6">
+                    {item.a}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="pt-8 mt-8 border-t border-zinc-900">
+             <div className="flex items-center gap-6 text-zinc-500">
+               <div className="flex items-center gap-2">
+                  <Clock size={14} className="text-blue-600" />
+                  <span className="text-[10px] font-black uppercase tracking-widest leading-none">Atendimento Seg - Sex</span>
+               </div>
+               <span className="text-xs font-black text-zinc-300">08:00 — 22:00</span>
+             </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
