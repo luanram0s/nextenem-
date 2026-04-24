@@ -57,10 +57,10 @@ export default function CalculadoraTRI() {
     <div className="space-y-6">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-8 bg-zinc-950 border border-zinc-800 rounded-[2.5rem] text-white flex items-center justify-between group hover:bg-zinc-900 transition-all shadow-2xl shadow-zinc-950/20"
+        className="w-full p-8 bg-zinc-950 border border-zinc-800 rounded-[2.5rem] text-white flex items-center justify-between group hover:bg-zinc-900 transition-all duration-300 shadow-2xl shadow-zinc-950/20"
       >
         <div className="flex items-center gap-6">
-          <div className="w-14 h-14 bg-blue-600/20 rounded-2xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
+          <div className="w-14 h-14 bg-blue-600/20 rounded-2xl flex items-center justify-center text-[#007BFF] group-hover:scale-110 transition-transform duration-300">
             <Calculator size={28} />
           </div>
           <div className="text-left">
@@ -86,7 +86,7 @@ export default function CalculadoraTRI() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="space-y-8">
                   <h4 className="font-black text-zinc-950 uppercase tracking-widest text-xs flex items-center gap-2">
-                    <BarChart3 size={16} className="text-blue-600" /> Ajuste seus acertos
+                    <BarChart3 size={16} className="text-[#007BFF]" /> Ajuste seus acertos
                   </h4>
                   
                   <div className="space-y-8">
@@ -105,7 +105,7 @@ export default function CalculadoraTRI() {
                             max={area.max} 
                             value={scores[area.id]}
                             onChange={(e) => setScores({...scores, [area.id]: parseInt(e.target.value)})}
-                            className="w-full h-2 bg-zinc-100 rounded-full appearance-none cursor-pointer accent-blue-600"
+                            className="w-full h-2 bg-zinc-100 rounded-full appearance-none cursor-pointer accent-[#007BFF]"
                           />
                         </div>
                       </div>
@@ -126,7 +126,7 @@ export default function CalculadoraTRI() {
                           <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Nota Final Estimada</span>
                         </div>
                         <div className="flex items-end gap-3">
-                          <span className="text-8xl font-black text-blue-600 tracking-tighter">{notaTotal}</span>
+                          <span className="text-8xl font-black text-[#007BFF] tracking-tighter">{notaTotal}</span>
                           <span className="text-2xl font-bold text-zinc-300 mb-4 uppercase tracking-widest">pts</span>
                         </div>
                       </div>

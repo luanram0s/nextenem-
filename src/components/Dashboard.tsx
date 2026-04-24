@@ -35,11 +35,11 @@ const Dashboard = () => {
       {/* SIDEBAR */}
       <aside className="w-72 border-r border-zinc-100 flex flex-col p-8 h-full bg-white shrink-0">
         <div className="flex items-center gap-3 mb-12 px-2">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-xl shadow-blue-600/20">
+          <div className="w-10 h-10 bg-[#007BFF] rounded-xl flex items-center justify-center text-white shadow-xl shadow-blue-600/20">
             <Zap size={22} fill="white" />
           </div>
           <div className="flex font-black text-2xl tracking-tighter italic">
-            <span className="text-blue-600">NEXT</span>
+            <span className="text-[#007BFF]">NEXT</span>
             <span className="text-zinc-950">ENEM</span>
           </div>
         </div>
@@ -47,7 +47,7 @@ const Dashboard = () => {
         <nav className="space-y-2 flex-1">
           <button 
             onClick={() => setActiveTab('inicio')}
-            className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all ${activeTab === 'inicio' ? 'bg-blue-50 text-blue-600 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
+            className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'inicio' ? 'bg-blue-50 text-[#007BFF] shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
           >
             <LayoutDashboard size={20} />
             <span className="uppercase tracking-widest text-[10px]">Início</span>
@@ -55,7 +55,7 @@ const Dashboard = () => {
           
           <button 
              onClick={() => setActiveTab('redacao')}
-             className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all ${activeTab === 'redacao' ? 'bg-blue-50 text-blue-600 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
+             className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'redacao' ? 'bg-blue-50 text-[#007BFF] shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
           >
             <PenTool size={20} />
             <span className="uppercase tracking-widest text-[10px]">Lab de Redação</span>
@@ -63,7 +63,7 @@ const Dashboard = () => {
 
           <button 
              onClick={() => setActiveTab('simulados')}
-             className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all ${activeTab === 'simulados' ? 'bg-blue-50 text-blue-600 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
+             className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'simulados' ? 'bg-blue-50 text-[#007BFF] shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
           >
             <ClipboardList size={20} />
             <span className="uppercase tracking-widest text-[10px]">Simulados TRI</span>
@@ -73,9 +73,9 @@ const Dashboard = () => {
         {/* LOGOUT */}
         <button 
           onClick={handleLogout}
-          className="mt-auto flex items-center gap-3 p-5 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-[2rem] transition-all font-black uppercase tracking-widest text-[10px] group border border-transparent hover:border-red-100"
+          className="mt-auto flex items-center gap-3 p-5 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-[2rem] transition-all duration-300 font-black uppercase tracking-widest text-[10px] group border border-transparent hover:border-red-100"
         >
-          <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <LogOut size={18} className="group-hover:-translate-x-1 transition-transform duration-300" />
           <span>Sair da Conta</span>
         </button>
       </aside>
@@ -91,7 +91,7 @@ const Dashboard = () => {
             </div>
             
             {goal && (
-              <div className="bg-blue-600 text-white p-6 rounded-[2.5rem] shadow-2xl shadow-blue-600/30 flex items-center gap-6 min-w-[320px]">
+              <div className="bg-[#007BFF] text-white p-6 rounded-[2.5rem] shadow-2xl shadow-blue-600/30 flex items-center gap-6 min-w-[320px]">
                 <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
                   <Target size={28} />
                 </div>
@@ -116,7 +116,7 @@ const Dashboard = () => {
                 {/* CARD REDAÇÃO */}
                 <div className="bg-zinc-50 p-8 rounded-[3rem] border border-zinc-100 flex flex-col group hover:bg-white hover:shadow-2xl transition-all duration-500">
                   <div className="flex justify-between items-start mb-8">
-                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm">
+                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#007BFF] shadow-sm">
                       <PenTool size={22} />
                     </div>
                     <span className="text-[10px] font-black text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest">+12%</span>
@@ -127,7 +127,7 @@ const Dashboard = () => {
                     <span className="text-zinc-400 font-bold">/1000</span>
                   </div>
                   <p className="text-xs text-zinc-500 font-medium mt-4">Último tema: Desafios da Educação</p>
-                  <button className="mt-8 w-full py-4 bg-zinc-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-95 transition-all">Ver Feedback</button>
+                  <button className="mt-8 w-full py-4 bg-zinc-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-95 transition-all duration-300">Ver Feedback</button>
                 </div>
 
                 {/* CARD PROGRESSO GERAL */}
@@ -147,7 +147,7 @@ const Dashboard = () => {
                       <span>Total</span>
                     </div>
                     <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 w-[74%] rounded-full shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
+                      <div className="h-full bg-[#007BFF] w-[74%] rounded-full shadow-[0_0_12px_rgba(0,123,255,0.5)]" />
                     </div>
                   </div>
                 </div>
@@ -172,7 +172,7 @@ const Dashboard = () => {
                     { t: "Física - Óptica", d: "Há 4 dias", s: "100%" },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-4 group cursor-pointer">
-                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-zinc-400 group-hover:text-blue-600 group-hover:shadow-lg transition-all duration-300">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-zinc-400 group-hover:text-[#007BFF] group-hover:shadow-lg transition-all duration-300">
                         <CheckCircle2 size={18} />
                       </div>
                       <div>
@@ -186,11 +186,11 @@ const Dashboard = () => {
               </div>
 
               <div className="bg-blue-50/50 p-8 rounded-[3rem] border border-blue-100/50">
-                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-blue-600/20">
+                <div className="w-12 h-12 bg-[#007BFF] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-blue-600/20">
                   <Trophy size={22} />
                 </div>
                 <h3 className="font-black text-zinc-950 uppercase tracking-widest text-xs mb-2">Sua Posição</h3>
-                <p className="text-3xl font-black text-blue-600 tracking-tighter">Top 5%</p>
+                <p className="text-3xl font-black text-[#007BFF] tracking-tighter">Top 5%</p>
                 <p className="text-xs text-zinc-500 font-medium mt-2 leading-relaxed">Você está entre os estudantes mais bem preparados para {goal?.course || 'sua meta'}.</p>
               </div>
             </div>
