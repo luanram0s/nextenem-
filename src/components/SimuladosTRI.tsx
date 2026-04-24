@@ -24,7 +24,7 @@ interface Question {
   enunciado: string;
   alternativas: { id: string; text: string }[];
   dica: string;
-  category: 'Lógica' | 'Matemática' | 'Humanas' | 'Linguagens';
+  category: 'Lógica' | 'Matemática' | 'Física' | 'Humanas' | 'Linguagens';
 }
 
 const mockQuestions: Question[] = [
@@ -53,28 +53,48 @@ const mockQuestions: Question[] = [
     ],
     dica: "Quando $\\Delta > 0$, a equação do segundo grau possui duas raízes reais e distintas, o que significa que a parábola intercepta o eixo $x$ em dois pontos.",
     category: 'Matemática'
+  },
+  {
+    id: 3,
+    enunciado: "Um objeto de massa $m = 2\\text{ kg}$ é submetido a uma força constante $F = 10\\text{ N}$. Qual a aceleração $a$ deste objeto, negligenciando o atrito? Utilize a Segunda Lei de Newton: $F = m \\cdot a$.",
+    alternativas: [
+      { id: 'A', text: '$2\\text{ m/s}^2$' },
+      { id: 'B', text: '$5\\text{ m/s}^2$' },
+      { id: 'C', text: '$10\\text{ m/s}^2$' },
+      { id: 'D', text: '$20\\text{ m/s}^2$' },
+      { id: 'E', text: '$0.2\\text{ m/s}^2$' }
+    ],
+    dica: "Isole a aceleração na fórmula: $a = F/m$. Não se esqueça de registrar seu cálculo no Laboratório.",
+    category: 'Física'
   }
 ];
 
 export default function SimuladosTRI() {
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<Record<number, { altId: string; reasoning: string }>>({});
   const [timeLeft, setTimeLeft] = useState(7200); // 2 hours
   const [isFinished, setIsFinished] = useState(false);
   const [showScratchpad, setShowScratchpad] = useState(false);
   const [scratchpadTexts, setScratchpadTexts] = useState<Record<number, string>>({});
   const [showTip, setShowTip] = useState(false);
   const [requirementAlert, setRequirementAlert] = useState<string | null>(null);
+  const [showFirstAccessModal, setShowFirstAccessModal] = useState(false);
+  const [hasSeenTechnicalModal, setHasSeenTechnicalModal] = useState(false);
 
   const currentQuestion = mockQuestions[currentIdx] || mockQuestions[0];
 
   useEffect(() => {
     setShowTip(false);
-    if (currentQuestion.category === 'Lógica' || currentQuestion.category === 'Matemática') {
-      setRequirementAlert('Esta questão necessita do Espaço de Raciocínio para ser validada.');
+    const isTechnical = ['Matemática', 'Física', 'Lógica'].includes(currentQuestion.category);
+    
+    if (isTechnical && !hasSeenTechnicalModal) {
+      setShowFirstAccessModal(true);
+      setHasSeenTechnicalModal(true);
+    } else if (isTechnical) {
+      setRequirementAlert('Esta questão necessita do Laboratório de Cálculo (mín. 10 caracteres).');
       setTimeout(() => setRequirementAlert(null), 5000);
     }
-  }, [currentIdx, currentQuestion.category]);
+  }, [currentIdx, currentQuestion.category, hasSeenTechnicalModal]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -91,7 +111,13 @@ export default function SimuladosTRI() {
   };
 
   const handleSelect = (altId: string) => {
-    setAnswers({ ...answers, [currentQuestion.id]: altId });
+    setAnswers({ 
+      ...answers, 
+      [currentQuestion.id]: { 
+        altId, 
+        reasoning: scratchpadTexts[currentQuestion.id] || '' 
+      } 
+    });
   };
 
   const renderTextWithMath = (text: string) => {
@@ -106,6 +132,41 @@ export default function SimuladosTRI() {
 
   return (
     <div className="flex flex-col h-full bg-white text-zinc-950 font-sans relative">
+      {/* FIRST ACCESS MODAL */}
+      <AnimatePresence>
+        {showFirstAccessModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-[3000] p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-zinc-950/80 backdrop-blur-md"
+              onClick={() => setShowFirstAccessModal(false)}
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-[2.5rem] p-10 max-w-md w-full relative z-[3001] shadow-2xl border border-zinc-100"
+            >
+              <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-xl shadow-indigo-600/20">
+                <Brain size={32} />
+              </div>
+              <h2 className="text-2xl font-black text-zinc-950 tracking-tighter mb-4 italic">Raciocínio Obrigatório</h2>
+              <p className="text-zinc-600 text-sm font-medium leading-relaxed mb-8">
+                Para validar esta questão, utilize o <span className="font-bold text-indigo-600">Laboratório de Cálculo</span> para organizar seu pensamento. O sistema analisará seu processo no final.
+              </p>
+              <button 
+                onClick={() => setShowFirstAccessModal(false)}
+                className="w-full py-5 bg-zinc-950 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all"
+              >
+                Entendido, Vamos lá
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* REQUIREMENT TOAST */}
       <AnimatePresence>
         {requirementAlert && (
@@ -139,42 +200,64 @@ export default function SimuladosTRI() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-zinc-950 text-white z-[1000] p-10 shadow-2xl flex flex-col border-l border-zinc-800"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-white text-zinc-950 z-[1000] p-10 shadow-2xl flex flex-col border-l border-zinc-100"
             >
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center shadow-lg shadow-red-600/30">
+                  <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-600/30">
                     <PenTool size={28} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-black italic tracking-tighter uppercase">Espaço de Raciocínio</h3>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Organize seu ataque aqui</p>
+                    <h3 className="text-xl font-black italic tracking-tighter uppercase">Laboratório de Cálculo</h3>
+                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Onde a lógica ganha vida</p>
                   </div>
                 </div>
-                <button onClick={() => setShowScratchpad(false)} className="p-4 bg-zinc-900 rounded-xl hover:bg-zinc-800 transition-all">
+                <button onClick={() => setShowScratchpad(false)} className="p-4 bg-zinc-50 rounded-xl hover:bg-zinc-100 transition-all">
                   <X size={24} />
                 </button>
               </div>
 
               <textarea 
                 value={scratchpadTexts[currentQuestion.id] || ''}
-                onChange={(e) => setScratchpadTexts({ ...scratchpadTexts, [currentQuestion.id]: e.target.value })}
-                placeholder="Esculpa sua lógica aqui..."
-                className="flex-1 w-full bg-zinc-900 border border-zinc-800 rounded-3xl p-8 text-lg font-medium text-white placeholder:text-zinc-800 focus:ring-4 focus:ring-red-600/20 outline-none transition-all resize-none shadow-inner"
+                onChange={(e) => {
+                  const newText = e.target.value;
+                  setScratchpadTexts({ ...scratchpadTexts, [currentQuestion.id]: newText });
+                  // Sync with answers if already selected
+                  if (answers[currentQuestion.id]) {
+                    setAnswers(prev => ({
+                      ...prev,
+                      [currentQuestion.id]: { ...prev[currentQuestion.id], reasoning: newText }
+                    }));
+                  }
+                }}
+                placeholder="Desenvolva sua tese matemática aqui..."
+                className="flex-1 w-full bg-zinc-50 border border-zinc-200 rounded-3xl p-8 text-lg font-medium text-zinc-900 placeholder:text-zinc-300 focus:ring-4 focus:ring-indigo-600/10 outline-none transition-all resize-none shadow-inner"
               />
               
-              <div className="mt-10 flex items-center justify-between">
+              <div className="mt-10 flex items-center justify-between text-zinc-400 font-black uppercase text-[10px] tracking-widest">
+                <span>Caracteres: {(scratchpadTexts[currentQuestion.id] || '').length} / 10 min.</span>
+              </div>
+
+              <div className="mt-6 flex items-center justify-between">
                  <button 
-                  onClick={() => setScratchpadTexts({ ...scratchpadTexts, [currentQuestion.id]: '' })}
-                  className="text-xs font-black uppercase tracking-widest text-zinc-600 hover:text-red-500 transition-colors"
+                  onClick={() => {
+                    setScratchpadTexts({ ...scratchpadTexts, [currentQuestion.id]: '' });
+                    if (answers[currentQuestion.id]) {
+                      setAnswers(prev => ({
+                        ...prev,
+                        [currentQuestion.id]: { ...prev[currentQuestion.id], reasoning: '' }
+                      }));
+                    }
+                  }}
+                  className="text-xs font-black uppercase tracking-widest text-zinc-400 hover:text-indigo-600 transition-colors"
                 >
-                  Dizimar Notas
+                  Limpar Área
                 </button>
                 <button 
                   onClick={() => setShowScratchpad(false)}
-                  className="px-10 py-5 bg-red-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-red-700 transition-all hover:scale-[1.05] active:scale-95"
+                  className="px-10 py-5 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-indigo-700 transition-all hover:scale-[1.05] active:scale-95"
                 >
-                  Confirmar Raciocínio
+                  Confirmar Dados
                 </button>
               </div>
             </motion.div>
@@ -197,7 +280,7 @@ export default function SimuladosTRI() {
         <div className="flex items-center gap-10">
           <div className="flex flex-col items-end">
              <span className="text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em] mb-1">Tempo de Prova</span>
-             <div className={`flex items-center gap-3 text-2xl font-black ${timeLeft < 600 ? 'text-red-600 animate-pulse' : 'text-zinc-950'}`}>
+             <div className={`flex items-center gap-3 text-2xl font-black ${timeLeft < 600 ? 'text-rose-600 animate-pulse' : 'text-zinc-950'}`}>
                 <Clock size={20} />
                 {formatTime(timeLeft)}
              </div>
@@ -218,7 +301,7 @@ export default function SimuladosTRI() {
                 className="space-y-10"
               >
                 <div className="bg-zinc-50 border border-zinc-100 p-10 rounded-[2.5rem] shadow-inner relative overflow-hidden">
-                   <div className="absolute top-0 left-0 w-2 h-full bg-red-600" />
+                   <div className="absolute top-0 left-0 w-2 h-full bg-indigo-600" />
                    <div className="flex items-center gap-3 mb-8">
                       <span className="px-5 py-2 bg-zinc-950 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full">Questão {currentQuestion.id}</span>
                    </div>
@@ -272,14 +355,14 @@ export default function SimuladosTRI() {
                       }`}
                     >
                       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-lg transition-all shrink-0 ${
-                        answers[currentQuestion.id] === alt.id
-                          ? 'bg-red-600 text-white rotate-12 shadow-lg shadow-red-600/30'
+                        answers[currentQuestion.id]?.altId === alt.id
+                          ? 'bg-indigo-600 text-white rotate-12 shadow-lg shadow-indigo-600/30'
                           : 'bg-zinc-100 text-zinc-400 group-hover:rotate-6 group-hover:text-zinc-600'
                       }`}>
                         {alt.id}
                       </div>
                       <span className={`text-lg font-black tracking-tight mt-2 flex-1 ${
-                        answers[currentQuestion.id] === alt.id ? 'text-white' : 'text-zinc-700'
+                        answers[currentQuestion.id]?.altId === alt.id ? 'text-white' : 'text-zinc-700'
                       }`}>
                         {renderTextWithMath(alt.text)}
                       </span>
@@ -300,7 +383,7 @@ export default function SimuladosTRI() {
 
                <div className="mb-12">
                   <h3 className="text-white text-xs font-black uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
-                     <span className="w-2 h-2 bg-red-600 rounded-full animate-ping" />
+                     <span className="w-2 h-2 bg-indigo-600 rounded-full animate-ping" />
                      Seu Alvo
                   </h3>
                   <div className="grid grid-cols-5 gap-3">
@@ -313,7 +396,7 @@ export default function SimuladosTRI() {
                               key={i}
                               onClick={() => i < mockQuestions.length && setCurrentIdx(i)}
                               className={`aspect-square rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${
-                                 active ? 'bg-red-600 text-white shadow-xl shadow-red-600/30 scale-125 z-10' :
+                                 active ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30 scale-125 z-10' :
                                  done ? 'bg-white text-zinc-950' : 
                                  'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'
                               }`}
@@ -331,7 +414,7 @@ export default function SimuladosTRI() {
                       <span className="text-2xl font-black">{Object.keys(answers).length}/45</span>
                   </div>
                   <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-                     <div className="h-full bg-red-600 transition-all duration-1000" style={{ width: `${(Object.keys(answers).length/45)*100}%` }} />
+                     <div className="h-full bg-indigo-600 transition-all duration-1000" style={{ width: `${(Object.keys(answers).length/45)*100}%` }} />
                   </div>
 
                   <button 
@@ -356,21 +439,22 @@ export default function SimuladosTRI() {
                 <ChevronLeft size={20} /> Anterior
              </button>
 
-             {/* 🎯 BOTÃO ESPAÇO DE RACIOCÍNIO 🎯 */}
+             {/* 🎯 BOTÃO LABORATÓRIO DE CÁLCULO 🎯 */}
              <button 
                 onClick={() => setShowScratchpad(true)}
-                className="flex items-center gap-4 px-12 py-5 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-red-600/30 hover:scale-105 active:scale-95 transition-all outline-none ring-4 ring-red-600/20"
+                className="flex items-center gap-4 px-12 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-indigo-600/30 hover:scale-105 active:scale-95 transition-all outline-none ring-4 ring-indigo-600/20"
              >
-                <PenTool size={20} /> 📝 Espaço de Raciocínio
+                <PenTool size={20} /> 📝 Laboratório de Cálculo
              </button>
 
              <button 
                 onClick={() => {
-                  const isTechnical = currentQuestion.category === 'Lógica' || currentQuestion.category === 'Matemática';
-                  const hasReasoning = (scratchpadTexts[currentQuestion.id] || '').trim().length > 0;
+                  const isTechnical = ['Matemática', 'Física', 'Lógica'].includes(currentQuestion.category);
+                  const scratchpadLength = (scratchpadTexts[currentQuestion.id] || '').trim().length;
+                  const hasReasoning = scratchpadLength >= 10;
                   
                   if (isTechnical && !hasReasoning) {
-                    setRequirementAlert('Obrigatório preencher o Espaço de Raciocínio!');
+                    setRequirementAlert(`Laboratório de Cálculo obrigatório (faltam ${10 - scratchpadLength} caracteres)`);
                     setTimeout(() => setRequirementAlert(null), 3000);
                     return;
                   }
@@ -378,18 +462,18 @@ export default function SimuladosTRI() {
                   setCurrentIdx(Math.min(mockQuestions.length - 1, currentIdx + 1));
                 }}
                 disabled={currentIdx === mockQuestions.length - 1}
-                className={`flex items-center gap-3 px-8 py-5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-30 flex-row-reverse ${
-                  (currentQuestion.category === 'Lógica' || currentQuestion.category === 'Matemática') && !(scratchpadTexts[currentQuestion.id] || '').trim()
-                    ? 'bg-zinc-200 text-zinc-500 cursor-not-allowed'
+                className={`flex items-center gap-3 px-8 py-5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all flex-row-reverse ${
+                  (['Matemática', 'Física', 'Lógica'].includes(currentQuestion.category)) && (scratchpadTexts[currentQuestion.id] || '').trim().length < 10
+                    ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed opacity-50'
                     : 'bg-zinc-950 text-white hover:scale-105 active:scale-95'
                 }`}
              >
-                {(currentQuestion.category === 'Lógica' || currentQuestion.category === 'Matemática') && !(scratchpadTexts[currentQuestion.id] || '').trim() ? <Lock size={18} /> : <ChevronRight size={20} />}
+                {(['Matemática', 'Física', 'Lógica'].includes(currentQuestion.category)) && (scratchpadTexts[currentQuestion.id] || '').trim().length < 10 ? <Lock size={18} /> : <ChevronRight size={20} />}
                 Próxima
              </button>
           </div>
 
-          <button className="p-5 text-zinc-200 hover:text-red-600 transition-all">
+          <button className="p-5 text-zinc-200 hover:text-indigo-600 transition-all">
              <Flag size={24} />
           </button>
       </footer>
