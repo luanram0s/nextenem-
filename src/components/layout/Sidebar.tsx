@@ -104,6 +104,7 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
           {/* Logout Button */}
           <button 
             onClick={() => {
+              localStorage.removeItem('next_enem_meta');
               localStorage.clear();
               window.location.reload();
             }}
