@@ -33,7 +33,19 @@ export default function App() {
   };
 
   if (!isLoggedIn) {
-    return <Login onLogin={handleLogin} />;
+    return (
+      <AnimatePresence>
+        <motion.div
+          key="login-page"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="w-full h-full"
+        >
+          <Login onLogin={handleLogin} />
+        </motion.div>
+      </AnimatePresence>
+    );
   }
 
   const renderContent = () => {

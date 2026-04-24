@@ -145,10 +145,16 @@ export default function Login({ onLogin }: LoginProps) {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <button className="h-12 border border-slate-200 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 transition-all font-bold text-slate-600 text-xs">
+            <button 
+              onClick={() => alert("Login social disponível em breve no Beta")}
+              className="h-12 border border-slate-200 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 transition-all font-bold text-slate-600 text-xs"
+            >
               <Github size={18} /> GitHub
             </button>
-            <button className="h-12 border border-slate-200 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 transition-all font-bold text-slate-600 text-xs">
+            <button 
+              onClick={() => alert("Login social disponível em breve no Beta")}
+              className="h-12 border border-slate-200 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 transition-all font-bold text-slate-600 text-xs"
+            >
               <Chrome size={18} /> Google
             </button>
           </div>

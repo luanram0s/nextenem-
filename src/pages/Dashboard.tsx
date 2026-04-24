@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Clock, BookCheck, Target, ChevronRight, GraduationCap } from 'lucide-react';
+import { TrendingUp, Clock, BookCheck, Target, ChevronRight, GraduationCap, Sparkles, Play } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '@/src/lib/utils';
+import CalculadoraTRI from '../components/CalculadoraTRI';
 
 const stats = [
   { label: 'Progresso Total', value: '68%', icon: TrendingUp, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -30,191 +31,169 @@ export default function Dashboard() {
     return localStorage.getItem('next_enem_course') || 'Medicina - USP';
   });
 
+  const [quote, setQuote] = useState("O sucesso é a soma de pequenos esforços repetidos dia após dia.");
+
+  const quotes = [
+    "O sucesso é a soma de pequenos esforços repetidos dia após dia.",
+    "A consistência no TRI é o que separa o sonho da aprovação.",
+    "Cada simulado é um degrau. Cada erro é um aprendizado.",
+    "Sua vaga na Federal está sendo construída hoje."
+  ];
+
+  useEffect(() => {
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    setQuote(randomQuote);
+  }, []);
+
   useEffect(() => {
     localStorage.setItem('next_enem_course', course);
   }, [course]);
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 bg-transparent">
-      {/* Welcome Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-black text-slate-800 tracking-tight">Bem-vindo, Luan!</h2>
-          <p className="text-slate-500 font-medium mt-1">Sua evolução rumo à aprovação em <span className="text-next-blue font-bold">{course}</span>.</p>
-        </div>
-        <div className="hidden sm:flex gap-2">
-          <div className="px-4 py-2 bg-white border border-slate-100 rounded-xl flex items-center gap-2 shadow-sm">
-            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">LARA: Ativa</span>
+    <div className="space-y-10 animate-in fade-in duration-700 bg-transparent max-w-[1400px] mx-auto">
+      {/* Bloco 1: Boas-vindas e Motivação */}
+      <header className="relative py-12 px-10 bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200">
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-next-blue">Dashboard Oficial</span>
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter">
+              Bons estudos, <span className="text-next-blue">Luan</span>.
+            </h1>
+            <p className="text-slate-400 font-medium italic opacity-80">
+              "{quote}"
+            </p>
+          </div>
+          <div className="flex flex-col items-end gap-2 text-right">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Sua Meta Principal</span>
+            <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl">
+              <span className="text-lg font-black text-white">{course}</span>
+            </div>
           </div>
         </div>
-      </div>
+        
+        <div className="absolute top-[-20%] right-[-10%] w-96 h-96 bg-next-blue/10 rounded-full blur-3xl" />
+      </header>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 items-start">
-        {/* COL 2: MAIN CONTENT (8/12) */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+        {/* Main Content Area (8/12) */}
         <div className="xl:col-span-8 space-y-10">
-          <header className="relative py-12 px-10 bg-next-blue rounded-[2.5rem] overflow-hidden shadow-2xl shadow-blue-200">
-            <div className="relative z-10 flex flex-col justify-between items-start gap-8">
-              <div className="max-w-xl">
-                <h1 className="text-5xl md:text-6xl font-black text-white leading-tight tracking-tighter">
-                  AVANÇO<br />
-                  <span className="opacity-60 italic">GLOBAL</span>
-                </h1>
-                <p className="text-white/80 mt-6 font-medium leading-relaxed">
-                  Você completou <span className="text-white font-bold">12 horas</span> de estudo nesta semana. 
-                  Mantenha o rito para atingir sua meta de <span className="text-white font-bold">850 pontos</span> no simulado de domingo.
-                </p>
+          
+          {/* Bloco 2: Próxima Aula (Blue Glow) */}
+          <section className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-6 bg-next-blue rounded-full" />
+                <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight">Foco de Hoje</h3>
               </div>
-              <button className="bg-white text-next-blue px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-blue-900/10">
-                Continuar Plano de Estudos
-              </button>
+              <span className="text-xs font-bold text-next-blue uppercase tracking-widest">Baseado em sua Incidência</span>
             </div>
-            
-            <div className="absolute top-[-20%] right-[-10%] w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-[-20%] left-[-10%] w-64 h-64 bg-blue-400/20 rounded-full blur-3xl" />
-          </header>
 
-          <motion.div 
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
-          >
-            {stats.map((stat, idx) => {
-              if (idx > 2) return null; 
-              return (
-                <motion.div 
-                  key={idx}
-                  variants={item}
-                  className="card-next group"
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">
-                      {stat.label}
-                    </span>
-                    <div className="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-next-blue group-hover:bg-blue-50 transition-colors">
-                      <stat.icon size={16} />
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <motion.div 
+                whileHover={{ y: -5 }}
+                className="group relative p-8 bg-white border border-slate-100 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-blue-500/5 hover:border-next-blue/20 transition-all overflow-hidden"
+              >
+                <div className="relative z-10">
+                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-next-blue mb-6 group-hover:scale-110 transition-transform">
+                    <GraduationCap size={24} />
                   </div>
-                  <p className="text-4xl font-black text-slate-800 tracking-tighter">
-                    {stat.value}
+                  <h4 className="text-lg font-black text-slate-800 mb-2">Geometria Espacial</h4>
+                  <p className="text-xs text-slate-500 font-medium mb-8 leading-relaxed">
+                    Poliedros e Sólidos de Revolução. Assunto com <span className="text-next-blue font-bold">15% de recorrência</span> na prova de MT.
                   </p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-next-blue transition-all duration-1000" 
-                        style={{ width: stat.value.includes('%') ? stat.value : '75%' }} 
-                      />
-                    </div>
-                    <span className="text-[10px] font-bold text-next-blue">TOP 5%</span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-
-          <section className="p-8 bg-white border border-slate-100 rounded-3xl shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight">Atividade Recente</h3>
-              <button className="text-xs font-bold text-next-blue flex items-center gap-1 hover:underline">
-                Histórico <ChevronRight size={14} />
-              </button>
-            </div>
-            <div className="space-y-4">
-              {[
-                { title: 'Simulado TRI #08', type: 'Exame', value: '742 pts', trend: '+12' },
-                { title: 'Módulo: Geometria', type: 'Estudo', value: '85%', trend: 'OK' },
-                { title: 'Redação: IA e Ética', type: 'Envio', value: '920 pts', trend: '+40' },
-              ].map((activity, i) => (
-                <div key={i} className="flex items-center justify-between p-5 bg-slate-50/50 rounded-2xl border border-slate-100/50 hover:bg-white hover:border-slate-200 transition-all cursor-pointer">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-next-blue font-black text-xs">
-                      {activity.type[0]}
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-slate-800">{activity.title}</p>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{activity.type}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-black text-next-blue">{activity.value}</p>
-                    <p className="text-[9px] font-bold text-emerald-500">{activity.trend}</p>
-                  </div>
+                  <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-next-blue group-hover:gap-4 transition-all">
+                    Acessar Módulo <ArrowRight size={14} />
+                  </button>
                 </div>
-              ))}
+                {/* Glow effect */}
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-next-blue/5 rounded-full blur-2xl group-hover:bg-next-blue/10 transition-all" />
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ y: -5 }}
+                className="group relative p-8 bg-white border border-slate-100 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-blue-500/5 hover:border-next-blue/20 transition-all overflow-hidden"
+              >
+                <div className="relative z-10">
+                  <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 mb-6 group-hover:scale-110 transition-transform">
+                    <Sparkles size={24} />
+                  </div>
+                  <h4 className="text-lg font-black text-slate-800 mb-2">Estequiometria</h4>
+                  <p className="text-xs text-slate-500 font-medium mb-8 leading-relaxed">
+                    O pilar da Natureza. Pratique cálculos de massa e volume para garantir sua consistência TRI.
+                  </p>
+                  <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500 group-hover:gap-4 transition-all">
+                    Assistir Aula <Play size={14} fill="currentColor" />
+                  </button>
+                </div>
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all" />
+              </motion.div>
             </div>
           </section>
+
+          {/* Stats Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {stats.slice(0, 3).map((stat, idx) => (
+              <div key={idx} className="p-6 bg-slate-50/50 border border-slate-100 rounded-3xl">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{stat.label}</span>
+                  <stat.icon size={16} className="text-slate-400" />
+                </div>
+                <p className="text-3xl font-black text-slate-800 tracking-tighter">{stat.value}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* COL 3: SIDEBAR WIDGETS (4/12) */}
-        <div className="xl:col-span-4 space-y-8">
-          <section className="p-10 bg-slate-900 rounded-[2.5rem] text-white shadow-2xl shadow-slate-900/20 relative overflow-hidden">
-            <div className="relative z-10 space-y-8">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight leading-tight">Radar de <br /> Aprovação</h3>
-                  <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest">{course}</p>
-                </div>
-                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-next-blue">
-                  <Target size={24} />
-                </div>
-              </div>
-
-              <div className="space-y-5">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                    <span className="text-slate-400">Geral</span>
-                    <span className="text-next-blue">68% / 85%</span>
-                  </div>
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div className="h-full bg-next-blue w-[68%] rounded-full shadow-[0_0_15px_rgba(0,123,255,0.5)]" />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                  <div>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Faltam</p>
-                    <p className="text-xl font-black">~120 questões</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Média Alvo</p>
-                    <p className="text-xl font-black text-next-blue">780+</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+        {/* Sidebar Widgets (4/12) */}
+        <div className="xl:col-span-4 space-y-10">
+          {/* Bloco 3: Calculadora TRI Widget */}
+          <div className="sticky top-10">
+            <CalculadoraTRI />
             
-            <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-next-blue/10 rounded-full blur-3xl pointer-events-none" />
-          </section>
-
-          <section className="p-8 bg-white border border-slate-100 rounded-3xl space-y-6">
-            <div className="flex items-center gap-2 mb-2">
-              <GraduationCap size={18} className="text-slate-400" />
-              <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Próxima Parada</h3>
-            </div>
-            
-            <div className="p-6 bg-slate-50 rounded-2xl space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-next-blue text-white rounded-xl flex items-center justify-center flex-shrink-0 font-bold shadow-lg shadow-blue-100">
-                  BIO
+            <section className="mt-10 p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 bg-next-blue/10 rounded-xl flex items-center justify-center text-next-blue">
+                  <Target size={20} />
                 </div>
-                <div>
-                  <h4 className="text-sm font-black text-slate-800">Bioquímica</h4>
-                  <p className="text-xs text-slate-500 font-medium mt-1 leading-relaxed">Finalize este módulo para destravar o simulado Natureza.</p>
+                <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Radar Sisu</h3>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-xs font-bold text-slate-600">Medicina - USP</span>
+                    <span className="text-xs font-black text-next-blue">812.5</span>
+                  </div>
+                  <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-next-blue w-[78%] rounded-full" />
+                  </div>
+                </div>
+
+                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-xs font-bold text-slate-600">Medicina - UNESP</span>
+                    <span className="text-xs font-black text-next-blue">795.0</span>
+                  </div>
+                  <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 w-[84%] rounded-full" />
+                  </div>
                 </div>
               </div>
-              <button className="w-full py-3 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-next-blue transition-all">
-                Continuar via LARA
-              </button>
-            </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-slate-50">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tempo de Estudo Hoje</span>
-              <span className="text-sm font-black text-slate-800">2h 45m</span>
-            </div>
-          </section>
+              <p className="mt-8 text-[10px] text-slate-400 font-medium leading-relaxed">
+                * As notas de corte são baseadas no último SISU. Ajuste sua meta TRI para acompanhar a evolução.
+              </p>
+            </section>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+const ArrowRight = ({ size, className }: { size: number, className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+);
