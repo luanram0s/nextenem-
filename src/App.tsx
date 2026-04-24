@@ -32,16 +32,10 @@ export default function App() {
     localStorage.setItem('next_enem_auth', 'true');
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.setItem('next_enem_auth', 'false');
-  };
-
   const handleSetGoal = (goal: { course: string; institution: string }) => {
     localStorage.setItem('next_enem_meta', JSON.stringify(goal));
     localStorage.setItem('next_enem_course', `${goal.course} - ${goal.institution}`);
     setHasGoal(true);
-    // Force storage event to update other components if needed
     window.dispatchEvent(new Event('storage'));
   };
 
@@ -87,13 +81,8 @@ export default function App() {
         return <Simulados />;
       case 'redacao':
         return <Redacao />;
-      case 'settings':
       default:
-        return (
-          <div className="p-8 text-center text-gray-400">
-            Seção em desenvolvimento
-          </div>
-        );
+        return <Dashboard />;
     }
   };
 
@@ -104,7 +93,6 @@ export default function App() {
         setActiveTab={setActiveTab} 
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
-        onLogout={handleLogout}
       />
 
       <main className="transition-all duration-300 md:ml-[280px] p-8 lg:p-16 max-w-[1600px] mx-auto">
