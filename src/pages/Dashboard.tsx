@@ -3,6 +3,7 @@ import { TrendingUp, Clock, BookCheck, Target, ChevronRight, GraduationCap, Spar
 import { motion } from 'motion/react';
 import { cn } from '@/src/lib/utils';
 import CalculadoraTRI from '../components/CalculadoraTRI';
+import GoalSelector from '../components/GoalSelector';
 
 const stats = [
   { label: 'Progresso Total', value: '68%', icon: TrendingUp, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -43,6 +44,13 @@ export default function Dashboard() {
   useEffect(() => {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     setQuote(randomQuote);
+
+    const handleStorage = () => {
+      setCourse(localStorage.getItem('next_enem_course') || 'Medicina - USP');
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   useEffect(() => {
@@ -150,10 +158,11 @@ export default function Dashboard() {
         {/* Sidebar Widgets (4/12) */}
         <div className="xl:col-span-4 space-y-10">
           {/* Bloco 3: Calculadora TRI Widget */}
-          <div className="sticky top-10">
+          <div className="sticky top-10 space-y-10">
+            <GoalSelector />
             <CalculadoraTRI />
             
-            <section className="mt-10 p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm">
+            <section className="p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 bg-next-blue/10 rounded-xl flex items-center justify-center text-next-blue">
                   <Target size={20} />
