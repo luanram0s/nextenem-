@@ -14,20 +14,33 @@ import {
   BookOpen,
   User,
   HelpCircle,
-  MessageCircle
+  MessageCircle,
+  ShieldCheck
 } from 'lucide-react';
 import CalculadoraTRI from './CalculadoraTRI';
 import StudyRoom from './StudyRoom';
 import Profile from './Profile';
+import SupportChat from './SupportChat';
+import MasterPanel from './MasterPanel';
 
 const Dashboard = () => {
   const [goal, setGoal] = useState<{ course: string, institution: string } | null>(null);
   const [activeTab, setActiveTab] = useState('inicio');
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const savedGoal = localStorage.getItem('next_enem_meta');
     if (savedGoal) {
       setGoal(JSON.parse(savedGoal));
+    }
+
+    // Check for user data to determine role
+    const savedUser = localStorage.getItem('next_enem_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    } else {
+      // Default mock for testing if no user exists
+      setUser({ name: 'Luan Luis', role: 'admin' });
     }
   }, []);
 
@@ -160,53 +173,9 @@ const Dashboard = () => {
       case 'perfil':
         return <Profile />;
       case 'suporte':
-        return (
-          <div className="max-w-4xl mx-auto space-y-12">
-            <header>
-              <h1 className="text-4xl font-black text-zinc-950 tracking-tighter mb-2">Suporte & Central de Ajuda</h1>
-              <p className="text-zinc-500 font-medium tracking-tight">Estamos aqui para garantir sua aprovação. Como podemos ajudar?</p>
-            </header>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <button className="bg-zinc-950 text-white p-10 rounded-[3rem] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all text-left group">
-                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-8 shadow-xl shadow-blue-600/20">
-                  <MessageCircle size={32} />
-                </div>
-                <h3 className="text-2xl font-black tracking-tight mb-2">Chat em Tempo Real</h3>
-                <p className="text-white/50 text-sm font-medium">Fale com nossos mentores e tire dúvidas pedagógicas ou técnicas agora.</p>
-                <div className="mt-8 flex items-center gap-2 text-blue-400 font-black text-[10px] uppercase tracking-widest">
-                  <span>Iniciar Conversa</span>
-                  <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </div>
-              </button>
-
-              <button className="bg-zinc-50 p-10 rounded-[3rem] border border-zinc-100 hover:bg-white hover:shadow-2xl transition-all text-left group">
-                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-md text-zinc-400 group-hover:text-blue-600 transition-colors">
-                  <HelpCircle size={32} />
-                </div>
-                <h3 className="text-2xl font-black text-zinc-950 tracking-tight mb-2">Perguntas Frequentes</h3>
-                <p className="text-zinc-500 text-sm font-medium">Encontre respostas rápidas sobre a plataforma, simulados e conteúdos.</p>
-                <div className="mt-8 flex items-center gap-2 text-zinc-400 group-hover:text-blue-600 font-black text-[10px] uppercase tracking-widest transition-colors">
-                  <span>Acessar FAQ</span>
-                  <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </div>
-              </button>
-            </div>
-
-            <div className="bg-blue-50/50 p-10 rounded-[3rem] border border-blue-100/50 flex items-center justify-between">
-              <div className="flex items-center gap-6">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm">
-                  <Zap size={24} />
-                </div>
-                <div>
-                  <h4 className="font-black text-zinc-950 text-lg tracking-tight">Status do Sistema</h4>
-                  <p className="text-sm font-bold text-blue-600 uppercase tracking-widest text-[10px]">Todos os serviços operacionais</p>
-                </div>
-              </div>
-              <div className="bg-emerald-500 w-3 h-3 rounded-full animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.4)]" />
-            </div>
-          </div>
-        );
+        return <SupportChat />;
+      case 'master':
+        return <MasterPanel />;
       default:
         return null;
     }
@@ -275,6 +244,16 @@ const Dashboard = () => {
               <HelpCircle size={20} />
               <span className="uppercase tracking-widest text-[10px]">Suporte</span>
             </button>
+
+            {user?.role === 'admin' && (
+              <button 
+                onClick={() => setActiveTab('master')}
+                className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'master' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
+              >
+                <ShieldCheck size={20} className={activeTab === 'master' ? 'text-blue-400' : ''} />
+                <span className="uppercase tracking-widest text-[10px]">Master Panel</span>
+              </button>
+            )}
           </div>
         </nav>
 
