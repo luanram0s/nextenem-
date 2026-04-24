@@ -16,7 +16,11 @@ import {
   User,
   HelpCircle,
   MessageCircle,
-  ShieldCheck
+  ShieldCheck,
+  Calculator,
+  FlaskConical,
+  Languages,
+  Globe
 } from 'lucide-react';
 import CalculadoraTRI from './CalculadoraTRI';
 import StudyRoom from './StudyRoom';
@@ -88,11 +92,42 @@ const Dashboard = () => {
               
               {/* LADO ESQUERDO: PROGRESSO E NOTAS */}
               <div className="lg:col-span-8 space-y-8">
+                {/* SUBJECT CARDS ROW */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { label: 'Matemática', icon: Calculator, progress: 65, color: 'text-blue-500' },
+                    { label: 'Natureza', icon: FlaskConical, progress: 40, color: 'text-emerald-500' },
+                    { label: 'Linguagens', icon: Languages, progress: 80, color: 'text-indigo-500' },
+                    { label: 'Humanas', icon: Globe, progress: 55, color: 'text-amber-500' },
+                  ].map((subject, i) => (
+                    <div key={i} className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100 hover:bg-white hover:shadow-xl hover:shadow-zinc-200/50 transition-all duration-300 hover:scale-[1.01] group cursor-pointer lg:aspect-square flex flex-col justify-between">
+                      <div className={`w-10 h-10 bg-white rounded-xl flex items-center justify-center ${subject.color} shadow-sm group-hover:scale-110 transition-transform duration-300`}>
+                        <subject.icon size={20} />
+                      </div>
+                      <div>
+                        <h4 className="text-[10px] font-black text-zinc-950 uppercase tracking-widest mb-3">{subject.label}</h4>
+                        <div className="space-y-1.5">
+                          <div className="flex justify-between text-[9px] font-black text-zinc-400 uppercase tracking-tighter">
+                            <span>Progresso</span>
+                            <span className={subject.color}>{subject.progress}%</span>
+                          </div>
+                          <div className="h-1 bg-zinc-200 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full ${subject.color === 'text-blue-500' ? 'bg-blue-500' : subject.color === 'text-emerald-500' ? 'bg-emerald-500' : subject.color === 'text-indigo-500' ? 'bg-indigo-500' : 'bg-amber-500'} transition-all duration-1000`} 
+                              style={{ width: `${subject.progress}%` }} 
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* CARD REDAÇÃO */}
-                  <div className="bg-zinc-50 p-8 rounded-[3rem] border border-zinc-100 flex flex-col group hover:bg-white hover:shadow-2xl transition-all duration-500">
+                  <div className="bg-zinc-50 p-8 rounded-2xl border border-zinc-100 flex flex-col group hover:bg-white hover:shadow-2xl transition-all duration-500 hover:scale-[1.01]">
                     <div className="flex justify-between items-start mb-8">
-                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#007BFF] shadow-sm">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#007BFF] shadow-sm">
                         <PenTool size={22} />
                       </div>
                       <span className="text-[10px] font-black text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest">+12%</span>
@@ -103,13 +138,13 @@ const Dashboard = () => {
                       <span className="text-zinc-400 font-bold">/1000</span>
                     </div>
                     <p className="text-xs text-zinc-500 font-medium mt-4">Último tema: Desafios da Educação</p>
-                    <button className="mt-8 w-full py-4 bg-zinc-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-95 transition-all duration-300">Ver Feedback</button>
+                    <button className="mt-8 w-full py-4 bg-zinc-950 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-95 transition-all duration-300">Ver Feedback</button>
                   </div>
 
                   {/* CARD PROGRESSO GERAL */}
-                  <div className="bg-zinc-950 p-8 rounded-[3rem] text-white flex flex-col shadow-2xl shadow-zinc-950/20">
+                  <div className="bg-zinc-950 p-8 rounded-2xl text-white flex flex-col shadow-2xl shadow-zinc-950/20 hover:scale-[1.01] transition-all duration-300">
                     <div className="flex justify-between items-start mb-8">
-                      <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-blue-400 backdrop-blur-sm">
+                      <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-blue-400 backdrop-blur-sm">
                         <PieChart size={22} />
                       </div>
                     </div>
@@ -123,21 +158,30 @@ const Dashboard = () => {
                         <span>Total</span>
                       </div>
                       <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                        <div className="h-full bg-[#007BFF] w-[74%] rounded-full shadow-[0_0_12px_rgba(0,123,255,0.5)]" />
+                        <div className="h-full bg-blue-600 w-[74%] rounded-full shadow-[0_0_12px_rgba(0,123,255,0.5)]" />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* CALCULADORA TRI INTEGRADA */}
-                <div className="bg-white border-2 border-zinc-50 p-8 rounded-[3rem] shadow-sm">
+                <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-2xl">
+                  <header className="mb-8 border-b border-zinc-800 pb-6 flex items-center justify-between">
+                    <div>
+                      <h3 className="text-xl font-black text-white tracking-tight">Simulador TRI</h3>
+                      <p className="text-zinc-500 text-xs font-medium">Calcule suas chances reais baseado no algoritmo oficial.</p>
+                    </div>
+                    <div className="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center text-blue-500 border border-blue-600/20">
+                      <Calculator size={22} />
+                    </div>
+                  </header>
                   <CalculadoraTRI />
                 </div>
               </div>
 
               {/* LADO DIREITO: ATIVIDADES E RANKINGS */}
               <div className="lg:col-span-4 space-y-8">
-                <div className="bg-zinc-50 p-8 rounded-[3rem] border border-zinc-100">
+                <div className="bg-zinc-50 p-8 rounded-2xl border border-zinc-100 hover:scale-[1.01] transition-all duration-300">
                   <h3 className="font-black text-zinc-950 uppercase tracking-widest text-xs mb-8 flex items-center gap-2">
                     <Clock size={16} className="text-blue-600" /> Atividades Recentes
                   </h3>
@@ -148,7 +192,7 @@ const Dashboard = () => {
                       { t: "Física - Óptica", d: "Há 4 dias", s: "100%" },
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-4 group cursor-pointer">
-                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-zinc-400 group-hover:text-[#007BFF] group-hover:shadow-lg transition-all duration-300">
+                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-zinc-400 group-hover:text-blue-600 group-hover:shadow-lg transition-all duration-300">
                           <CheckCircle2 size={18} />
                         </div>
                         <div>
@@ -158,16 +202,16 @@ const Dashboard = () => {
                       </div>
                     ))}
                   </div>
-                  <button className="mt-10 w-full py-4 border-2 border-zinc-200 text-zinc-400 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-200 hover:text-zinc-600 transition-all">Histórico Completo</button>
+                  <button className="mt-10 w-full py-4 border-2 border-zinc-200 text-zinc-400 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-200 hover:text-zinc-600 transition-all duration-300">Histórico Completo</button>
                 </div>
 
-                <div className="bg-blue-50/50 p-8 rounded-[3rem] border border-blue-100/50">
-                  <div className="w-12 h-12 bg-[#007BFF] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-blue-600/20">
+                <div className="bg-blue-600 p-8 rounded-2xl text-white shadow-2xl shadow-blue-600/30 hover:scale-[1.01] transition-all duration-300">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white mb-6 backdrop-blur-md">
                     <Trophy size={22} />
                   </div>
-                  <h3 className="font-black text-zinc-950 uppercase tracking-widest text-xs mb-2">Sua Posição</h3>
-                  <p className="text-3xl font-black text-[#007BFF] tracking-tighter">Top 5%</p>
-                  <p className="text-xs text-zinc-500 font-medium mt-2 leading-relaxed">Você está entre os estudantes mais bem preparados para {goal?.course || 'sua meta'}.</p>
+                  <h3 className="font-black text-white uppercase tracking-widest text-xs mb-2">Sua Posição</h3>
+                  <p className="text-3xl font-black text-white tracking-tighter">Top 5%</p>
+                  <p className="text-xs text-white/70 font-medium mt-2 leading-relaxed">Você está entre os estudantes mais bem preparados para {goal?.course || 'sua meta'}.</p>
                 </div>
               </div>
             </div>

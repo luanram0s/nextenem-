@@ -17,7 +17,7 @@ export default function SupportChat() {
     e.preventDefault();
     if (!input.trim()) return;
 
-    setMessages([...messages, { id: Date.now(), text: input, sender: 'user', time: new Date().toLocaleTimeString([], { hour: '2d', minute: '2d' }) }]);
+    setMessages([...messages, { id: Date.now(), text: input, sender: 'user', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
     setInput('');
     
     // Simple echo/bot response
@@ -26,7 +26,7 @@ export default function SupportChat() {
         id: Date.now() + 1, 
         text: "Entendi! Vou encaminhar sua dúvida para um de nossos mentores especialistas. Eles responderão em breve.", 
         sender: 'ai', 
-        time: new Date().toLocaleTimeString([], { hour: '2d', minute: '2d' }) 
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
       }]);
     }, 1000);
   };
