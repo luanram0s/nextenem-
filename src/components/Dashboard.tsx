@@ -28,6 +28,7 @@ import Profile from './Profile';
 import SupportChat from './SupportChat';
 import MasterPanel from './MasterPanel';
 import RedacaoLab from './RedacaoLab';
+import SimuladosTRI from './SimuladosTRI';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -222,6 +223,8 @@ const Dashboard = () => {
         return <StudyRoom />;
       case 'redacao':
         return <RedacaoLab />;
+      case 'simulados':
+        return <SimuladosTRI />;
       case 'perfil':
         return <Profile />;
       case 'suporte':
