@@ -122,24 +122,24 @@ export default function Profile() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Curso Desejado</label>
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">Curso Desejado</label>
                 <input 
                   type="text" 
                   value={goal?.course || ''}
                   onChange={(e) => setGoal(prev => ({ course: e.target.value, institution: prev?.institution || '' }))}
                   placeholder="Ex: Medicina"
-                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-xs font-bold text-white focus:ring-2 focus:ring-blue-600 outline-none"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-5 text-sm font-bold text-zinc-950 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none shadow-sm"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Universidade Alvo</label>
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">Universidade Alvo</label>
                 <input 
                   type="text" 
                   value={goal?.institution || ''}
                   onChange={(e) => setGoal(prev => ({ institution: e.target.value, course: prev?.course || '' }))}
                   placeholder="Ex: USP"
-                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-xs font-bold text-white focus:ring-2 focus:ring-blue-600 outline-none"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-5 text-sm font-bold text-zinc-950 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none shadow-sm"
                 />
               </div>
             </div>

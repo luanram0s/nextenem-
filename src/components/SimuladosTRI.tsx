@@ -285,7 +285,7 @@ export default function SimuladosTRI() {
                 onClick={() => setShowScratchpad(true)}
                 className="flex items-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20"
               >
-                <PenTool size={16} /> 📝 Rascunho
+                <PenTool size={16} /> 📝 Rascunho de Guerra
               </button>
               <div className="h-10 w-[1px] bg-zinc-100 mx-2" />
               <button 
