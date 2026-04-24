@@ -127,7 +127,7 @@ export default function Profile() {
                 <input 
                   type="text" 
                   value={goal?.course || ''}
-                  onChange={(e) => setGoal(prev => ({ ...prev!, course: e.target.value }))}
+                  onChange={(e) => setGoal(prev => ({ course: e.target.value, institution: prev?.institution || '' }))}
                   placeholder="Ex: Medicina"
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-xs font-bold text-white focus:ring-2 focus:ring-blue-600 outline-none"
                 />
@@ -137,7 +137,7 @@ export default function Profile() {
                 <input 
                   type="text" 
                   value={goal?.institution || ''}
-                  onChange={(e) => setGoal(prev => ({ ...prev!, institution: e.target.value }))}
+                  onChange={(e) => setGoal(prev => ({ institution: e.target.value, course: prev?.course || '' }))}
                   placeholder="Ex: USP"
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-xs font-bold text-white focus:ring-2 focus:ring-blue-600 outline-none"
                 />

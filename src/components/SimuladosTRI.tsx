@@ -28,7 +28,7 @@ interface Question {
 const mockQuestions: Question[] = [
   {
     id: 1,
-    enunciado: "O Enem utiliza a Teoria de Resposta ao Item (TRI) para o cálculo das proficiências dos participantes. Esse modelo matemático leva em consideração três parâmetros fundamentais para cada questão. Qual destes parâmetros é crucial para evitar que o acerto por 'chute' eleve desproporcionalmente a nota do aluno?",
+    enunciado: "O Enem utiliza a Teoria de Resposta ao Item (TRI) para o cálculo das proficiências dos participantes. Esse modelo matemático leva em consideração três parâmetros fundamentais para cada questão. Qual destes parâmetros é crucial para evitar que o acerto por 'chute' eleve desproporcionalmente a nota do aluno?\n\nExemplo de Fórmula: $f(x) = \\sqrt{x^2 + 1}$",
     alternativas: [
       { id: 'A', text: 'Parâmetro de Discriminação (a)' },
       { id: 'B', text: 'Parâmetro de Dificuldade (b)' },
@@ -283,9 +283,9 @@ export default function SimuladosTRI() {
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => setShowScratchpad(true)}
-                className="flex items-center gap-2 px-6 py-4 bg-zinc-50 text-zinc-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-zinc-950 hover:text-white transition-all shadow-sm"
+                className="flex items-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20"
               >
-                <PenTool size={16} /> Rascunho
+                <PenTool size={16} /> 📝 Rascunho
               </button>
               <div className="h-10 w-[1px] bg-zinc-100 mx-2" />
               <button 
