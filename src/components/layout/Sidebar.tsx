@@ -101,27 +101,15 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
             })}
           </nav>
 
-          {/* User Progress Mini Card */}
-          <div className="mt-auto mb-6 p-6 bg-slate-50/50 border border-slate-100 rounded-3xl">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Sua evolução</p>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-black text-slate-700">Meta TRI 800+</span>
-              <span className="text-[10px] bg-next-blue/10 text-next-blue px-2 py-0.5 rounded-full font-black uppercase tracking-tight">On</span>
-            </div>
-            <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-              <div className="h-full bg-next-blue w-[68%] rounded-full shadow-[0_0_8px_rgba(0,123,255,0.3)] transition-all duration-1000" />
-            </div>
-          </div>
-
           {/* Logout Button */}
           <button 
             onClick={() => {
               localStorage.clear();
               window.location.reload();
             }}
-            className="flex items-center gap-3 p-4 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all font-black uppercase tracking-widest text-[10px] group border border-transparent hover:border-red-100 shadow-sm hover:shadow-red-200/20"
+            className="mt-auto flex items-center gap-3 p-4 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all font-bold group"
           >
-            <LogOut size={16} className="group-hover:translate-x-1 transition-transform" />
+            <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
             <span>Sair da Conta</span>
           </button>
         </div>
