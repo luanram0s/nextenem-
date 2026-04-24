@@ -30,6 +30,9 @@ export default function Simulados() {
       <div className="max-w-6xl mx-auto space-y-12 animate-in fade-in duration-700">
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">NEXT ENEM</span>
+            </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-8 bg-next-blue rounded-full" />
               <h2 className="text-4xl font-black text-slate-800 tracking-tight">Simulados TRI</h2>
@@ -87,12 +90,12 @@ export default function Simulados() {
           </div>
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-next-blue">Atenção ao TRI</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-next-blue">TEORIA DE RESPOSTA AO ITEM</span>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed font-medium">
               O algoritmo <span className="font-black text-slate-800">Teoria de Resposta ao Item</span> é o coração do ENEM. 
               Acertos aleatórios em questões complexas sem consistência nas fáceis penalizam sua média. 
-              Nosso simulador calibra essa consistência em tempo real.
+              O NEXT ENEM calibra essa consistência em tempo real.
             </p>
           </div>
         </section>

@@ -52,6 +52,7 @@ export default function CalculadoraTRI() {
             <Calculator size={28} />
           </div>
           <div className="text-left">
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1 block">PLATAFORMA NEXT ENEM</span>
             <h3 className="text-xl font-black tracking-tight uppercase">Simulador de Nota TRI</h3>
             <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mt-1">Calcule sua probabilidade de aprovação</p>
           </div>

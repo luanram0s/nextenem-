@@ -31,6 +31,9 @@ export default function StudyRoom() {
     <div className="space-y-12 max-w-6xl mx-auto animate-in fade-in duration-700 pb-20">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div className="space-y-4">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">NEXT ENEM</span>
+          </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-8 bg-next-blue rounded-full" />
             <h2 className="text-4xl font-black text-slate-800 tracking-tight">Trilha de Aprendizado</h2>

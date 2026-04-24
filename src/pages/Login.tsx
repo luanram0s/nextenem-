@@ -30,7 +30,10 @@ export default function Login({ onLogin }: LoginProps) {
           <div className="w-12 h-12 bg-next-blue rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
             <BrainCircuit size={24} className="text-white" />
           </div>
-          <h1 className="text-2xl font-black text-white tracking-tighter uppercase">Next Enem</h1>
+          <h1 className="text-2xl font-black tracking-tighter uppercase flex items-center">
+            <span className="text-next-blue">NEXT</span>
+            <span className="text-white ml-2">ENEM</span>
+          </h1>
         </div>
 
         <div className="relative z-10 space-y-6">
@@ -70,8 +73,10 @@ export default function Login({ onLogin }: LoginProps) {
           className="w-full max-w-md space-y-10"
         >
           <div className="text-center lg:text-left">
-            <h3 className="text-3xl font-black text-slate-900 tracking-tight">Acesse sua Trilha</h3>
-            <p className="text-slate-500 mt-2 font-medium">Insira suas credenciais para continuar.</p>
+            <h3 className="text-3xl font-black tracking-tight">
+              <span className="text-next-blue">NEXT</span> <span className="text-slate-800">ENEM</span>
+            </h3>
+            <p className="text-slate-500 mt-2 font-medium">Acesse sua trilha de aprovação.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

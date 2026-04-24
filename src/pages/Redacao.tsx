@@ -33,7 +33,7 @@ export default function Redacao() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <PenTool size={20} className="text-next-blue" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400">Next Inteligência</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">NEXT ENEM</span>
           </div>
           <h2 className="text-4xl font-black text-slate-800 tracking-tight">Laboratório de Redação</h2>
         </div>
