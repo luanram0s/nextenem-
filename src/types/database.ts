@@ -32,11 +32,33 @@ export interface VideoSnippet {
   is_public: boolean;
 }
 
-export interface UserHistoryDTO {
+export interface StudentProfile {
+  id: string;
+  name: string;
+  email: string;
+  plan: 'Basic' | 'Premium' | 'Elite' | 'Master';
+  status: 'Ativo' | 'Inativo';
+  progress: number;
+  cognitive_profile?: any;
+  created_at: string;
+}
+
+export interface Ticket {
+  id: string;
   user_id: string;
-  discipline: string;
-  topic: string;
-  score: number;
-  total: number;
-  time_spent: number;
+  student_name: string;
+  plan: string;
+  subject: string;
+  status: 'Aguardando' | 'Em Atendimento' | 'Resolvido';
+  priority: 'low' | 'medium' | 'high';
+  message: string;
+  response?: string;
+  created_at: string;
+}
+
+export interface AdminConfig {
+  id: string;
+  key: string;
+  value: string;
+  updated_at: string;
 }

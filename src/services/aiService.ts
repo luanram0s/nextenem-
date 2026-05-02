@@ -61,6 +61,45 @@ export const aiService = {
   },
 
   /**
+   * 1.1: Parser de Provas Oficiais
+   * Extrai questões estruturadas de uma string de texto (extraída de PDF).
+   */
+  async extractQuestionsFromText(text: string): Promise<any[]> {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-pro-preview',
+      contents: `
+        Você é um parser especializado em provas do Enem. 
+        Analise o texto abaixo e identifique cada questão.
+
+        Texto: "${text}"
+
+        Para cada questão, extraia:
+        1. enem_id (Ano_Area_Numero)
+        2. enunciado
+        3. alternativas (A, B, C, D, E)
+        4. correct_label (Gabarito)
+        5. competency (1 a 9)
+        6. hability (1 a 30)
+        7. area (Matemática, Natureza, Humanas ou Linguagens)
+
+        Retorne um JSON contendo uma lista de objetos chamados "questions".
+        Seja rigoroso com o texto das alternativas.
+      `,
+      config: {
+        responseMimeType: 'application/json'
+      }
+    });
+
+    try {
+      const data = JSON.parse(response.text || '{"questions": []}');
+      return data.questions || [];
+    } catch (e) {
+      console.error('Falha no Parse de Provas:', e);
+      return [];
+    }
+  },
+
+  /**
    * 4.2: Generates a question based on TRI difficulty level.
    */
   async generateQuestionByTRI(

@@ -31,6 +31,7 @@ import RedacaoLab from './RedacaoLab';
 import SimuladosTRI from './SimuladosTRI';
 import TheoryDashboard from './TheoryDashboard';
 import DynamicMentor from './DynamicMentor';
+import PerformanceAnalytics from './PerformanceAnalytics';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -94,6 +95,11 @@ const Dashboard = () => {
             {/* MENTOR DINÂMICO IA */}
             <div className="mb-12">
               <DynamicMentor />
+            </div>
+
+            {/* PERFORMANCE ANALYTICS (PORTÃO 5.2) */}
+            <div className="mb-16">
+              <PerformanceAnalytics />
             </div>
 
             {/* DASHBOARD GRID */}

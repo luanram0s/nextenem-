@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, 
   ClipboardCheck, 
@@ -20,29 +20,113 @@ import {
   X,
   User,
   Zap,
-  BookOpen
+  BookOpen,
+  FileUp,
+  Loader2,
+  CheckCircle,
+  FileText
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-
-const tickets = [
-  { id: 1, student: 'Luan Luis', plan: 'Master', subject: 'Dúvida TRI Matemática', status: 'Aguardando', responsible: 'Consultor Atlas', priority: 'high' },
-  { id: 2, student: 'Maria Silva', plan: 'Start', subject: 'Problema no Acesso', status: 'Em Atendimento', responsible: 'Suporte Dev', priority: 'low' },
-  { id: 3, student: 'João Souza', plan: 'Elite', subject: 'Correção de Redação', status: 'Resolvido', responsible: 'Prof. Ricardo', priority: 'medium' },
-];
-
-const students = [
-  { id: 1, name: 'Luan Luis', email: 'luan@nextenem.com', plan: 'Premium', status: 'Ativo', progress: '74%' },
-  { id: 2, name: 'Maria Silva', email: 'maria@gmail.com', plan: 'Basic', status: 'Inativo', progress: '12%' },
-  { id: 3, name: 'João Souza', email: 'joao@outlook.com', plan: 'Premium', status: 'Ativo', progress: '89%' },
-  { id: 4, name: 'Ana Costa', email: 'ana@univise.br', plan: 'Premium', status: 'Ativo', progress: '34%' },
-  { id: 5, name: 'Pedro Alves', email: 'pedro.alves@gmail.com', plan: 'Premium', status: 'Ativo', progress: '65%' },
-];
+import { cacheService } from '../services/cacheService';
+import { QuestionCache, StudentProfile, Ticket } from '../types/database';
 
 export default function MasterPanel() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'operacional' | 'estudantes' | 'ia'>('operacional');
-  const [selectedTicket, setSelectedTicket] = useState<typeof tickets[0] | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
+  const [responseMessage, setResponseMessage] = useState('');
+  
+  // 1.1: State for Proof Processor
+  const [proofText, setProofText] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [extractedQuestions, setExtractedQuestions] = useState<any[]>([]);
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'parsing' | 'reviewing' | 'saving'>('idle');
+
+  // Real Data State
+  const [studentsList, setStudentsList] = useState<StudentProfile[]>([]);
+  const [ticketsList, setTicketsList] = useState<Ticket[]>([]);
+  const [systemPrompt, setSystemPrompt] = useState('Você é o Atlas, o mentor supremo do Next Enem...');
+
+  useEffect(() => {
+    loadData();
+    if (activeTab === 'ia') {
+      loadSystemPrompt();
+    }
+  }, [activeTab]);
+
+  const loadData = async () => {
+    if (activeTab === 'estudantes') {
+      const data = await cacheService.getAllStudents();
+      setStudentsList(data);
+    } else if (activeTab === 'operacional') {
+      const data = await cacheService.getTickets();
+      setTicketsList(data);
+    }
+  };
+
+  const loadSystemPrompt = async () => {
+    const prompt = await cacheService.getAdminConfig('system_prompt');
+    if (prompt) setSystemPrompt(prompt);
+  };
+
+  const handleUpdatePrompt = async () => {
+    setIsProcessing(true);
+    const success = await cacheService.setAdminConfig('system_prompt', systemPrompt);
+    if (success) {
+      alert('Configuração de IA atualizada com sucesso em toda a plataforma!');
+    }
+    setIsProcessing(false);
+  };
+
+  const handleResponseSubmit = async () => {
+    if (!selectedTicket || !responseMessage) return;
+    setIsProcessing(true);
+    const success = await cacheService.respondToTicket(selectedTicket.id, responseMessage);
+    if (success) {
+      alert('Resposta enviada!');
+      setResponseMessage('');
+      setSelectedTicket(null);
+      loadData();
+    }
+    setIsProcessing(false);
+  };
+
+  const handleProcessProof = async () => {
+    if (!proofText) return;
+    setUploadStatus('parsing');
+    setIsProcessing(true);
+    
+    const questions = await aiService.extractQuestionsFromText(proofText);
+    setExtractedQuestions(questions);
+    setUploadStatus('reviewing');
+    setIsProcessing(false);
+  };
+
+  const handleSaveToGlobalLibrary = async () => {
+    setUploadStatus('saving');
+    setIsProcessing(true);
+
+    for (const q of extractedQuestions) {
+      await cacheService.persistQuestion({
+        enem_id: q.enem_id,
+        year: parseInt(q.enem_id.split('_')[0]) || new Date().getFullYear(),
+        area: q.area,
+        competency: parseInt(q.competency),
+        hability: parseInt(q.hability),
+        enunciado: q.enunciado,
+        alternativas: q.alternativas,
+        is_public: true,
+        reference_matrix_context: `C${q.competency}H${q.hability}`
+      });
+    }
+
+    setUploadStatus('idle');
+    setExtractedQuestions([]);
+    setProofText('');
+    setIsProcessing(false);
+    alert('Biblioteca Global alimentada com sucesso!');
+  };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white p-8 lg:p-12 space-y-12 pb-32 relative">
@@ -87,9 +171,9 @@ export default function MasterPanel() {
                   <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Histórico de Mensagens</span>
                   <div className="bg-zinc-800/50 p-6 rounded-2xl border border-zinc-800">
                     <p className="text-sm font-medium text-zinc-300 leading-relaxed">
-                      "Olá, gostaria de entender por que meu acerto na questão 24 de matemática não valorizou tanto minha nota sendo que acertei a 25 que era mais fácil."
+                      "{selectedTicket.message}"
                     </p>
-                    <span className="text-[9px] font-black text-zinc-600 block mt-4">ENVIADO ÀS 14:32</span>
+                    <span className="text-[9px] font-black text-zinc-600 block mt-4">ENVIADO EM {new Date(selectedTicket.created_at).toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -97,10 +181,16 @@ export default function MasterPanel() {
               <div className="mt-auto pt-8 border-t border-zinc-800">
                 <div className="relative">
                   <textarea 
+                    value={responseMessage}
+                    onChange={(e) => setResponseMessage(e.target.value)}
                     placeholder="Escreva sua resposta técnica aqui..."
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl p-6 text-sm font-medium text-white placeholder:text-zinc-700 min-h-[150px] focus:ring-2 focus:ring-blue-600 outline-none transition-all resize-none"
                   />
-                  <button className="absolute bottom-4 right-4 p-4 bg-blue-600 text-white rounded-xl shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all">
+                  <button 
+                    onClick={handleResponseSubmit}
+                    disabled={isProcessing}
+                    className="absolute bottom-4 right-4 p-4 bg-blue-600 text-white rounded-xl shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all"
+                  >
                     <Send size={18} />
                   </button>
                 </div>
@@ -149,6 +239,91 @@ export default function MasterPanel() {
 
         {activeTab === 'operacional' && (
           <div className="space-y-12">
+            {/* 1.1 & 1.2: PROOF UPLOAD & PARSING STATION */}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-[3rem] p-10 relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-[100px] pointer-events-none" />
+               
+               <header className="flex items-center justify-between mb-8">
+                 <div className="flex items-center gap-4">
+                   <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 border border-amber-500/20">
+                     <FileUp size={24} />
+                   </div>
+                   <div>
+                     <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">Estação de Alimentação Global</h2>
+                     <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mt-1">Extração de Questões Oficiais (AI Parser)</p>
+                   </div>
+                 </div>
+                 {uploadStatus === 'reviewing' && (
+                   <button 
+                     onClick={() => { setUploadStatus('idle'); setExtractedQuestions([]); }}
+                     className="text-[10px] font-black text-zinc-500 uppercase hover:text-white transition-colors"
+                   >
+                     Limpar Sessão
+                   </button>
+                 )}
+               </header>
+
+               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                 <div className="lg:col-span-12">
+                    {uploadStatus === 'idle' || uploadStatus === 'parsing' ? (
+                      <div className="space-y-4">
+                        <textarea 
+                          value={proofText}
+                          onChange={(e) => setProofText(e.target.value)}
+                          placeholder="Cole aqui o conteúdo textual da Prova Oficial do Enem para processamento..."
+                          disabled={isProcessing}
+                          className="w-full bg-zinc-950 border border-zinc-800 rounded-3xl p-8 text-sm font-medium text-zinc-300 min-h-[250px] focus:ring-2 focus:ring-amber-500 outline-none transition-all resize-none shadow-inner"
+                        />
+                        <button 
+                          onClick={handleProcessProof}
+                          disabled={isProcessing || !proofText}
+                          className="w-full py-5 bg-amber-500 text-zinc-950 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/20 hover:bg-amber-400 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                        >
+                          {isProcessing ? (
+                            <> <Loader2 size={18} className="animate-spin" /> Extraindo Matriz de Referência... </>
+                          ) : (
+                            <> <Zap size={18} fill="currentColor" /> Iniciar Processamento IA </>
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                           <h3 className="text-xs font-black text-amber-500 uppercase tracking-widest flex items-center gap-2">
+                             <CheckCircle size={16} /> Questões Extradas ({extractedQuestions.length})
+                           </h3>
+                           <button 
+                             onClick={handleSaveToGlobalLibrary}
+                             disabled={isProcessing}
+                             className="px-8 py-3 bg-white text-zinc-950 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-xl"
+                           >
+                             {isProcessing ? 'Alimentando Banco...' : 'Persistir na Biblioteca Global'}
+                           </button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-4 custom-scrollbar">
+                           {extractedQuestions.map((q, i) => (
+                             <div key={i} className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 relative group overflow-hidden">
+                                <div className="absolute top-0 right-0 p-3 bg-amber-500/10 text-amber-500 text-[8px] font-black uppercase">
+                                  C{q.competency}H{q.hability}
+                                </div>
+                                <span className="text-[10px] font-black text-zinc-600 block mb-2">{q.enem_id}</span>
+                                <p className="text-xs font-bold text-zinc-300 leading-relaxed truncate mb-4 italic">
+                                  "{q.enunciado}"
+                                </p>
+                                <div className="flex gap-2">
+                                  <span className="text-[8px] font-black px-2 py-1 bg-zinc-800 text-zinc-400 rounded uppercase">Gabarito: {q.correct_label}</span>
+                                  <span className="text-[8px] font-black px-2 py-1 bg-zinc-800 text-zinc-400 rounded uppercase">{q.area}</span>
+                                </div>
+                             </div>
+                           ))}
+                        </div>
+                      </div>
+                    )}
+                 </div>
+               </div>
+            </div>
+
             {/* OPERATIONAL METRICS */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
@@ -187,11 +362,11 @@ export default function MasterPanel() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-800/50">
-                    {tickets.map((ticket) => (
+                    {ticketsList.map((ticket) => (
                       <tr key={ticket.id} className="group hover:bg-zinc-800/30 transition-all cursor-pointer" onClick={() => setSelectedTicket(ticket)}>
                         <td className="py-8 px-10">
                           <div>
-                            <p className="text-sm font-black text-white mb-1">{ticket.student}</p>
+                            <p className="text-sm font-black text-white mb-1">{ticket.student_name}</p>
                             <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase ${
                               ticket.plan === 'Master' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' : 
                               ticket.plan === 'Elite' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 
@@ -213,7 +388,7 @@ export default function MasterPanel() {
                           </span>
                         </td>
                         <td className="py-8 px-6 text-center">
-                          <p className="text-[10px] font-black text-zinc-500 uppercase">{ticket.responsible}</p>
+                          <p className="text-[10px] font-black text-zinc-500 uppercase">Consultor Next</p>
                         </td>
                         <td className="py-8 px-10 text-right">
                           <button className="p-3 bg-zinc-800 text-zinc-400 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all">
@@ -258,7 +433,7 @@ export default function MasterPanel() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800/50">
-                  {students.map((student) => (
+                  {studentsList.map((student) => (
                     <tr key={student.id} className="group hover:bg-zinc-900/50 transition-all duration-300">
                       <td className="py-8 px-10">
                         <div className="flex items-center gap-4">
@@ -273,7 +448,7 @@ export default function MasterPanel() {
                       </td>
                       <td className="py-8 px-6">
                         <span className={`text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border ${
-                          student.plan === 'Premium' 
+                          student.plan === 'Premium' || student.plan === 'Master' || student.plan === 'Elite'
                             ? 'text-blue-400 border-blue-400/20 bg-blue-400/5' 
                             : 'text-zinc-400 border-zinc-700 bg-zinc-800'
                         }`}>
@@ -285,10 +460,10 @@ export default function MasterPanel() {
                           <div className="w-32 h-2 bg-zinc-800 rounded-full overflow-hidden shadow-inner">
                             <div 
                               className="h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out" 
-                              style={{ width: student.progress }} 
+                              style={{ width: `${student.progress}%` }} 
                             />
                           </div>
-                          <span className="text-[10px] font-black text-white min-w-[35px]">{student.progress}</span>
+                          <span className="text-[10px] font-black text-white min-w-[35px]">{student.progress}%</span>
                         </div>
                       </td>
                       <td className="py-8 px-6 text-center">
@@ -339,8 +514,10 @@ export default function MasterPanel() {
                     <Brain size={12} className="text-blue-500" /> System Prompt Geral
                   </label>
                   <textarea 
+                    value={systemPrompt}
+                    onChange={(e) => setSystemPrompt(e.target.value)}
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl p-6 text-sm font-medium text-zinc-300 min-h-[300px] focus:ring-2 focus:ring-blue-600 outline-none transition-all resize-none"
-                    defaultValue="Você é o Atlas, o mentor supremo do Next Enem. Seu foco é garantir que o aluno compreenda a TRI através de uma linguagem técnica porém inspiradora. Nunca dê a resposta direta, guie o raciocínio."
+                    placeholder="Instruções fundamentais para o cérebro da plataforma..."
                   />
                 </div>
 
@@ -364,8 +541,12 @@ export default function MasterPanel() {
                 </div>
               </div>
 
-              <button className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl shadow-blue-600/30 hover:bg-blue-700 transition-all">
-                Atualizar Instruções de IA
+              <button 
+                onClick={handleUpdatePrompt}
+                disabled={isProcessing}
+                className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl shadow-blue-600/30 hover:bg-blue-700 transition-all disabled:opacity-50"
+              >
+                {isProcessing ? 'Sincronizando Cérebro IA...' : 'Atualizar Instruções de IA'}
               </button>
             </div>
 

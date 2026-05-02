@@ -78,5 +78,62 @@ export const cacheService = {
        return false;
     }
     return true;
+  },
+
+  /**
+   * 2.1: Fetch all student profiles from Supabase.
+   */
+  async getAllStudents(): Promise<StudentProfile[]> {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) return [];
+    return data || [];
+  },
+
+  /**
+   * 2.2: Support Ticket Lifecycle
+   */
+  async getTickets(): Promise<Ticket[]> {
+    const { data, error } = await supabase
+      .from('tickets')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) return [];
+    return data || [];
+  },
+
+  async respondToTicket(ticketId: string, response: string): Promise<boolean> {
+    const { error } = await supabase
+      .from('tickets')
+      .update({ response, status: 'Resolvido' })
+      .eq('id', ticketId);
+
+    return !error;
+  },
+
+  /**
+   * 3.1: Global Admin Config (System Prompts, etc)
+   */
+  async getAdminConfig(key: string): Promise<string | null> {
+    const { data, error } = await supabase
+      .from('admin_config')
+      .select('value')
+      .eq('key', key)
+      .single();
+
+    if (error) return null;
+    return data.value;
+  },
+
+  async setAdminConfig(key: string, value: string): Promise<boolean> {
+    const { error } = await supabase
+      .from('admin_config')
+      .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+
+    return !error;
   }
 };
