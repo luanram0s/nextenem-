@@ -115,6 +115,35 @@ export const cacheService = {
     return !error;
   },
 
+  async createTicket(ticket: Omit<Ticket, 'id' | 'created_at' | 'status'>): Promise<Ticket | null> {
+    const { data, error } = await supabase
+      .from('tickets')
+      .insert([{ 
+        ...ticket, 
+        status: 'Aguardando',
+        created_at: new Date().toISOString()
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating ticket:', error);
+      return null;
+    }
+    return data;
+  },
+
+  async getUnreadResponsesCount(userId: string): Promise<number> {
+    const { count, error } = await supabase
+      .from('tickets')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('status', 'Resolvido'); // Or a dedicated 'is_read' flag if added later
+
+    if (error) return 0;
+    return count || 0;
+  },
+
   /**
    * 3.1: Global Admin Config (System Prompts, etc)
    */

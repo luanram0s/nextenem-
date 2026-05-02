@@ -1,98 +1,155 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, BrainCircuit, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send, BrainCircuit, Sparkles, MessageSquare, LifeBuoy, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/src/lib/utils';
+import { aiService } from '../services/aiService';
+import { cacheService } from '../services/cacheService';
 
 interface Message {
   id: string;
   text: string;
   isLara: boolean;
   timestamp: Date;
+  isTicketOption?: boolean;
 }
 
 export default function LaraChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Olá, sou a LARA! Estou aqui para otimizar sua trilha rumo à aprovação. Em que posso te ajudar hoje?',
+      text: 'Saudações! Sou o Atlas, sua IA de suporte tático. Como posso otimizar seus estudos hoje?',
       isLara: true,
       timestamp: new Date()
     }
   ]);
   
+  const [unreadCount, setUnreadCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  
+  // 3.2: Get User Context for better TRI logic and Support
+  const user = JSON.parse(localStorage.getItem('next_enem_user') || '{"id": "test", "name": "Aluno"}');
+  const lastTopic = localStorage.getItem('last_topic_studied') || 'Geral';
+
+  useEffect(() => {
+    checkNotifications();
+    const interval = setInterval(checkNotifications, 30000); // Check every 30s
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, isTyping]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const checkNotifications = async () => {
+    if (user?.id) {
+      const count = await cacheService.getUnreadResponsesCount(user.id);
+      setUnreadCount(count);
+    }
+  };
 
+  const handleSend = async () => {
+    if (!input.trim() || isTyping) return;
+
+    const query = input;
     const userMsg: Message = {
       id: Date.now().toString(),
-      text: input,
+      text: query,
       isLara: false,
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMsg]);
     setInput('');
+    setIsTyping(true);
 
-    // Simulate LARA response
-    setTimeout(() => {
-      const laraResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        text: getLaraAdvice(input),
-        isLara: true,
-        timestamp: new Date()
+    try {
+      // 3.2: AI Triage logic
+      const context = {
+        topic: lastTopic,
+        performance: 'Nível Master', // Prototype mock
+        question: 'Questão de Eletrodinâmica Enem 2023'
       };
-      setMessages(prev => [...prev, laraResponse]);
-    }, 1000);
+
+      const aiResponse = await aiService.getSupportResponse(query, context);
+      
+      const laraMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        text: aiResponse,
+        isLara: true,
+        timestamp: new Date(),
+        isTicketOption: aiResponse.toLowerCase().includes('ticket')
+      };
+      
+      setMessages(prev => [...prev, laraMsg]);
+    } catch (e) {
+      console.error('Support AI Error:', e);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
-  const getLaraAdvice = (query: string): string => {
-    const q = query.toLowerCase();
-    if (q.includes('estudar') || q.includes('foco')) {
-      return 'Baseado na sua incidência de erros, recomendo focar em Geometria Espacial e Estequiometria. São temas frequentes e de alto impacto no TRI.';
+  const handleOpenTicket = async () => {
+    setIsTyping(true);
+    
+    try {
+      const ticket = await cacheService.createTicket({
+        user_id: user.id || 'anonymous',
+        student_name: user.name || 'Estudante',
+        plan: localStorage.getItem('next_enem_plan') || 'Premium',
+        subject: `Dúvida sobre: ${lastTopic}`,
+        message: messages[messages.length - 2].text, // The last user message
+        priority: 'medium'
+      });
+
+      if (ticket) {
+        setMessages(prev => [...prev, {
+          id: Date.now().toString(),
+          text: 'Entendido. Abri um ticket prioritário para nosso time pedagógico. Você será notificado assim que um consultor responder.',
+          isLara: true,
+          timestamp: new Date()
+        }]);
+      }
+    } catch (e) {
+      alert('Erro ao abrir ticket. Tente novamente.');
+    } finally {
+      setIsTyping(false);
     }
-    if (q.includes('redação') || q.includes('tema')) {
-      return 'O tema quente para esta semana é "Impactos da Inteligência Artificial na Educação do Século XXI". Que tal começar um rascunho agora?';
-    }
-    return 'Lembre-se: no ENEM, a consistência vale mais que a complexidade. Continue firme na sua trilha!';
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-[100] lara-chat-wrapper transition-all duration-300 [.goal-modal-open_&]:opacity-0 [.goal-modal-open_&]:pointer-events-none">
+    <div className="fixed bottom-8 right-8 z-[100] transition-all duration-300">
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="absolute bottom-20 right-0 w-[400px] max-w-[calc(100vw-2rem)] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col"
+            className="absolute bottom-20 right-0 w-[420px] max-w-[calc(100vw-2rem)] bg-zinc-950 rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-zinc-800 overflow-hidden flex flex-col"
           >
-            {/* Header */}
-            <div className="bg-slate-900 p-6 text-white flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-next-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <BrainCircuit size={20} />
+            {/* Header - Cyber Master Style */}
+            <div className="bg-zinc-900 p-6 text-white flex items-center justify-between border-b border-zinc-800">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-cyan-500/10 rounded-2xl flex items-center justify-center border border-cyan-500/20 shadow-[0_0_15px_rgba(34,211,238,0.1)]">
+                  <BrainCircuit size={24} className="text-cyan-400" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-tight">Suporte LARA</h3>
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Inteligência Ativa</span>
+                  <h3 className="text-xs font-black uppercase tracking-widest italic flex items-center gap-2">
+                    Suporte Elite Atlas <Sparkles size={12} className="text-amber-500" />
+                  </h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Protocolo Master Ativo</span>
                   </div>
                 </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                className="p-2 hover:bg-white/5 rounded-full transition-colors text-zinc-500"
               >
                 <X size={20} />
               </button>
@@ -101,38 +158,62 @@ export default function LaraChat() {
             {/* Messages */}
             <div 
               ref={scrollRef}
-              className="flex-1 overflow-y-auto p-6 space-y-4 max-h-[400px] scroll-smooth"
+              className="flex-1 overflow-y-auto p-6 space-y-6 max-h-[450px] min-h-[350px] scroll-smooth custom-scrollbar"
             >
               {messages.map((msg) => (
-                <div 
-                  key={msg.id}
-                  className={cn(
-                    "max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed",
-                    msg.isLara 
-                      ? "bg-slate-50 text-slate-700 rounded-tl-none font-medium" 
-                      : "bg-next-blue text-white ml-auto rounded-tr-none font-bold"
+                <div key={msg.id} className="space-y-3">
+                  <div 
+                    className={cn(
+                      "max-w-[90%] p-4 rounded-2xl text-sm leading-relaxed relative group",
+                      msg.isLara 
+                        ? "bg-zinc-900 text-zinc-300 rounded-tl-none border border-zinc-800" 
+                        : "bg-cyan-500 text-zinc-950 ml-auto rounded-tr-none font-black italic shadow-lg shadow-cyan-500/10"
+                    )}
+                  >
+                    {msg.text}
+                    {msg.isLara && (
+                      <div className="absolute -left-2 top-2 w-4 h-4 bg-zinc-900 border-l border-t border-zinc-800 rotate-[-45deg] -z-10" />
+                    )}
+                  </div>
+                  
+                  {msg.isTicketOption && (
+                    <motion.button
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      onClick={handleOpenTicket}
+                      className="flex items-center gap-3 bg-amber-500/10 border border-amber-500/20 text-amber-500 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-500/20 transition-all ml-4"
+                    >
+                      <LifeBuoy size={14} /> Falar com Especialista Humano
+                    </motion.button>
                   )}
-                >
-                  {msg.text}
                 </div>
               ))}
+              
+              {isTyping && (
+                <div className="flex gap-2 p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800/50 w-20">
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" />
+                </div>
+              )}
             </div>
 
             {/* Input */}
-            <div className="p-6 border-t border-slate-50">
-              <div className="flex items-center gap-2 bg-slate-50 p-2 pl-4 rounded-xl">
+            <div className="p-6 border-t border-zinc-900 bg-zinc-900/20">
+              <div className="flex items-center gap-3 bg-zinc-950 border border-zinc-800 p-2 pl-6 rounded-2xl focus-within:border-cyan-500/50 transition-all shadow-inner">
                 <input 
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Pergunte à LARA..."
-                  className="bg-transparent flex-1 text-sm outline-none font-medium text-slate-700"
+                  placeholder="Dúvida técnica ou pedagógica..."
+                  className="bg-transparent flex-1 text-sm outline-none font-medium text-zinc-300 placeholder:text-zinc-700 py-3"
                 />
                 <button 
                   onClick={handleSend}
-                  className="w-10 h-10 bg-next-blue text-white rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors shadow-lg shadow-blue-100"
+                  disabled={isTyping || !input.trim()}
+                  className="w-12 h-12 bg-cyan-500 text-zinc-950 rounded-xl flex items-center justify-center hover:bg-cyan-400 disabled:opacity-50 transition-all shadow-lg shadow-cyan-500/20 active:scale-90"
                 >
-                  <Send size={16} />
+                  <Send size={18} />
                 </button>
               </div>
             </div>
@@ -141,20 +222,34 @@ export default function LaraChat() {
       </AnimatePresence>
 
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          if (!isOpen) checkNotifications();
+        }}
         className={cn(
-          "w-16 h-16 rounded-2xl shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-110 active:scale-95 group",
-          isOpen ? "bg-slate-900 rotate-90" : "bg-next-blue hover:shadow-blue-200"
+          "w-18 h-18 rounded-3xl shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-110 active:scale-95 relative overflow-hidden group",
+          isOpen ? "bg-zinc-900 ring-2 ring-zinc-800" : "bg-cyan-500 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)]"
         )}
       >
-        {isOpen ? <X size={28} /> : (
+        {isOpen ? <X size={32} className="text-zinc-400" /> : (
           <div className="relative">
-            <MessageCircle size={28} />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full flex items-center justify-center">
-              <div className="w-1.5 h-1.5 bg-next-blue rounded-full animate-pulse" />
-            </div>
+            <MessageSquare size={32} className="text-zinc-950" />
+            <AnimatePresence>
+              {unreadCount > 0 && (
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-4 -right-4 bg-rose-500 text-white w-7 h-7 rounded-full flex items-center justify-center border-4 border-zinc-950 text-[10px] font-black"
+                >
+                  {unreadCount}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
+        
+        {/* Hover light effect */}
+        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
       </button>
     </div>
   );

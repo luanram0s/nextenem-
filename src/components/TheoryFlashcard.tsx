@@ -11,6 +11,11 @@ interface TheoryFlashcardProps {
 }
 
 export default function TheoryFlashcard({ topic, discipline, summary, videos }: TheoryFlashcardProps) {
+  React.useEffect(() => {
+    // 3.2: Context Persistence for Support Bot
+    localStorage.setItem('last_topic_studied', topic);
+  }, [topic]);
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}

@@ -175,5 +175,35 @@ export const aiService = {
       console.error('Failed to analyze scratchpad', e);
       return null;
     }
+  },
+
+  /**
+   * 3.2: AI Support Triage
+   * Uses global system prompt to answer pedagogical or technical questions.
+   */
+  async getSupportResponse(query: string, context?: any) {
+    // 1. Get Global Prompt
+    const systemPrompt = await cacheService.getAdminConfig('system_prompt') || 
+      'Você é o Atlas, o mentor supremo do Next Enem. Ajude o aluno de forma técnica e inspiradora. Se a dúvida for complexa, sugira que ele abra um ticket.';
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-1.5-flash',
+      contents: `
+        ROLE: ${systemPrompt}
+        
+        CONTEXT:
+        O aluno está estudando o tópico: ${context?.topic || 'Geral'}.
+        Desempenho atual: ${context?.performance || 'Iniciante'}.
+        Questão em foco: ${context?.question || 'Nenhuma'}.
+        
+        QUERY DO ALUNO: "${query}"
+        
+        INSTRUÇÃO: 
+        Responda de forma curta, direta e pedagógica. 
+        Se a dúvida for muito complexa ou fora do escopo, sugira explicitamente que ele "abra um ticket de suporte" para falar com um humano.
+      `
+    });
+
+    return response.text || 'Desculpe, não consegui processar sua dúvida agora.';
   }
 };
