@@ -31,3 +31,12 @@ export interface VideoSnippet {
   title: string;
   is_public: boolean;
 }
+
+export interface UserHistoryDTO {
+  user_id: string;
+  discipline: string;
+  topic: string;
+  score: number;
+  total: number;
+  time_spent: number;
+}

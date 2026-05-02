@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
+import TheoryDashboard from './components/TheoryDashboard';
 import Login from './pages/Login';
 import LaraChat from './components/LaraChat';
 import GoalSelector from './components/GoalSelector';
@@ -85,6 +86,15 @@ export default function App() {
                 <div className="p-12">
                    <MasterPanel />
                 </div>
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/library" 
+            element={
+              <ProtectedRoute>
+                <TheoryDashboard />
               </ProtectedRoute>
             } 
           />

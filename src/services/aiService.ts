@@ -1,7 +1,8 @@
-import { GoogleGenerativeAI } from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 import { cacheService } from './cacheService';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+// Ensure process.env.GEMINI_API_KEY is available
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
 /**
  * MOTOR DE INTELIGÊNCIA NEXT ENEM
@@ -27,19 +28,20 @@ export const aiService = {
 
     // Fallback to AI
     console.log(`[Cache Miss] Triggering AI for Competency ${competency}, Hability ${hability}`);
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
     
-    const prompt = `
-      Atue como um professor especialista no Enem.
-      Explique a seguinte questão baseada na Competência ${competency} e Habilidade ${hability} do Enem.
-      
-      Questão: ${enunciado}
-      
-      Forneça uma explicação pedagógica, clara e focada em táticas de prova.
-    `;
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: `
+        Atue como um professor especialista no Enem.
+        Explique a seguinte questão baseada na Competência ${competency} e Habilidade ${hability} do Enem.
+        
+        Questão: ${enunciado}
+        
+        Forneça uma explicação pedagógica, clara e focada em táticas de prova.
+      `
+    });
 
-    const result = await model.generateContent(prompt);
-    const explanation = result.response.text();
+    const explanation = response.text || 'Não foi possível gerar uma explicação no momento.';
 
     // Persist for future use (Global Cache)
     await cacheService.persistQuestion({
@@ -51,9 +53,88 @@ export const aiService = {
       enunciado,
       alternativas: {},
       explanation_cache: explanation,
-      reference_matrix_context: `C${competency}H${hability}`
+      reference_matrix_context: `C${competency}H${hability}`,
+      is_public: true
     });
 
     return explanation;
+  },
+
+  /**
+   * 4.2: Generates a question based on TRI difficulty level.
+   */
+  async generateQuestionByTRI(
+    topic: string, 
+    discipline: string, 
+    level: 'Fácil' | 'Média' | 'Difícil'
+  ) {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-pro-preview',
+      contents: `
+        Atue como o motor de questões do Enem.
+        Gere uma questão de múltipla escolha inédita sobre o tema "${topic}" da disciplina "${discipline}".
+        Dificuldade Alvo (TRI): ${level}
+        
+        A questão deve seguir rigorosamente o padrão Enem:
+        - Objeto de conhecimento claro.
+        - Contextualização (situação-problema).
+        - Comando direto.
+        - 5 alternativas (A-E), sendo apenas uma correta.
+        - Distratores plausíveis.
+        
+        Gere um JSON com:
+        - enunciado: Texto completo da questão.
+        - alternativas: Objeto { A: "...", B: "...", ... }
+        - correctLabel: Letra da alternativa correta.
+        - difficulty: O nível solicitado.
+        
+        Responda APENAS o JSON.
+      `,
+      config: {
+        responseMimeType: 'application/json'
+      }
+    });
+
+    try {
+      return JSON.parse(response.text || '{}');
+    } catch (e) {
+      console.error('Failed to generate TRI question', e);
+      return null;
+    }
+  },
+
+  /**
+   * 5.1: Analyzes the student's thought process from the "Laboratório de Cálculo".
+   * Corrects the logic, not just the answer.
+   */
+  async analyzeCalculationLab(questionEnunciado: string, scratchpadText: string, selectedOption: string, correctOption: string) {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-pro-preview',
+      contents: `
+        Atue como um mentor pedagógico do Enem.
+        Analise o rascunho de cálculo do aluno para a seguinte questão.
+        
+        Questão: ${questionEnunciado}
+        Resposta do Aluno: ${selectedOption} (Gabarito: ${correctOption})
+        Rascunho do Aluno: "${scratchpadText}"
+        
+        Gere um JSON com:
+        - logic_error: Descrição de onde o aluno errou no raciocínio (se errou).
+        - corrective_tip: Dica imediata para não repetir o erro.
+        - cognitive_feedback: Elogio ou ajuste na forma de pensar.
+        
+        Responda APENAS o JSON.
+      `,
+      config: {
+        responseMimeType: 'application/json'
+      }
+    });
+
+    try {
+      return JSON.parse(response.text || '{}');
+    } catch (e) {
+      console.error('Failed to analyze scratchpad', e);
+      return null;
+    }
   }
 };

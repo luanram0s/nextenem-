@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { QuestionCache, VideoSnippet } from '../types/database';
+import { QuestionCache, VideoSnippet, UserHistoryDTO } from '../types/database';
 
 /**
  * SERVICE: Content Cache & Reference Matrix Persistence
@@ -66,5 +66,17 @@ export const cacheService = {
 
     if (error) return null;
     return data;
+  },
+
+  /**
+   * 4.1: Syncs LocalStorage history to Supabase for centralized persistence.
+   */
+  async syncPerformanceHistory(history: UserHistoryDTO[]): Promise<boolean> {
+    const { error } = await supabase.from('history').insert(history);
+    if (error) {
+       console.error('Error syncing history', error);
+       return false;
+    }
+    return true;
   }
 };

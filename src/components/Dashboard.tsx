@@ -29,6 +29,8 @@ import SupportChat from './SupportChat';
 import MasterPanel from './MasterPanel';
 import RedacaoLab from './RedacaoLab';
 import SimuladosTRI from './SimuladosTRI';
+import TheoryDashboard from './TheoryDashboard';
+import DynamicMentor from './DynamicMentor';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -88,6 +90,11 @@ const Dashboard = () => {
                 </div>
               )}
             </header>
+
+            {/* MENTOR DINÂMICO IA */}
+            <div className="mb-12">
+              <DynamicMentor />
+            </div>
 
             {/* DASHBOARD GRID */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -229,6 +236,8 @@ const Dashboard = () => {
         return <Profile />;
       case 'suporte':
         return <SupportChat />;
+      case 'biblioteca':
+        return <TheoryDashboard />;
       default:
         return null;
     }
@@ -279,6 +288,14 @@ const Dashboard = () => {
           >
             <ClipboardList size={20} />
             <span className="uppercase tracking-widest text-[10px]">Simulados TRI</span>
+          </button>
+
+          <button 
+             onClick={() => setActiveTab('biblioteca')}
+             className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'biblioteca' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
+          >
+            <BookOpen size={20} className={activeTab === 'biblioteca' ? 'text-cyan-400' : ''} />
+            <span className="uppercase tracking-widest text-[10px]">Biblioteca Global</span>
           </button>
 
           <div className="pt-4 mt-4 border-t border-zinc-100 space-y-1.5">
