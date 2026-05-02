@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, BrainCircuit, Sparkles, MessageSquare, LifeBuoy, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
+import { X, Send, LifeBuoy, MessageSquare, User, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/src/lib/utils';
 import { aiService } from '../services/aiService';
@@ -20,7 +20,7 @@ export default function LaraChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Saudações! Sou o Atlas, sua IA de suporte tático. Como posso otimizar seus estudos hoje?',
+      text: 'Olá! Sou o Atlas, seu suporte de elite. Como posso ajudar em seus estudos hoje?',
       isLara: true,
       timestamp: new Date()
     }
@@ -29,13 +29,12 @@ export default function LaraChat() {
   const [unreadCount, setUnreadCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   
-  // 3.2: Get User Context for better TRI logic and Support
   const user = JSON.parse(localStorage.getItem('next_enem_user') || '{"id": "test", "name": "Aluno"}');
   const lastTopic = localStorage.getItem('last_topic_studied') || 'Geral';
 
   useEffect(() => {
     checkNotifications();
-    const interval = setInterval(checkNotifications, 30000); // Check every 30s
+    const interval = setInterval(checkNotifications, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -62,17 +61,16 @@ export default function LaraChat() {
       isLara: false,
       timestamp: new Date()
     };
-
+    
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
 
     try {
-      // 3.2: AI Triage logic
       const context = {
         topic: lastTopic,
-        performance: 'Nível Master', // Prototype mock
-        question: 'Questão de Eletrodinâmica Enem 2023'
+        performance: 'Nível Master',
+        question: 'Questão em foco'
       };
 
       const aiResponse = await aiService.getSupportResponse(query, context);
@@ -102,14 +100,14 @@ export default function LaraChat() {
         student_name: user.name || 'Estudante',
         plan: localStorage.getItem('next_enem_plan') || 'Premium',
         subject: `Dúvida sobre: ${lastTopic}`,
-        message: messages[messages.length - 2].text, // The last user message
+        message: messages[messages.length - 2].text,
         priority: 'medium'
       });
 
       if (ticket) {
         setMessages(prev => [...prev, {
           id: Date.now().toString(),
-          text: 'Entendido. Abri um ticket prioritário para nosso time pedagógico. Você será notificado assim que um consultor responder.',
+          text: 'Ticket aberto com sucesso. Nossa equipe pedagógica analisará sua dúvida e responderá em breve.',
           isLara: true,
           timestamp: new Date()
         }]);
@@ -126,94 +124,89 @@ export default function LaraChat() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="absolute bottom-20 right-0 w-[420px] max-w-[calc(100vw-2rem)] bg-zinc-950 rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-zinc-800 overflow-hidden flex flex-col"
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="absolute bottom-20 right-0 w-[380px] max-w-[calc(100vw-2rem)] bg-white rounded-3xl shadow-2xl border border-zinc-200 overflow-hidden flex flex-col"
           >
-            {/* Header - Cyber Master Style */}
-            <div className="bg-zinc-900 p-6 text-white flex items-center justify-between border-b border-zinc-800">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-cyan-500/10 rounded-2xl flex items-center justify-center border border-cyan-500/20 shadow-[0_0_15px_rgba(34,211,238,0.1)]">
-                  <BrainCircuit size={24} className="text-cyan-400" />
+            {/* Header - Clean Blue Style */}
+            <div className="bg-blue-700 p-5 text-white flex items-center justify-between shadow-md">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30 backdrop-blur-sm">
+                  <User size={20} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-black uppercase tracking-widest italic flex items-center gap-2">
-                    Suporte Elite Atlas <Sparkles size={12} className="text-amber-500" />
-                  </h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                    <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Protocolo Master Ativo</span>
+                  <h3 className="text-sm font-bold tracking-tight">Suporte Next Enem</h3>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+                    <span className="text-[10px] font-medium text-blue-100 uppercase tracking-wider">Atendimento Online</span>
                   </div>
                 </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-white/5 rounded-full transition-colors text-zinc-500"
+                className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-white/80"
               >
                 <X size={20} />
               </button>
             </div>
 
-            {/* Messages */}
+            {/* Messages - White Background */}
             <div 
               ref={scrollRef}
-              className="flex-1 overflow-y-auto p-6 space-y-6 max-h-[450px] min-h-[350px] scroll-smooth custom-scrollbar"
+              className="flex-1 overflow-y-auto p-5 space-y-4 max-h-[400px] min-h-[350px] bg-white scroll-smooth custom-scrollbar"
             >
               {messages.map((msg) => (
-                <div key={msg.id} className="space-y-3">
+                <div key={msg.id} className="space-y-2">
                   <div 
                     className={cn(
-                      "max-w-[90%] p-4 rounded-2xl text-sm leading-relaxed relative group",
+                      "max-w-[85%] p-3.5 rounded-2xl text-[13px] leading-relaxed shadow-sm",
                       msg.isLara 
-                        ? "bg-zinc-900 text-zinc-300 rounded-tl-none border border-zinc-800" 
-                        : "bg-cyan-500 text-zinc-950 ml-auto rounded-tr-none font-black italic shadow-lg shadow-cyan-500/10"
+                        ? "bg-zinc-100 text-black rounded-tl-none border border-zinc-200" 
+                        : "bg-blue-50 text-black ml-auto rounded-tr-none border border-blue-100"
                     )}
                   >
                     {msg.text}
-                    {msg.isLara && (
-                      <div className="absolute -left-2 top-2 w-4 h-4 bg-zinc-900 border-l border-t border-zinc-800 rotate-[-45deg] -z-10" />
-                    )}
                   </div>
                   
                   {msg.isTicketOption && (
                     <motion.button
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       onClick={handleOpenTicket}
-                      className="flex items-center gap-3 bg-amber-500/10 border border-amber-500/20 text-amber-500 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-500/20 transition-all ml-4"
+                      className="flex items-center gap-2 bg-blue-700 text-white px-4 py-2.5 rounded-xl text-[11px] font-bold shadow-md hover:bg-blue-800 transition-all ml-4"
                     >
-                      <LifeBuoy size={14} /> Falar com Especialista Humano
+                      <LifeBuoy size={14} /> Falar com Especialista
                     </motion.button>
                   )}
                 </div>
               ))}
               
               {isTyping && (
-                <div className="flex gap-2 p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800/50 w-20">
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" />
+                <div className="flex gap-1.5 p-3 bg-zinc-50 border border-zinc-100 rounded-2xl w-14 shadow-sm">
+                  <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce" />
                 </div>
               )}
             </div>
 
-            {/* Input */}
-            <div className="p-6 border-t border-zinc-900 bg-zinc-900/20">
-              <div className="flex items-center gap-3 bg-zinc-950 border border-zinc-800 p-2 pl-6 rounded-2xl focus-within:border-cyan-500/50 transition-all shadow-inner">
+            {/* Input - Clean White Footer */}
+            <div className="p-4 border-t border-zinc-100 bg-zinc-50">
+              <div className="flex items-center gap-2 bg-white border border-zinc-200 p-1.5 pl-4 rounded-full focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 transition-all shadow-sm">
                 <input 
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Dúvida técnica ou pedagógica..."
-                  className="bg-transparent flex-1 text-sm outline-none font-medium text-zinc-300 placeholder:text-zinc-700 py-3"
+                  placeholder="Olá! Como posso ajudar?"
+                  className="bg-transparent flex-1 text-sm outline-none font-medium text-black placeholder:text-zinc-400 py-2"
                 />
                 <button 
                   onClick={handleSend}
                   disabled={isTyping || !input.trim()}
-                  className="w-12 h-12 bg-cyan-500 text-zinc-950 rounded-xl flex items-center justify-center hover:bg-cyan-400 disabled:opacity-50 transition-all shadow-lg shadow-cyan-500/20 active:scale-90"
+                  className="w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 disabled:opacity-50 transition-all shadow-md active:scale-90"
                 >
-                  <Send size={18} />
+                  <Send size={16} />
                 </button>
               </div>
             </div>
@@ -227,19 +220,19 @@ export default function LaraChat() {
           if (!isOpen) checkNotifications();
         }}
         className={cn(
-          "w-18 h-18 rounded-3xl shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-110 active:scale-95 relative overflow-hidden group",
-          isOpen ? "bg-zinc-900 ring-2 ring-zinc-800" : "bg-cyan-500 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)]"
+          "w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 relative overflow-hidden group",
+          isOpen ? "bg-white border border-zinc-200" : "bg-blue-700 hover:bg-blue-800 shadow-blue-500/20"
         )}
       >
-        {isOpen ? <X size={32} className="text-zinc-400" /> : (
+        {isOpen ? <X size={24} className="text-zinc-500" /> : (
           <div className="relative">
-            <MessageSquare size={32} className="text-zinc-950" />
+            <MessageSquare size={24} className="text-white" />
             <AnimatePresence>
               {unreadCount > 0 && (
                 <motion.div 
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute -top-4 -right-4 bg-rose-500 text-white w-7 h-7 rounded-full flex items-center justify-center border-4 border-zinc-950 text-[10px] font-black"
+                  className="absolute -top-3 -right-3 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center border-2 border-white text-[10px] font-black shadow-md"
                 >
                   {unreadCount}
                 </motion.div>
@@ -247,9 +240,6 @@ export default function LaraChat() {
             </AnimatePresence>
           </div>
         )}
-        
-        {/* Hover light effect */}
-        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
       </button>
     </div>
   );

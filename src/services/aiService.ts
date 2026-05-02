@@ -5,6 +5,22 @@ import { cacheService } from './cacheService';
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
 /**
+ * Centralized call with exponential backoff for 429 errors.
+ */
+async function safeGenerate(params: any, retries = 2, delay = 1000): Promise<any> {
+  try {
+    return await ai.models.generateContent(params);
+  } catch (error: any) {
+    if (error?.status === 429 && retries > 0) {
+      console.warn(`[Gemini 429] Quota exceeded. Retrying in ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return safeGenerate(params, retries - 1, delay * 2);
+    }
+    throw error;
+  }
+}
+
+/**
  * MOTOR DE INTELIGÊNCIA NEXT ENEM
  * Logic: Cache-First, AI-Second.
  */
@@ -29,7 +45,7 @@ export const aiService = {
     // Fallback to AI
     console.log(`[Cache Miss] Triggering AI for Competency ${competency}, Hability ${hability}`);
     
-    const response = await ai.models.generateContent({
+    const response = await safeGenerate({
       model: 'gemini-3-flash-preview',
       contents: `
         Atue como um professor especialista no Enem.
@@ -65,8 +81,8 @@ export const aiService = {
    * Extrai questões estruturadas de uma string de texto (extraída de PDF).
    */
   async extractQuestionsFromText(text: string): Promise<any[]> {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.1-pro-preview',
+    const response = await safeGenerate({
+      model: 'gemini-3-flash-preview',
       contents: `
         Você é um parser especializado em provas do Enem. 
         Analise o texto abaixo e identifique cada questão.
@@ -107,8 +123,8 @@ export const aiService = {
     discipline: string, 
     level: 'Fácil' | 'Média' | 'Difícil'
   ) {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.1-pro-preview',
+    const response = await safeGenerate({
+      model: 'gemini-3-flash-preview',
       contents: `
         Atue como o motor de questões do Enem.
         Gere uma questão de múltipla escolha inédita sobre o tema "${topic}" da disciplina "${discipline}".
@@ -147,8 +163,8 @@ export const aiService = {
    * Corrects the logic, not just the answer.
    */
   async analyzeCalculationLab(questionEnunciado: string, scratchpadText: string, selectedOption: string, correctOption: string) {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.1-pro-preview',
+    const response = await safeGenerate({
+      model: 'gemini-3-flash-preview',
       contents: `
         Atue como um mentor pedagógico do Enem.
         Analise o rascunho de cálculo do aluno para a seguinte questão.
@@ -186,8 +202,8 @@ export const aiService = {
     const systemPrompt = await cacheService.getAdminConfig('system_prompt') || 
       'Você é o Atlas, o mentor supremo do Next Enem. Ajude o aluno de forma técnica e inspiradora. Se a dúvida for complexa, sugira que ele abra um ticket.';
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
+    const response = await safeGenerate({
+      model: 'gemini-3-flash-preview',
       contents: `
         ROLE: ${systemPrompt}
         
