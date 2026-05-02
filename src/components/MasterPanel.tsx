@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
+import { aiService } from '../services/aiService';
 import { cacheService } from '../services/cacheService';
 import { QuestionCache, StudentProfile, Ticket } from '../types/database';
 

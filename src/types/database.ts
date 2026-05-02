@@ -62,3 +62,12 @@ export interface AdminConfig {
   value: string;
   updated_at: string;
 }
+
+export interface UserHistoryDTO {
+  user_id: string;
+  discipline: string;
+  topic: string;
+  score: number;
+  total: number;
+  time_spent: number;
+}

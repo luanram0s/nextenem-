@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { QuestionCache, VideoSnippet, UserHistoryDTO } from '../types/database';
+import { QuestionCache, VideoSnippet, UserHistoryDTO, StudentProfile, Ticket } from '../types/database';
 
 /**
  * SERVICE: Content Cache & Reference Matrix Persistence
