@@ -4,20 +4,23 @@ import { cacheService } from './cacheService';
 // Ensure process.env.GEMINI_API_KEY is available
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
-const DEFAULT_MODEL = 'gemini-1.5-flash';
+const DEFAULT_MODEL = 'gemini-3-flash-preview';
 
 /**
  * Centralized call with exponential backoff for 429 errors.
  */
-async function safeGenerate(params: any, retries = 5, delay = 2000): Promise<any> {
+async function safeGenerate(params: any, retries = 5, delay = 2000): Promise<string> {
   try {
     const modelName = params.model || DEFAULT_MODEL;
-    // Replace potentially invalid model names with standard ones
-    const sanitizedParams = {
-      ...params,
-      model: modelName.includes('pro') ? 'gemini-1.5-pro' : 'gemini-1.5-flash'
-    };
-    return await ai.models.generateContent(sanitizedParams);
+    const sanitizedModelName = modelName.includes('pro') ? 'gemini-3.1-pro-preview' : 'gemini-3-flash-preview';
+    
+    const response = await ai.models.generateContent({ 
+      model: sanitizedModelName,
+      contents: params.contents,
+      config: params.config
+    });
+
+    return response.text || '';
   } catch (error: any) {
     // Check for rate limit error (429) or other retryable errors
     const isRateLimit = error?.status === 429 || error?.message?.includes('429') || error?.message?.includes('RESOURCE_EXHAUSTED');
@@ -56,8 +59,8 @@ export const aiService = {
     // Fallback to AI
     console.log(`[Cache Miss] Triggering AI for Competency ${competency}, Hability ${hability}`);
     
-    const response = await safeGenerate({
-      model: 'gemini-3-flash-preview',
+    const responseText = await safeGenerate({
+      model: 'gemini-1.5-flash',
       contents: `
         Atue como um professor especialista no Enem.
         Explique a seguinte questão baseada na Competência ${competency} e Habilidade ${hability} do Enem.
@@ -68,7 +71,7 @@ export const aiService = {
       `
     });
 
-    const explanation = response.text || 'Não foi possível gerar uma explicação no momento.';
+    const explanation = responseText || 'Não foi possível gerar uma explicação no momento.';
 
     // Persist for future use (Global Cache)
     await cacheService.persistQuestion({
@@ -92,8 +95,8 @@ export const aiService = {
    * Extrai questões estruturadas de uma string de texto (extraída de PDF).
    */
   async extractQuestionsFromText(text: string): Promise<any[]> {
-    const response = await safeGenerate({
-      model: 'gemini-3-flash-preview',
+    const responseText = await safeGenerate({
+      model: 'gemini-1.5-flash',
       contents: `
         Você é um parser especializado em provas do Enem. 
         Analise o texto abaixo e identifique cada questão.
@@ -118,7 +121,7 @@ export const aiService = {
     });
 
     try {
-      const data = JSON.parse(response.text || '{"questions": []}');
+      const data = JSON.parse(responseText || '{"questions": []}');
       return data.questions || [];
     } catch (e) {
       console.error('Falha no Parse de Provas:', e);
@@ -134,8 +137,8 @@ export const aiService = {
     discipline: string, 
     level: 'Fácil' | 'Média' | 'Difícil'
   ) {
-    const response = await safeGenerate({
-      model: 'gemini-3-flash-preview',
+    const responseText = await safeGenerate({
+      model: 'gemini-1.5-flash',
       contents: `
         Atue como o motor de questões do Enem.
         Gere uma questão de múltipla escolha inédita sobre o tema "${topic}" da disciplina "${discipline}".
@@ -162,7 +165,7 @@ export const aiService = {
     });
 
     try {
-      return JSON.parse(response.text || '{}');
+      return JSON.parse(responseText || '{}');
     } catch (e) {
       console.error('Failed to generate TRI question', e);
       return null;
@@ -174,8 +177,8 @@ export const aiService = {
    * Corrects the logic, not just the answer.
    */
   async analyzeCalculationLab(questionEnunciado: string, scratchpadText: string, selectedOption: string, correctOption: string) {
-    const response = await safeGenerate({
-      model: 'gemini-3-flash-preview',
+    const responseText = await safeGenerate({
+      model: 'gemini-1.5-flash',
       contents: `
         Atue como um mentor pedagógico do Enem.
         Analise o rascunho de cálculo do aluno para a seguinte questão.
@@ -197,7 +200,7 @@ export const aiService = {
     });
 
     try {
-      return JSON.parse(response.text || '{}');
+      return JSON.parse(responseText || '{}');
     } catch (e) {
       console.error('Failed to analyze scratchpad', e);
       return null;
@@ -213,8 +216,8 @@ export const aiService = {
     const systemPrompt = await cacheService.getAdminConfig('system_prompt') || 
       'Você é o Atlas, o mentor supremo do Next Enem. Ajude o aluno de forma técnica e inspiradora. Se a dúvida for complexa, sugira que ele abra um ticket.';
 
-    const response = await safeGenerate({
-      model: 'gemini-3-flash-preview',
+    const responseText = await safeGenerate({
+      model: 'gemini-1.5-flash',
       contents: `
         ROLE: ${systemPrompt}
         
@@ -231,6 +234,6 @@ export const aiService = {
       `
     });
 
-    return response.text || 'Desculpe, não consegui processar sua dúvida agora.';
+    return responseText || 'Desculpe, não consegui processar sua dúvida agora.';
   }
 };

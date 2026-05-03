@@ -3,19 +3,23 @@ import { cacheService } from './cacheService';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
-const DEFAULT_MODEL = 'gemini-1.5-flash';
+const DEFAULT_MODEL = 'gemini-3-flash-preview';
 
 /**
  * Centralized call with exponential backoff for 429 errors.
  */
-async function safeGenerate(params: any, retries = 5, delay = 2000): Promise<any> {
+async function safeGenerate(params: any, retries = 5, delay = 2000): Promise<string> {
   try {
     const modelName = params.model || DEFAULT_MODEL;
-    const sanitizedParams = {
-      ...params,
-      model: modelName.includes('pro') ? 'gemini-1.5-pro' : 'gemini-1.5-flash'
-    };
-    return await ai.models.generateContent(sanitizedParams);
+    const sanitizedModelName = modelName.includes('pro') ? 'gemini-3.1-pro-preview' : 'gemini-3-flash-preview';
+    
+    const response = await ai.models.generateContent({ 
+      model: sanitizedModelName,
+      contents: params.contents,
+      config: params.config
+    });
+
+    return response.text || '';
   } catch (error: any) {
     const isRateLimit = error?.status === 429 || error?.message?.includes('429') || error?.message?.includes('RESOURCE_EXHAUSTED');
     
@@ -45,8 +49,8 @@ export const mentorService = {
       `Disciplina: ${h.discipline}, Acertos: ${h.score}/${h.total}, Data: ${h.date}`
     ).join('\n');
 
-    const response = await safeGenerate({
-      model: 'gemini-1.5-pro',
+    const responseText = await safeGenerate({
+      model: 'gemini-3.1-pro-preview',
       contents: `
         Você é o Mentor Dinâmico do Next Enem. Seu objetivo é analisar o histórico do aluno e fornecer um Plano de Guerra tático.
         
@@ -68,7 +72,7 @@ export const mentorService = {
     });
 
     try {
-      return JSON.parse(response.text || '{}');
+      return JSON.parse(responseText || '{}');
     } catch (e) {
       console.error('Failed to parse mentor response', e);
       return {
