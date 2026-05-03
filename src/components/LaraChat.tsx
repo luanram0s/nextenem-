@@ -84,8 +84,20 @@ export default function LaraChat() {
       };
       
       setMessages(prev => [...prev, laraMsg]);
-    } catch (e) {
+    } catch (e: any) {
       console.error('Support AI Error:', e);
+      const isRateLimit = e?.status === 429 || e?.message?.includes('429') || e?.message?.includes('RESOURCE_EXHAUSTED');
+      
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: isRateLimit 
+          ? 'Estamos recebendo muitas solicitações no momento devido ao alto volume de alunos. Aguarde um minuto e tente novamente, ou abra um ticket se for urgente.'
+          : 'Desculpe, tive um problema técnico temporário. Pode tentar reformular sua dúvida?',
+        isLara: true,
+        timestamp: new Date(),
+        isTicketOption: true
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsTyping(false);
     }

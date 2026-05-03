@@ -64,14 +64,14 @@ export default function SupportChat() {
 
         <button 
           onClick={() => document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth' })}
-          className="bg-zinc-950 p-8 rounded-2xl border border-zinc-900 hover:shadow-2xl hover:shadow-zinc-950/20 transition-all group flex flex-col items-center text-center"
+          className="bg-white p-8 rounded-2xl border border-zinc-100 hover:shadow-2xl hover:shadow-zinc-200/50 transition-all group flex flex-col items-center text-center shadow-sm"
         >
-          <div className="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center text-white group-hover:scale-110 transition-transform mb-6">
+          <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform mb-6">
             <HelpCircle size={32} />
           </div>
-          <h3 className="text-xl font-black text-white tracking-tight mb-2">Central de FAQ</h3>
-          <p className="text-xs text-zinc-500 font-medium mb-6">Encontre respostas rápidas para as perguntas mais comuns.</p>
-          <span className="text-[10px] font-black text-zinc-400 bg-zinc-900 px-4 py-2 rounded-full uppercase tracking-widest">Acessar Banco de Dados</span>
+          <h3 className="text-xl font-black text-zinc-950 tracking-tight mb-2">Central de FAQ</h3>
+          <p className="text-xs text-zinc-500 font-medium mb-6">Encontres respostas rápidas para as perguntas mais comuns.</p>
+          <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-4 py-2 rounded-full uppercase tracking-widest">Acessar Banco de Dados</span>
         </button>
       </div>
 
@@ -119,32 +119,32 @@ export default function SupportChat() {
         </div>
 
         {/* ACCORDION FAQ */}
-        <div id="faq-section" className="lg:col-span-12 xl:col-span-7 bg-zinc-950 p-10 rounded-2xl border border-zinc-900 shadow-2xl space-y-8">
+        <div id="faq-section" className="lg:col-span-12 xl:col-span-7 bg-white p-10 rounded-2xl border border-zinc-100 shadow-xl shadow-zinc-200/40 space-y-8">
           <div className="flex items-center gap-3">
-             <HelpCircle size={20} className="text-blue-500" />
-             <h3 className="font-black text-white uppercase tracking-widest text-xs">Perguntas Frequentes</h3>
+             <HelpCircle size={20} className="text-blue-600" />
+             <h3 className="font-black text-zinc-950 uppercase tracking-widest text-xs">Perguntas Frequentes</h3>
           </div>
-
+ 
           <div className="space-y-4">
             {faq.map((item, i) => (
               <div 
                 key={i} 
-                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-700 transition-all"
+                className="bg-zinc-50 border border-zinc-100 rounded-2xl overflow-hidden hover:border-blue-600/20 transition-all"
               >
                 <button 
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full p-6 flex items-center justify-between text-left group"
                 >
-                  <span className="text-sm font-bold text-zinc-100 tracking-tight group-hover:text-blue-400 transition-colors">{item.q}</span>
+                  <span className="text-sm font-bold text-zinc-950 tracking-tight group-hover:text-blue-600 transition-colors">{item.q}</span>
                   <ChevronDown 
                     size={18} 
-                    className={`text-zinc-500 transition-transform duration-300 ${openFaq === i ? 'rotate-180 text-blue-500' : ''}`} 
+                    className={`text-zinc-400 transition-transform duration-300 ${openFaq === i ? 'rotate-180 text-blue-600' : ''}`} 
                   />
                 </button>
                 <div className={`transition-all duration-300 ease-in-out ${
-                  openFaq === i ? 'max-h-40 p-6 pt-0 border-t border-zinc-800' : 'max-h-0'
+                  openFaq === i ? 'max-h-40 p-6 pt-0 border-t border-zinc-100' : 'max-h-0'
                 }`}>
-                  <p className="text-xs text-zinc-400 font-medium leading-relaxed px-6 pb-6">
+                  <p className="text-xs text-zinc-600 font-medium leading-relaxed px-6 pb-6">
                     {item.a}
                   </p>
                 </div>
@@ -152,13 +152,13 @@ export default function SupportChat() {
             ))}
           </div>
           
-          <div className="pt-8 mt-8 border-t border-zinc-900">
-             <div className="flex items-center gap-6 text-zinc-500">
+          <div className="pt-8 mt-8 border-t border-zinc-50">
+             <div className="flex items-center gap-6 text-zinc-400">
                <div className="flex items-center gap-2">
                   <Clock size={14} className="text-blue-600" />
                   <span className="text-[10px] font-black uppercase tracking-widest leading-none">Atendimento Seg - Sex</span>
                </div>
-               <span className="text-xs font-black text-zinc-300">08:00 — 22:00</span>
+               <span className="text-xs font-black text-zinc-950">08:00 — 22:00</span>
              </div>
           </div>
         </div>

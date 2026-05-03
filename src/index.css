@@ -13,11 +13,11 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-next-blue: #007BFF;
-  --color-next-dark: #001A33;
+  --color-next-blue: #2563EB;
+  --color-next-dark: #0F172A;
   --color-next-bg: #FFFFFF;
-  --color-next-surface: #F8FAFC; /* Slate-50/100 */
-  --color-next-border: #E2E8F0; /* Slate-200 */
+  --color-next-surface: #F8FAFC;
+  --color-next-border: #F1F5F9;
 }
 
 @layer base {

@@ -48,24 +48,24 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
         }}
         transition={{ type: 'spring', damping: 20, stiffness: 100 }}
         className={cn(
-          "fixed top-0 left-0 h-screen bg-white border-r border-slate-100 z-40 transition-all duration-300 md:translate-x-0 w-[280px]",
+          "fixed top-0 left-0 h-screen bg-white border-r border-zinc-100 z-40 transition-all duration-300 md:translate-x-0 w-[280px] shadow-sm",
           !isOpen && "md:w-[280px]"
         )}
       >
-        <div className="flex flex-col h-full p-8 selection:bg-next-blue selection:text-white">
+        <div className="flex flex-col h-full p-8 selection:bg-blue-600 selection:text-white">
           {/* Logo */}
-          <div className="flex items-center gap-3 mb-12 px-2">
-            <div className="w-10 h-10 bg-next-blue rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
-              <Zap size={22} fill="white" />
+          <div className="flex items-center gap-4 mb-12 px-2">
+            <div className="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-xl shadow-blue-500/20">
+              <Zap size={24} fill="white" />
             </div>
-            <div className="flex font-black text-2xl tracking-tighter italic">
-              <span className="text-next-blue">NEXT</span>
-              <span className="text-slate-900">ENEM</span>
+            <div className="flex font-black text-2xl tracking-[ -0.05em] italic">
+              <span className="text-blue-600">NEXT</span>
+              <span className="text-zinc-950">ENEM</span>
             </div>
           </div>
-
+ 
           {/* Navigation */}
-          <nav className="flex-1 space-y-2">
+          <nav className="flex-1 space-y-3">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -79,15 +79,15 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
                     if (window.innerWidth < 768) setIsOpen(false);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-200 group text-sm font-black uppercase tracking-tight",
+                    "w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-200 group text-[11px] font-black uppercase tracking-[0.05em]",
                     isActive 
-                      ? "bg-next-blue text-white shadow-xl shadow-blue-500/10" 
-                      : "text-slate-400 hover:bg-slate-50 hover:text-next-blue"
+                      ? "bg-blue-600 text-white shadow-xl shadow-blue-600/20" 
+                      : "text-zinc-400 hover:bg-zinc-50 hover:text-blue-600"
                   )}
                 >
                   <Icon size={18} className={cn(
                     "transition-transform group-hover:scale-110",
-                    isActive ? "text-white" : "text-slate-300 group-hover:text-next-blue"
+                    isActive ? "text-white" : "text-zinc-300 group-hover:text-blue-600"
                   )} />
                   <span>{item.label}</span>
                   {isActive && (
@@ -100,7 +100,7 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
               );
             })}
           </nav>
-
+ 
           {/* Logout Button */}
           <button 
             onClick={() => {
@@ -108,9 +108,9 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
               localStorage.clear();
               window.location.reload();
             }}
-            className="mt-auto flex items-center gap-3 p-4 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all font-bold group"
+            className="mt-auto flex items-center gap-3 p-5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest group"
           >
-            <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
+            <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
             <span>Sair da Conta</span>
           </button>
         </div>

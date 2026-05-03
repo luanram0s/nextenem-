@@ -25,14 +25,14 @@ export default function Login({ onLogin }: LoginProps) {
   return (
     <div className="min-h-screen w-full flex bg-white overflow-hidden font-sans">
       {/* Left Side: Branding & Visuals */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-900 relative p-20 flex-col justify-between overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-blue-50 relative p-20 flex-col justify-between overflow-hidden border-r border-zinc-100">
         <div className="relative z-10 flex items-center gap-3">
-          <div className="w-12 h-12 bg-next-blue rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+          <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
             <BrainCircuit size={24} className="text-white" />
           </div>
           <h1 className="text-2xl font-black tracking-tighter uppercase flex items-center">
-            <span className="text-next-blue">NEXT</span>
-            <span className="text-white ml-2">ENEM</span>
+            <span className="text-blue-600">NEXT</span>
+            <span className="text-zinc-950 ml-2">ENEM</span>
           </h1>
         </div>
 
@@ -40,29 +40,29 @@ export default function Login({ onLogin }: LoginProps) {
           <motion.h2 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-6xl font-black text-white leading-tight tracking-tighter"
+            className="text-6xl font-black text-zinc-950 leading-tight tracking-tighter"
           >
-            A Inteligência que <br /> <span className="text-next-blue">Antecipa</span> sua Prova.
+            A Inteligência que <br /> <span className="text-blue-600">Antecipa</span> sua Prova.
           </motion.h2>
-          <p className="text-slate-400 text-lg max-w-md font-medium leading-relaxed">
+          <p className="text-zinc-500 text-lg max-w-md font-medium leading-relaxed">
             Plataforma adaptativa com correção via IA, simuladores TRI e trilhas de aprendizado personalizadas.
           </p>
         </div>
 
         <div className="relative z-10 flex gap-10">
           <div>
-            <p className="text-3xl font-black text-white">82%</p>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Aprovação Média</p>
+            <p className="text-3xl font-black text-zinc-950">82%</p>
+            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">Aprovação Média</p>
           </div>
           <div>
-            <p className="text-3xl font-black text-white">12k+</p>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Alunos Ativos</p>
+            <p className="text-3xl font-black text-zinc-950">12k+</p>
+            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">Alunos Ativos</p>
           </div>
         </div>
 
         {/* Abstract shapes */}
-        <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-next-blue/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-next-blue/10 rounded-full blur-[150px]" />
+        <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-blue-600/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[150px]" />
       </div>
 
       {/* Right Side: Login Form */}

@@ -4,15 +4,26 @@ import { cacheService } from './cacheService';
 // Ensure process.env.GEMINI_API_KEY is available
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
+const DEFAULT_MODEL = 'gemini-1.5-flash';
+
 /**
  * Centralized call with exponential backoff for 429 errors.
  */
-async function safeGenerate(params: any, retries = 2, delay = 1000): Promise<any> {
+async function safeGenerate(params: any, retries = 5, delay = 2000): Promise<any> {
   try {
-    return await ai.models.generateContent(params);
+    const modelName = params.model || DEFAULT_MODEL;
+    // Replace potentially invalid model names with standard ones
+    const sanitizedParams = {
+      ...params,
+      model: modelName.includes('pro') ? 'gemini-1.5-pro' : 'gemini-1.5-flash'
+    };
+    return await ai.models.generateContent(sanitizedParams);
   } catch (error: any) {
-    if (error?.status === 429 && retries > 0) {
-      console.warn(`[Gemini 429] Quota exceeded. Retrying in ${delay}ms...`);
+    // Check for rate limit error (429) or other retryable errors
+    const isRateLimit = error?.status === 429 || error?.message?.includes('429') || error?.message?.includes('RESOURCE_EXHAUSTED');
+    
+    if (isRateLimit && retries > 0) {
+      console.warn(`[Gemini 429] Quota exceeded. Retrying in ${delay}ms... (${retries} retries left)`);
       await new Promise(resolve => setTimeout(resolve, delay));
       return safeGenerate(params, retries - 1, delay * 2);
     }

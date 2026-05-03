@@ -66,10 +66,10 @@ export default function PerformanceAnalytics() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h3 className="text-2xl font-black text-zinc-950 italic tracking-tighter uppercase">Evolução TRI</h3>
-              <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-1">Sua trajetória rumo à aprovação</p>
+              <p className="text-[10px] font-black text-zinc-950 uppercase tracking-[0.2em] mt-1 opacity-60">Sua trajetória rumo à aprovação</p>
             </div>
             <div className="flex gap-2">
-              <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[9px] font-black uppercase rounded-full border border-blue-100">Semanal</span>
+              <span className="px-3 py-1 bg-white text-zinc-950 text-[9px] font-black uppercase rounded-full border border-zinc-100 shadow-sm">Semanal</span>
             </div>
           </div>
 
@@ -125,7 +125,7 @@ export default function PerformanceAnalytics() {
         >
           <div className="mb-6">
             <h3 className="text-sm font-black text-zinc-950 italic tracking-widest uppercase">Equilíbrio de Áreas</h3>
-            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-1">Distribuição de competência</p>
+            <p className="text-[10px] font-black text-zinc-950 uppercase tracking-[0.2em] mt-1 opacity-60">Distribuição de competência</p>
           </div>
 
           <div className="h-[250px] w-full">
@@ -156,16 +156,16 @@ export default function PerformanceAnalytics() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-12 bg-zinc-50 border border-zinc-100 rounded-3xl p-10"
+          className="lg:col-span-12 bg-white border border-zinc-100 rounded-[3rem] p-10 shadow-xl shadow-zinc-200/20"
         >
           <div className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-600/20">
+              <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-600/20">
                 <Brain size={28} />
               </div>
               <div>
                 <h3 className="text-2xl font-black text-zinc-950 italic tracking-tighter">Análise Cognitiva do Lab</h3>
-                <p className="text-xs font-black text-zinc-400 uppercase tracking-widest mt-1">Padrões identificados pela IA em seus rascunhos</p>
+                <p className="text-xs font-black text-zinc-950 uppercase tracking-[0.2em] mt-1 opacity-60">Padrões identificados pela IA em seus rascunhos</p>
               </div>
             </div>
           </div>
@@ -182,13 +182,13 @@ export default function PerformanceAnalytics() {
                   <span className="text-[9px] font-black text-zinc-300 uppercase tracking-widest">{insight.field}</span>
                 </div>
                 <h4 className="text-lg font-black text-zinc-950 mb-2 flex items-center gap-2">
-                  <AlertCircle size={18} className="text-zinc-400 group-hover:text-indigo-600 transition-colors" />
+                  <AlertCircle size={18} className="text-rose-500 transition-colors" />
                   {insight.pattern}
                 </h4>
-                <p className="text-sm text-zinc-500 font-medium leading-relaxed">
+                <p className="text-sm text-zinc-950 font-bold opacity-70 leading-relaxed italic">
                   {insight.description}
                 </p>
-                <div className="mt-6 flex items-center gap-2 text-indigo-600 font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="mt-6 flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
                   <CheckCircle2 size={14} /> Corrigir tática agora
                 </div>
               </div>

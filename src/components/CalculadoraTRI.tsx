@@ -57,20 +57,20 @@ export default function CalculadoraTRI() {
     <div className="space-y-6">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-8 bg-zinc-950 border border-zinc-800 rounded-[2.5rem] text-white flex items-center justify-between group hover:bg-zinc-900 transition-all duration-300 shadow-2xl shadow-zinc-950/20"
+        className="w-full p-8 bg-white border border-zinc-100 rounded-[2.5rem] text-zinc-950 flex items-center justify-between group hover:bg-zinc-50 transition-all duration-300 shadow-xl shadow-zinc-200/40"
       >
         <div className="flex items-center gap-6">
-          <div className="w-14 h-14 bg-blue-600/20 rounded-2xl flex items-center justify-center text-[#007BFF] group-hover:scale-110 transition-transform duration-300">
+          <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300 border border-blue-100">
             <Calculator size={28} />
           </div>
           <div className="text-left">
-            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-1 block">SIMULADOR ELITE NEXT ENEM</span>
+            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-1 block">SIMULADOR ELITE NEXT ENEM</span>
             <h3 className="text-xl font-black tracking-tight uppercase">Simulador de Notas TRI</h3>
-            <p className="text-xs text-zinc-400 font-medium uppercase tracking-widest mt-1">Calcule sua aprovação em tempo real</p>
+            <p className="text-xs text-zinc-500 font-medium uppercase tracking-widest mt-1">Calcule sua aprovação em tempo real</p>
           </div>
         </div>
         <div className={cn("transition-transform duration-500", isOpen ? "rotate-90" : "")}>
-          <ChevronRight size={24} className="text-zinc-600" />
+          <ChevronRight size={24} className="text-zinc-300" />
         </div>
       </button>
 

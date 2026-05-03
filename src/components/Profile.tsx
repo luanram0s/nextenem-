@@ -48,19 +48,19 @@ export default function Profile() {
     <div className="max-w-4xl mx-auto space-y-12 pb-20">
       {/* TOAST NOTIFICATION */}
       <div className={`fixed bottom-10 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${showToast ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-        <div className="bg-zinc-950 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-zinc-800">
-          <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-500">
-            <CheckCircle2 size={18} />
+        <div className="bg-white text-zinc-950 px-8 py-5 rounded-3xl shadow-2xl flex items-center gap-4 border border-zinc-100">
+          <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 border border-emerald-100">
+            <CheckCircle2 size={24} />
           </div>
           <span className="text-xs font-black uppercase tracking-widest">Alterações Salvas com Sucesso</span>
         </div>
       </div>
-
+ 
       <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
         <div className="flex flex-col items-center gap-4">
           <div 
             onClick={handleAvatarClick}
-            className="w-40 h-40 rounded-[2.5rem] bg-zinc-950 border-4 border-white shadow-2xl overflow-hidden relative group cursor-pointer active:scale-95 transition-all"
+            className="w-40 h-40 rounded-[2.5rem] bg-zinc-50 border-8 border-white shadow-2xl overflow-hidden relative group cursor-pointer active:scale-95 transition-all"
           >
             <img 
               src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=200" 
@@ -106,7 +106,7 @@ export default function Profile() {
                 type="text" 
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-zinc-900 text-white rounded-xl p-4 text-sm font-bold border border-zinc-800 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none"
+                className="w-full bg-zinc-50 text-zinc-950 rounded-xl p-4 text-sm font-bold border border-zinc-100 focus:ring-4 focus:ring-blue-600/10 focus:bg-white transition-all outline-none"
               />
             </div>
             
@@ -117,7 +117,7 @@ export default function Profile() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="(00) 00000-0000"
-                className="w-full bg-zinc-900 text-white rounded-xl p-4 text-sm font-bold border border-zinc-800 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none"
+                className="w-full bg-zinc-50 text-zinc-950 rounded-xl p-4 text-sm font-bold border border-zinc-100 focus:ring-4 focus:ring-blue-600/10 focus:bg-white transition-all outline-none"
               />
             </div>
 

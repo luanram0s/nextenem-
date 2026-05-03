@@ -98,10 +98,20 @@ export default function MasterPanel() {
     setUploadStatus('parsing');
     setIsProcessing(true);
     
-    const questions = await aiService.extractQuestionsFromText(proofText);
-    setExtractedQuestions(questions);
-    setUploadStatus('reviewing');
-    setIsProcessing(false);
+    try {
+      const questions = await aiService.extractQuestionsFromText(proofText);
+      setExtractedQuestions(questions);
+      setUploadStatus('reviewing');
+    } catch (e: any) {
+      console.error(e);
+      const isRateLimit = e?.status === 429 || e?.message?.includes('429') || e?.message?.includes('RESOURCE_EXHAUSTED');
+      alert(isRateLimit 
+        ? 'Muitas solicitações ao motor de IA. Aguarde alguns instantes e tente novamente.' 
+        : 'Erro técnico ao processar prova. Verifique o formato do texto.');
+      setUploadStatus('idle');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleSaveToGlobalLibrary = async () => {
