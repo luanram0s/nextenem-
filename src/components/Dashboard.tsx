@@ -157,36 +157,36 @@ const Dashboard = () => {
                   </div>
 
                   {/* CARD PROGRESSO GERAL */}
-                  <div className="bg-zinc-950 p-8 rounded-2xl text-white flex flex-col shadow-2xl shadow-zinc-950/20 hover:scale-[1.01] transition-all duration-300">
+                  <div className="bg-white p-8 rounded-2xl text-zinc-950 flex flex-col shadow-xl border border-zinc-100 hover:scale-[1.01] transition-all duration-300">
                     <div className="flex justify-between items-start mb-8">
-                      <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-blue-400 backdrop-blur-sm">
+                      <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
                         <PieChart size={22} />
                       </div>
                     </div>
-                    <h3 className="text-sm font-black text-white/50 uppercase tracking-widest mb-2">Progresso Geral</h3>
+                    <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-2">Progresso Geral</h3>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-5xl font-black text-white tracking-tighter">74%</span>
+                      <span className="text-5xl font-black text-zinc-950 tracking-tighter">74%</span>
                     </div>
                     <div className="mt-6 space-y-3">
-                      <div className="flex justify-between text-[10px] font-black tracking-widest text-white/40 uppercase">
+                      <div className="flex justify-between text-[10px] font-black tracking-widest text-zinc-400 uppercase">
                         <span>Dominado</span>
                         <span>Total</span>
                       </div>
-                      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                        <div className="h-full bg-blue-600 w-[74%] rounded-full shadow-[0_0_12px_rgba(0,123,255,0.5)]" />
+                      <div className="h-2 bg-zinc-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-600 w-[74%] rounded-full shadow-[0_0_12px_rgba(37,99,235,0.2)]" />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* CALCULADORA TRI INTEGRADA */}
-                <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-2xl">
-                  <header className="mb-8 border-b border-zinc-800 pb-6 flex items-center justify-between">
+                <div className="p-8 rounded-2xl bg-white border border-zinc-200 shadow-xl">
+                  <header className="mb-8 border-b border-zinc-100 pb-6 flex items-center justify-between">
                     <div>
-                      <h3 className="text-xl font-black text-white tracking-tight">Simulador TRI</h3>
+                      <h3 className="text-xl font-black text-zinc-950 tracking-tight">Simulador TRI</h3>
                       <p className="text-zinc-500 text-xs font-medium">Calcule suas chances reais baseado no algoritmo oficial.</p>
                     </div>
-                    <div className="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center text-blue-500 border border-blue-600/20">
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 border border-blue-100">
                       <Calculator size={22} />
                     </div>
                   </header>
@@ -298,9 +298,9 @@ const Dashboard = () => {
 
           <button 
              onClick={() => setActiveTab('biblioteca')}
-             className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'biblioteca' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
+             className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'biblioteca' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
           >
-            <BookOpen size={20} className={activeTab === 'biblioteca' ? 'text-cyan-400' : ''} />
+            <BookOpen size={20} />
             <span className="uppercase tracking-widest text-[10px]">Biblioteca Global</span>
           </button>
 
@@ -324,9 +324,9 @@ const Dashboard = () => {
             {user?.role === 'admin' && (
               <button 
                 onClick={() => navigate('/admin')}
-                className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'master' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
+                className={`w-full flex items-center gap-3 p-4 rounded-2xl font-bold transition-all duration-300 ${activeTab === 'master' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600'}`}
               >
-                <ShieldCheck size={20} className={activeTab === 'master' ? 'text-blue-400' : ''} />
+                <ShieldCheck size={20} />
                 <span className="uppercase tracking-widest text-[10px]">Master Panel</span>
               </button>
             )}

@@ -50,33 +50,33 @@ export default function StudyRoom() {
             <button 
               key={lesson.id}
               onClick={() => setCurrentLesson(lesson)}
-              className={`w-full text-left p-4 rounded-2xl transition-all duration-300 group flex items-center justify-between border ${
+              className={`w-full text-left p-5 rounded-2xl transition-all duration-300 group flex items-center justify-between border ${
                 currentLesson.id === lesson.id 
-                  ? 'bg-zinc-900 border-zinc-900 text-white shadow-xl shadow-zinc-900/20' 
-                  : 'bg-zinc-50 border-zinc-100 hover:bg-zinc-100 text-zinc-600'
+                  ? 'bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-600/20 scale-[1.02]' 
+                  : 'bg-white border-zinc-100 hover:bg-zinc-50 text-zinc-600 shadow-sm'
               }`}
             >
               <div className="flex items-center gap-4">
                 <div className={`${
-                  currentLesson.id === lesson.id ? 'text-blue-400' : lesson.completed ? 'text-emerald-500' : 'text-zinc-300'
+                  currentLesson.id === lesson.id ? 'text-white' : lesson.completed ? 'text-emerald-500' : 'text-zinc-300'
                 }`}>
                   {lesson.completed ? <CheckCircle size={20} /> : <PlayCircle size={20} />}
                 </div>
                 <div>
-                  <h4 className={`text-sm font-bold tracking-tight ${
-                    currentLesson.id === lesson.id ? 'text-white' : 'text-zinc-800'
+                  <h4 className={`text-sm font-black tracking-tight ${
+                    currentLesson.id === lesson.id ? 'text-white' : 'text-zinc-800 underline decoration-transparent group-hover:decoration-blue-600/30'
                   }`}>
                     {lesson.title}
                   </h4>
                   <p className={`text-[10px] font-black uppercase tracking-widest ${
-                    currentLesson.id === lesson.id ? 'text-white/40' : 'text-zinc-400'
+                    currentLesson.id === lesson.id ? 'text-white/60' : 'text-zinc-400'
                   }`}>
                     Aula {lesson.id < 10 ? `0${lesson.id}` : lesson.id}
                   </p>
                 </div>
               </div>
               <span className={`text-[10px] font-black ${
-                currentLesson.id === lesson.id ? 'text-white/40' : 'text-zinc-400'
+                currentLesson.id === lesson.id ? 'text-white/60' : 'text-zinc-400'
               }`}>
                 {lesson.duration}
               </span>
@@ -137,17 +137,17 @@ export default function StudyRoom() {
           </div>
 
           {/* NOTES MODULE */}
-          <div className="flex-1 bg-zinc-950 rounded-3xl p-8 border border-zinc-800 shadow-2xl flex flex-col">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-black text-white tracking-tight flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center text-blue-500">
-                  <BookOpen size={16} />
+          <div className="flex-1 bg-white rounded-[2.5rem] p-10 border border-zinc-100 shadow-xl shadow-zinc-200/40 flex flex-col">
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-xl font-black text-zinc-950 tracking-tight flex items-center gap-4">
+                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 border border-blue-100Shadow-sm">
+                  <BookOpen size={24} />
                 </div>
                 Suas Anotações
               </h3>
               <div className="flex items-center gap-4">
-                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Aula {currentLesson.id}</span>
-                <button className="text-[10px] font-black text-zinc-500 uppercase tracking-widest hover:text-white transition-colors">Limpar</button>
+                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Aula {currentLesson.id}</span>
+                <button className="text-[10px] font-black text-zinc-400 uppercase tracking-widest hover:text-red-500 transition-colors">Limpar Sessão</button>
               </div>
             </div>
             
@@ -155,16 +155,16 @@ export default function StudyRoom() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Comece a digitar os pontos chaves desta aula..."
-              className="flex-1 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 text-zinc-300 font-medium leading-relaxed resize-none placeholder:text-zinc-600 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none mb-6 min-h-[150px]"
+              className="flex-1 bg-zinc-50 border border-zinc-200 rounded-[2rem] p-8 text-zinc-700 font-medium leading-relaxed resize-none placeholder:text-zinc-300 focus:ring-4 focus:ring-blue-600/10 focus:bg-white outline-none transition-all mb-8 shadow-inner"
             />
             
             <div className="flex justify-end gap-4">
-              <button className="px-8 py-4 bg-zinc-800 text-zinc-300 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-700 transition-all">
-                Exportar PDF
+              <button className="px-8 py-5 bg-zinc-100 text-zinc-500 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-200 hover:text-zinc-950 transition-all">
+                Exportar Plano de Estudo
               </button>
-              <button className="px-8 py-4 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
-                <Save size={14} />
-                Salvar Nota
+              <button className="px-10 py-5 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-600/30 hover:bg-blue-700 transition-all flex items-center gap-3">
+                <Save size={18} />
+                Salvar no Perfil
               </button>
             </div>
           </div>

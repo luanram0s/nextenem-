@@ -376,13 +376,13 @@ export default function SimuladosTRI() {
 
         {/* LADO DIREITO: DASHBOARD LOCAL */}
         <div className="lg:col-span-4 h-full flex flex-col overflow-hidden">
-            <div className="bg-zinc-950 rounded-[3rem] p-10 flex flex-col h-full shadow-2xl relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-10 opacity-5 rotate-12 pointer-events-none">
+            <div className="bg-white border border-zinc-100 rounded-[3rem] p-10 flex flex-col h-full shadow-xl shadow-zinc-200/40 relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-10 opacity-[0.03] rotate-12 pointer-events-none text-zinc-950">
                   <PenTool size={200} />
                </div>
 
                <div className="mb-12">
-                  <h3 className="text-white text-xs font-black uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                  <h3 className="text-zinc-950 text-xs font-black uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
                      <span className="w-2 h-2 bg-indigo-600 rounded-full animate-ping" />
                      Seu Alvo
                   </h3>
@@ -397,8 +397,8 @@ export default function SimuladosTRI() {
                               onClick={() => i < mockQuestions.length && setCurrentIdx(i)}
                               className={`aspect-square rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${
                                  active ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30 scale-125 z-10' :
-                                 done ? 'bg-white text-zinc-950' : 
-                                 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'
+                                 done ? 'bg-blue-600 text-white shadow-md' : 
+                                 'bg-zinc-50 text-zinc-400 border border-zinc-100 hover:bg-zinc-100 hover:text-zinc-600'
                               }`}
                            >
                               {num}
@@ -409,17 +409,17 @@ export default function SimuladosTRI() {
                </div>
 
                <div className="mt-auto space-y-6">
-                  <div className="flex items-center justify-between text-white">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Respondidas</span>
-                      <span className="text-2xl font-black">{Object.keys(answers).length}/45</span>
+                  <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Respondidas</span>
+                      <span className="text-2xl font-black text-zinc-950">{Object.keys(answers).length}/45</span>
                   </div>
-                  <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                  <div className="h-2 bg-zinc-100 rounded-full overflow-hidden">
                      <div className="h-full bg-indigo-600 transition-all duration-1000" style={{ width: `${(Object.keys(answers).length/45)*100}%` }} />
                   </div>
 
                   <button 
                     onClick={() => { if(window.confirm('Assinar termo de entrega final?')) setIsFinished(true) }}
-                    className="w-full py-6 bg-white text-zinc-950 rounded-2xl font-black text-sm uppercase tracking-[0.3em] hover:bg-zinc-100 transition-all active:scale-95 mt-10 shadow-2xl"
+                    className="w-full py-6 bg-zinc-950 text-white rounded-2xl font-black text-sm uppercase tracking-[0.3em] hover:bg-zinc-800 transition-all active:scale-95 mt-10 shadow-xl"
                   >
                     ENTREGAR PROVA
                   </button>

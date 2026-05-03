@@ -86,48 +86,48 @@ export default function TheoryDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 md:p-10 font-sans">
+    <div className="min-h-screen bg-white text-zinc-950 p-6 md:p-10 font-sans">
       <header className="max-w-6xl mx-auto mb-12">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-cyan-500/10 rounded-lg">
-            <Zap size={24} className="text-cyan-400" />
+          <div className="p-2 bg-blue-50 rounded-lg">
+            <Zap size={24} className="text-blue-600" />
           </div>
           <h1 className="text-3xl font-black tracking-tighter uppercase italic">
-            Next Enem <span className="text-cyan-400">Library</span>
+            Next Enem <span className="text-blue-600">Library</span>
           </h1>
         </div>
-        <p className="text-zinc-500 text-sm font-bold uppercase tracking-[0.3em] mb-10">
-          Cache Global: 1.2M+ Conteúdos Rápidos
+        <p className="text-zinc-400 text-[10px] font-black uppercase tracking-[0.3em] mb-10">
+          Biblioteca Global • 1.2M+ Conteúdos Consultados
         </p>
 
         <form onSubmit={handleSearch} className="relative group">
           <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
-            <Search size={20} className="text-zinc-600 group-focus-within:text-cyan-400 transition-colors" />
+            <Search size={20} className="text-zinc-300 group-focus-within:text-blue-600 transition-colors" />
           </div>
           <input 
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="O que você precisa aprender hoje? (Ex: Estequiometria)"
-            className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl py-6 pl-16 pr-6 text-lg font-bold text-white placeholder:text-zinc-700 focus:outline-none focus:border-cyan-500/50 transition-all shadow-2xl"
+            className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl py-6 pl-16 pr-6 text-lg font-bold text-zinc-950 placeholder:text-zinc-400 focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all shadow-xl shadow-zinc-200/40"
           />
           <button 
             type="submit"
-            className="absolute right-4 top-1/2 -translate-y-1/2 px-6 py-3 bg-cyan-500 text-zinc-950 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-cyan-400 transition-all active:scale-95"
+            className="absolute right-4 top-1/2 -translate-y-1/2 px-6 py-3 bg-blue-600 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all active:scale-95 shadow-lg shadow-blue-600/20"
           >
             Acessar
           </button>
         </form>
 
-        <div className="flex gap-2 mt-6 overflow-x-auto pb-2 custom-scrollbar">
+        <div className="flex gap-2 mt-6 overflow-x-auto pb-2 custom-scrollbar-light">
           {disciplines.map((d) => (
             <button
               key={d}
               onClick={() => setSelectedDiscipline(d)}
               className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all whitespace-nowrap ${
                 selectedDiscipline === d 
-                ? 'bg-zinc-100 border-zinc-100 text-zinc-950' 
-                : 'border-zinc-800 text-zinc-500 hover:border-zinc-600'
+                ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/20' 
+                : 'bg-white border-zinc-100 text-zinc-400 hover:border-zinc-300 hover:text-zinc-600'
               }`}
             >
               {d}
@@ -138,27 +138,27 @@ export default function TheoryDashboard() {
 
       <main className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xs font-black text-zinc-500 uppercase tracking-[0.4em] flex items-center gap-3">
-            <BookOpen size={16} className="text-cyan-400" />
+          <h2 className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] flex items-center gap-3">
+            <BookOpen size={16} className="text-blue-600" />
             Recorrência Garantida
           </h2>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-cyan-400">
+          <div className="flex items-center gap-2 text-[9px] font-black text-blue-600 tracking-widest uppercase">
             <Layers size={14} />
-            CONTEÚDO INSTANTÂNEO
+            Conteúdo Instantâneo
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="popLayout">
             {isLoading ? (
-              // Cyber Skeletal Loader
+              // Clean Skeletal Loader
               Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="bg-zinc-900/50 border border-zinc-800/50 rounded-2xl p-6 animate-pulse">
-                  <div className="h-4 w-20 bg-zinc-800 rounded mb-4" />
-                  <div className="h-6 w-40 bg-zinc-800 rounded mb-6" />
+                <div key={i} className="bg-zinc-50 border border-zinc-100 rounded-2xl p-6 animate-pulse">
+                  <div className="h-4 w-20 bg-zinc-200 rounded mb-4" />
+                  <div className="h-6 w-40 bg-zinc-200 rounded mb-6" />
                   <div className="space-y-2">
-                    <div className="h-3 w-full bg-zinc-800 rounded" />
-                    <div className="h-3 w-2/3 bg-zinc-800 rounded" />
+                    <div className="h-3 w-full bg-zinc-200 rounded" />
+                    <div className="h-3 w-2/3 bg-zinc-200 rounded" />
                   </div>
                 </div>
               ))
