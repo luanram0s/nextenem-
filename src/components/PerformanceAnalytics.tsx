@@ -65,11 +65,11 @@ export default function PerformanceAnalytics() {
           <div className="absolute top-0 left-0 w-2 h-full bg-blue-600 opacity-20" />
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h3 className="text-2xl font-black text-zinc-950 italic tracking-tighter uppercase">Evolução TRI</h3>
-              <p className="text-[10px] font-black text-zinc-950 uppercase tracking-[0.2em] mt-1 opacity-60">Sua trajetória rumo à aprovação</p>
+              <h3 className="text-2xl font-black text-black italic tracking-tighter uppercase">Evolução TRI</h3>
+              <p className="text-[10px] font-black text-black uppercase tracking-[0.2em] mt-1 opacity-60">Sua trajetória rumo à aprovação</p>
             </div>
             <div className="flex gap-2">
-              <span className="px-3 py-1 bg-white text-zinc-950 text-[9px] font-black uppercase rounded-full border border-zinc-100 shadow-sm">Semanal</span>
+              <span className="px-3 py-1 bg-white text-black text-[9px] font-black uppercase rounded-full border border-zinc-100 shadow-sm">Semanal</span>
             </div>
           </div>
 
@@ -124,8 +124,8 @@ export default function PerformanceAnalytics() {
           className="lg:col-span-4 bg-white border border-zinc-100 rounded-[2.5rem] p-10 shadow-xl shadow-zinc-200/40 flex flex-col justify-between"
         >
           <div className="mb-6">
-            <h3 className="text-sm font-black text-zinc-950 italic tracking-widest uppercase">Equilíbrio de Áreas</h3>
-            <p className="text-[10px] font-black text-zinc-950 uppercase tracking-[0.2em] mt-1 opacity-60">Distribuição de competência</p>
+            <h3 className="text-sm font-black text-black italic tracking-widest uppercase">Equilíbrio de Áreas</h3>
+            <p className="text-[10px] font-black text-black uppercase tracking-[0.2em] mt-1 opacity-60">Distribuição de competência</p>
           </div>
 
           <div className="h-[250px] w-full">
@@ -164,8 +164,8 @@ export default function PerformanceAnalytics() {
                 <Brain size={28} />
               </div>
               <div>
-                <h3 className="text-2xl font-black text-zinc-950 italic tracking-tighter">Análise Cognitiva do Lab</h3>
-                <p className="text-xs font-black text-zinc-950 uppercase tracking-[0.2em] mt-1 opacity-60">Padrões identificados pela IA em seus rascunhos</p>
+                <h3 className="text-2xl font-black text-black italic tracking-tighter">Análise Cognitiva do Lab</h3>
+                <p className="text-xs font-black text-black uppercase tracking-[0.2em] mt-1 opacity-60">Padrões identificados pela IA em seus rascunhos</p>
               </div>
             </div>
           </div>
@@ -181,11 +181,11 @@ export default function PerformanceAnalytics() {
                   </span>
                   <span className="text-[9px] font-black text-zinc-300 uppercase tracking-widest">{insight.field}</span>
                 </div>
-                <h4 className="text-lg font-black text-zinc-950 mb-2 flex items-center gap-2">
+                <h4 className="text-lg font-black text-black mb-2 flex items-center gap-2">
                   <AlertCircle size={18} className="text-rose-500 transition-colors" />
                   {insight.pattern}
                 </h4>
-                <p className="text-sm text-zinc-950 font-bold opacity-70 leading-relaxed italic">
+                <p className="text-sm text-black font-bold opacity-70 leading-relaxed italic">
                   {insight.description}
                 </p>
                 <div className="mt-6 flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">

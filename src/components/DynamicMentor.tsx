@@ -79,25 +79,25 @@ export default function DynamicMentor() {
             <Brain size={28} />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-zinc-950 tracking-tight uppercase italic">Plano de Guerra</h2>
-            <p className="text-[10px] font-black text-zinc-950 uppercase tracking-[0.2em] mt-1 opacity-60">Análise Tática em Tempo Real</p>
+            <h2 className="text-2xl font-black text-black tracking-tight uppercase italic">Plano de Guerra</h2>
+            <p className="text-[10px] font-black text-black uppercase tracking-[0.2em] mt-1 opacity-60">Análise Tática em Tempo Real</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-full border border-zinc-100 shadow-sm">
+        <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-full border border-blue-600 shadow-sm">
           <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" />
-          <span className="text-[10px] font-black text-zinc-950 uppercase tracking-widest">Mentor Ativo</span>
+          <span className="text-[10px] font-black text-black uppercase tracking-widest">Mentor Ativo</span>
         </div>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Summary Column */}
         <div className="lg:col-span-12">
-           <div className="p-8 bg-white border border-zinc-100 rounded-[2rem] flex gap-5 items-start shadow-sm">
+           <div className="p-8 bg-white border border-blue-600/20 rounded-[2rem] flex gap-5 items-start shadow-sm">
              <div className="p-3 bg-blue-50 rounded-xl text-blue-600 border border-blue-100">
                <TrendingUp size={24} />
              </div>
              <div>
-               <p className="text-base font-bold text-zinc-950 leading-relaxed italic">
+               <p className="text-base font-bold text-black leading-relaxed italic">
                  "{brief?.summary}"
                </p>
              </div>
@@ -106,13 +106,13 @@ export default function DynamicMentor() {
 
         {/* Intelligence Grid */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="p-8 bg-white border border-emerald-100 rounded-[2rem] shadow-sm">
+          <div className="p-8 bg-white border border-blue-600/20 rounded-[2rem] shadow-sm">
             <h3 className="text-[10px] font-black text-emerald-700 uppercase tracking-widest flex items-center gap-3 mb-6">
               <Sparkles size={16} /> Pontos de Domínio
             </h3>
             <ul className="space-y-4">
               {brief?.strengths.map((s, i) => (
-                <li key={i} className="text-sm font-bold text-zinc-950 flex items-center gap-4">
+                <li key={i} className="text-sm font-bold text-black flex items-center gap-4">
                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
                   {s}
                 </li>
@@ -122,13 +122,13 @@ export default function DynamicMentor() {
         </div>
 
         <div className="lg:col-span-6 space-y-4">
-          <div className="p-8 bg-white border border-rose-100 rounded-[2rem] shadow-sm">
+          <div className="p-8 bg-white border border-blue-600/20 rounded-[2rem] shadow-sm">
             <h3 className="text-[10px] font-black text-rose-700 uppercase tracking-widest flex items-center gap-3 mb-6">
               <AlertTriangle size={16} /> Pontos de Atenção
             </h3>
             <ul className="space-y-4">
               {brief?.weaknesses.map((w, i) => (
-                <li key={i} className="text-sm font-bold text-zinc-950 flex items-center gap-4">
+                <li key={i} className="text-sm font-bold text-black flex items-center gap-4">
                   <div className="w-1.5 h-1.5 bg-rose-500 rounded-full" />
                   {w}
                 </li>
@@ -139,13 +139,13 @@ export default function DynamicMentor() {
 
         {/* Recommended Topics */}
         <div className="lg:col-span-12">
-          <h3 className="text-[10px] font-black text-zinc-950 uppercase tracking-[0.2em] mb-6 opacity-60">
+          <h3 className="text-[10px] font-black text-black uppercase tracking-[0.2em] mb-6 opacity-60">
             Missões Recomendadas (Biblioteca Global)
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {brief?.recommendedTopics.map((topic, i) => (
-              <div key={i} className="p-6 bg-white border border-zinc-100 rounded-2xl hover:border-blue-600/30 hover:shadow-xl hover:shadow-zinc-200/50 transition-all group cursor-pointer">
-                <p className="text-xs font-black text-zinc-950 group-hover:text-blue-600 transition-colors uppercase tracking-tight">{topic}</p>
+              <div key={i} className="p-6 bg-white border border-blue-100 rounded-2xl hover:border-blue-600 hover:shadow-xl hover:shadow-blue-500/10 transition-all group cursor-pointer">
+                <p className="text-xs font-black text-black group-hover:text-blue-600 transition-colors uppercase tracking-tight">{topic}</p>
               </div>
             ))}
           </div>

@@ -60,7 +60,7 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
             </div>
             <div className="flex font-black text-2xl tracking-[ -0.05em] italic">
               <span className="text-blue-600">NEXT</span>
-              <span className="text-zinc-950">ENEM</span>
+              <span className="text-black">ENEM</span>
             </div>
           </div>
  
@@ -81,19 +81,19 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
                   className={cn(
                     "w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-200 group text-[11px] font-black uppercase tracking-[0.05em]",
                     isActive 
-                      ? "bg-blue-600 text-white shadow-xl shadow-blue-600/20" 
-                      : "text-zinc-400 hover:bg-zinc-50 hover:text-blue-600"
+                      ? "bg-blue-50 text-blue-600 border border-blue-100 shadow-sm" 
+                      : "text-zinc-400 hover:bg-zinc-50 hover:text-black"
                   )}
                 >
                   <Icon size={18} className={cn(
                     "transition-transform group-hover:scale-110",
-                    isActive ? "text-white" : "text-zinc-300 group-hover:text-blue-600"
+                    isActive ? "text-blue-600" : "text-zinc-300 group-hover:text-black"
                   )} />
                   <span>{item.label}</span>
                   {isActive && (
                     <motion.div 
                       layoutId="sidebar-active-indicator"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-white/60"
+                      className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600"
                     />
                   )}
                 </button>

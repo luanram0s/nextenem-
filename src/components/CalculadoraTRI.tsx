@@ -57,16 +57,16 @@ export default function CalculadoraTRI() {
     <div className="space-y-6">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-8 bg-white border border-zinc-100 rounded-[2.5rem] text-zinc-950 flex items-center justify-between group hover:bg-zinc-50 transition-all duration-300 shadow-xl shadow-zinc-200/40"
+        className="w-full p-8 bg-white border border-zinc-100 rounded-[2.5rem] text-black flex items-center justify-between group hover:bg-zinc-50 transition-all duration-300 shadow-xl shadow-zinc-200/40"
       >
         <div className="flex items-center gap-6">
           <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300 border border-blue-100">
             <Calculator size={28} />
           </div>
           <div className="text-left">
-            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-1 block">SIMULADOR ELITE NEXT ENEM</span>
+            <span className="text-[10px] font-black text-black uppercase tracking-[0.2em] mb-1 block opacity-40">SIMULADOR ELITE NEXT ENEM</span>
             <h3 className="text-xl font-black tracking-tight uppercase">Simulador de Notas TRI</h3>
-            <p className="text-xs text-zinc-500 font-medium uppercase tracking-widest mt-1">Calcule sua aprovação em tempo real</p>
+            <p className="text-xs text-black font-medium uppercase tracking-widest mt-1 opacity-50">Calcule sua aprovação em tempo real</p>
           </div>
         </div>
         <div className={cn("transition-transform duration-500", isOpen ? "rotate-90" : "")}>
@@ -85,8 +85,8 @@ export default function CalculadoraTRI() {
             <div className="p-10 bg-white border-2 border-zinc-50 rounded-[3rem] shadow-2xl shadow-zinc-200/50 space-y-12 backdrop-blur-xl bg-white/80">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="space-y-8">
-                  <h4 className="font-black text-zinc-950 uppercase tracking-widest text-xs flex items-center gap-2">
-                    <BarChart3 size={16} className="text-[#007BFF]" /> Ajuste seus acertos
+                  <h4 className="font-black text-black uppercase tracking-widest text-xs flex items-center gap-2">
+                    <BarChart3 size={16} className="text-blue-600" /> Ajuste seus acertos
                   </h4>
                   
                   <div className="space-y-8">
@@ -94,7 +94,7 @@ export default function CalculadoraTRI() {
                       <div key={area.id} className="space-y-4">
                         <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
                           <span className="text-zinc-400">{area.label}</span>
-                          <span className="text-zinc-950 bg-zinc-50 px-3 py-1 rounded-full border border-zinc-100">
+                          <span className="text-black bg-zinc-50 px-3 py-1 rounded-full border border-zinc-100">
                             {scores[area.id]} {area.id === 'red' ? 'pts' : 'acertos'}
                           </span>
                         </div>
@@ -105,7 +105,7 @@ export default function CalculadoraTRI() {
                             max={area.max} 
                             value={scores[area.id]}
                             onChange={(e) => setScores({...scores, [area.id]: parseInt(e.target.value)})}
-                            className="w-full h-2 bg-zinc-100 rounded-full appearance-none cursor-pointer accent-[#007BFF]"
+                            className="w-full h-2 bg-zinc-100 rounded-full appearance-none cursor-pointer accent-blue-600"
                           />
                         </div>
                       </div>
@@ -126,13 +126,13 @@ export default function CalculadoraTRI() {
                           <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Nota Final Estimada</span>
                         </div>
                         <div className="flex items-end gap-3">
-                          <span className="text-8xl font-black text-[#007BFF] tracking-tighter">{notaTotal}</span>
+                          <span className="text-8xl font-black text-blue-600 tracking-tighter">{notaTotal}</span>
                           <span className="text-2xl font-bold text-zinc-300 mb-4 uppercase tracking-widest">pts</span>
                         </div>
                       </div>
 
                       <div className="space-y-4">
-                         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-black opacity-40">
                             <span>Sua Chance em {goal?.institution || 'SIU'}</span>
                             <span>{Math.round((notaTotal / corteEstimado) * 100)}%</span>
                          </div>
@@ -142,7 +142,7 @@ export default function CalculadoraTRI() {
                               style={{ width: `${Math.min((notaTotal / corteEstimado) * 100, 100)}%` }}
                             />
                          </div>
-                         <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 mt-2">
+                         <div className="flex items-center gap-2 text-[10px] font-bold text-black opacity-40 mt-2">
                            <Info size={12} />
                            <span>Nota de corte base estimada: {corteEstimado} pts</span>
                          </div>

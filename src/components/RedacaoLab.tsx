@@ -44,15 +44,15 @@ export default function RedacaoLab() {
             <ChevronLeft size={20} />
           </button>
           <div>
-            <h1 className="text-2xl font-black text-zinc-950 tracking-tighter">Laboratório de Redação</h1>
-            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-1">Simulação Real • Correção instantânea IA</p>
+            <h1 className="text-2xl font-black text-black tracking-tighter">Laboratório de Redação</h1>
+            <p className="text-[10px] font-black text-black uppercase tracking-widest mt-1 opacity-60">Simulação Real • Correção instantânea IA</p>
           </div>
         </div>
         
         <div className="flex items-center gap-6">
           <div className="flex flex-col items-end">
-            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Tempo Restante</span>
-            <div className={`flex items-center gap-2 font-mono text-xl font-black ${timeLeft < 600 ? 'text-rose-500 animate-pulse' : 'text-zinc-950'}`}>
+            <span className="text-[10px] font-black text-black uppercase tracking-widest mb-1 opacity-60">Tempo Restante</span>
+            <div className={`flex items-center gap-2 font-mono text-xl font-black ${timeLeft < 600 ? 'text-rose-500 animate-pulse' : 'text-black'}`}>
               <Clock size={18} />
               {formatTime(timeLeft)}
             </div>
@@ -69,8 +69,8 @@ export default function RedacaoLab() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 min-h-0 overflow-hidden">
         {/* LEFT: PROPOSAL */}
         <div className="lg:col-span-5 bg-zinc-50 rounded-[2.5rem] border border-zinc-200 flex flex-col overflow-hidden shadow-inner">
-          <div className="p-8 border-b border-zinc-200 flex items-center justify-between bg-white/50">
-            <div className="flex items-center gap-4 text-zinc-950">
+          <div className="p-12 border-b border-zinc-200 flex items-center justify-between bg-white/50">
+            <div className="flex items-center gap-4 text-black">
               <FileText size={20} className="text-blue-600" />
               <span className="text-xs font-black uppercase tracking-widest">Texto de Apoio & Proposta</span>
             </div>
@@ -82,25 +82,25 @@ export default function RedacaoLab() {
           <div className="flex-1 overflow-y-auto p-12 space-y-10 custom-scrollbar-light">
             <div className="space-y-6">
               <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.4em]">Tema da Semana</span>
-              <h2 className="text-4xl font-black text-zinc-950 tracking-tighter leading-[1.1]">
+              <h2 className="text-4xl font-black text-black tracking-tighter leading-[1.1]">
                 Caminhos para combater a intolerância religiosa no Brasil.
               </h2>
             </div>
 
-            <div className="space-y-8 text-zinc-500 text-sm font-medium leading-relaxed">
+            <div className="space-y-8 text-black text-sm font-medium leading-relaxed opacity-70">
               <div className="p-8 bg-white rounded-3xl border border-zinc-100 shadow-sm relative">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-600/20 rounded-l-3xl" />
-                <p className="italic mb-6 text-zinc-600">"A liberdade de crença é um direito fundamental garantido pela Constituição de 1988, porém, dados do Ministério dos Direitos Humanos apontam um crescimento de 45% nas denúncias de intolerância..."</p>
-                <cite className="text-[10px] font-black uppercase tracking-widest text-zinc-400">— Fonte: G1 Notícias (Adaptado)</cite>
+                <p className="italic mb-6 text-black opacity-80">"A liberdade de crença é um direito fundamental garantido pela Constituição de 1988, porém, dados do Ministério dos Direitos Humanos apontam um crescimento de 45% nas denúncias de intolerância..."</p>
+                <cite className="text-[10px] font-black uppercase tracking-widest text-black opacity-40">— Fonte: G1 Notícias (Adaptado)</cite>
               </div>
               
               <p>Com base nos textos motivadores e em seus conhecimentos, redija um texto dissertativo-argumentativo em modalidade escrita formal da língua portuguesa sobre o tema proposto.</p>
               
               <div className="space-y-6">
-                <h4 className="text-zinc-950 font-black text-xs uppercase tracking-widest flex items-center gap-3">
+                <h4 className="text-black font-black text-xs uppercase tracking-widest flex items-center gap-3">
                   <Layout size={16} className="text-blue-600" /> Instruções de Prova
                 </h4>
-                <ul className="space-y-3 list-disc list-inside text-xs font-bold text-zinc-400">
+                <ul className="space-y-3 list-disc list-inside text-xs font-bold text-black opacity-40">
                   <li>Seu texto deve ter entre 7 e 30 linhas.</li>
                   <li>Evite cópias literais dos textos motivadores.</li>
                   <li>Utilize uma proposta de intervenção completa.</li>
@@ -138,14 +138,14 @@ export default function RedacaoLab() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Digite sua redação aqui respeitando a estrutura formal..."
-              className="flex-1 bg-transparent p-12 text-zinc-800 font-serif text-xl leading-[2.5rem] resize-none focus:outline-none placeholder:text-zinc-200 custom-scrollbar-light"
+              className="flex-1 bg-transparent p-12 text-black font-serif text-xl leading-[2.5rem] resize-none focus:outline-none placeholder:text-zinc-200 custom-scrollbar-light"
               style={{
                 backgroundImage: 'linear-gradient(transparent, transparent 39px, rgba(0,0,0,0.02) 39px)',
                 backgroundSize: '100% 40px'
               }}
             />
 
-            <div className="absolute top-1/2 right-10 -translate-y-1/2 opacity-[0.02] pointer-events-none text-zinc-950">
+            <div className="absolute top-1/2 right-10 -translate-y-1/2 opacity-[0.02] pointer-events-none text-black">
                <FileText size={400} strokeWidth={1} />
             </div>
           </div>

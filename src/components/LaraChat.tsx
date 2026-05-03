@@ -174,8 +174,8 @@ export default function LaraChat() {
                     className={cn(
                       "max-w-[85%] p-3.5 rounded-2xl text-[13.5px] leading-relaxed shadow-sm border",
                       msg.isLara 
-                        ? "bg-zinc-100 text-black rounded-tl-none border-zinc-200" 
-                        : "bg-blue-50 text-black ml-auto rounded-tr-none border-blue-100"
+                        ? "bg-zinc-100 text-black font-medium rounded-tl-none border-zinc-200" 
+                        : "bg-blue-50 text-black font-medium ml-auto rounded-tr-none border-blue-100"
                     )}
                   >
                     {msg.text}
@@ -233,7 +233,7 @@ export default function LaraChat() {
         }}
         className={cn(
           "w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 relative group border-2 border-white",
-          isOpen ? "bg-white text-zinc-600 border-zinc-200" : "bg-blue-600 hover:bg-blue-700 shadow-blue-500/30"
+          isOpen ? "bg-white text-zinc-600 border-zinc-200" : "bg-blue-600 hover:bg-blue-700 shadow-blue-600/30 shadow-none!"
         )}
       >
         {isOpen ? <X size={28} /> : (

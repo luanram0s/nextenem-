@@ -22,7 +22,7 @@
 
 @layer base {
   body {
-    @apply bg-next-bg text-slate-900 font-sans antialiased selection:bg-next-blue selection:text-white;
+    @apply bg-white text-black font-sans antialiased selection:bg-blue-600 selection:text-white;
   }
 }
 
