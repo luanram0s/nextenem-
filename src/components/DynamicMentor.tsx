@@ -153,12 +153,12 @@ export default function DynamicMentor() {
 
         {/* Tactical Tip */}
         <div className="lg:col-span-12">
-          <div className="p-8 bg-blue-600 rounded-[2rem] text-white shadow-xl shadow-blue-600/30">
+          <div className="p-8 bg-white border-2 border-blue-600 rounded-[2rem] text-black shadow-xl shadow-blue-500/5">
             <div className="flex items-center gap-3 mb-3">
-              <Target size={24} className="text-white/80" />
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em]">Dica de Vaga Garantida</h4>
+              <Target size={24} className="text-blue-600" />
+              <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Dica de Vaga Garantida</h4>
             </div>
-            <p className="text-lg font-black tracking-tight leading-tight uppercase italic underline underline-offset-8 decoration-white/20">
+            <p className="text-lg font-black tracking-tight leading-tight uppercase italic underline underline-offset-8 decoration-blue-600/20">
               {brief?.tacticalTip}
             </p>
           </div>

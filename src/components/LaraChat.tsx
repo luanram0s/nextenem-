@@ -142,22 +142,22 @@ export default function LaraChat() {
             className="absolute bottom-20 right-0 w-[380px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col"
           >
             {/* Header - Total Clean Blue Style */}
-            <div className="bg-blue-600 p-5 text-white flex items-center justify-between shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <User size={20} className="text-white" />
+            <div className="bg-blue-600 p-6 text-white flex items-center justify-between shadow-lg">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center border border-white/20">
+                  <User size={24} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold tracking-tight">Suporte Next Enem</h3>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <div className="w-2 h-2 bg-emerald-400 rounded-full shadow-sm" />
-                    <span className="text-[10px] font-semibold text-blue-100 uppercase tracking-wider">Atendimento Online</span>
+                  <h3 className="text-base font-black tracking-tight uppercase italic">Suporte Next</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full" />
+                    <span className="text-[9px] font-black text-blue-100 uppercase tracking-[0.2em]">Agente Online</span>
                   </div>
                 </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-white"
+                className="p-2 hover:bg-white/10 rounded-xl transition-all text-white border border-transparent hover:border-white/20"
               >
                 <X size={20} />
               </button>
@@ -232,8 +232,7 @@ export default function LaraChat() {
           if (!isOpen) checkNotifications();
         }}
         className={cn(
-          "w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 relative group border-2 border-white",
-          isOpen ? "bg-white text-zinc-600 border-zinc-200" : "bg-blue-600 hover:bg-blue-700 shadow-blue-600/30 shadow-none!"
+          "w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 relative group border-2 border-white bg-blue-600 hover:bg-blue-700 shadow-blue-600/20"
         )}
       >
         {isOpen ? <X size={28} /> : (

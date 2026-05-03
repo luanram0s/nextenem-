@@ -153,11 +153,11 @@ const Dashboard = () => {
                        <span className="text-black font-black opacity-30">/1000</span>
                     </div>
                     <p className="text-xs text-black font-bold mt-4 opacity-70 italic">Último tema: Desafios da Educação</p>
-                    <button className="mt-8 w-full py-4 bg-black text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-600 active:scale-95 transition-all duration-300">Ver Feedback</button>
+                    <button className="mt-8 w-full py-4 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-700 active:scale-95 transition-all duration-300 shadow-lg shadow-blue-600/20">Ver Feedback</button>
                   </div>
 
                   {/* CARD PROGRESSO GERAL */}
-                  <div className="bg-white p-8 rounded-2xl text-black flex flex-col shadow-xl border border-blue-600/10 hover:scale-[1.01] transition-all duration-300">
+                  <div className="bg-white p-8 rounded-2xl text-black flex flex-col shadow-xl border border-zinc-100 hover:scale-[1.01] transition-all duration-300">
                     <div className="flex justify-between items-start mb-8">
                       <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 border border-blue-100">
                         <PieChart size={22} />
@@ -217,10 +217,11 @@ const Dashboard = () => {
                       </div>
                     ))}
                   </div>
-                  <button className="mt-10 w-full py-4 border-2 border-zinc-100 text-black rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all duration-300">Histórico Completo</button>
+                  <button className="mt-10 w-full py-4 border-2 border-blue-600 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all duration-300">Histórico Completo</button>
                 </div>
 
-                <div className="bg-white border-2 border-blue-600 p-8 rounded-2xl text-black shadow-xl shadow-blue-500/5 hover:scale-[1.01] transition-all duration-300 flex flex-col justify-between">
+                <div className="bg-white border-2 border-zinc-100 p-8 rounded-2xl text-black shadow-xl shadow-zinc-200/40 hover:scale-[1.01] transition-all duration-300 flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-600" />
                   <div>
                     <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-6 border border-blue-100">
                       <Trophy size={22} />
@@ -268,7 +269,7 @@ const Dashboard = () => {
         <nav className="space-y-2 flex-1 overflow-y-auto custom-scrollbar pr-2">
           <button 
             onClick={() => setActiveTab('inicio')}
-            className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'inicio' ? 'bg-zinc-50 text-black border border-zinc-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+            className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'inicio' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
           >
             <LayoutDashboard size={20} className={activeTab === 'inicio' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
             <span className="uppercase tracking-[0.1em] text-[10px]">Início</span>
@@ -276,7 +277,7 @@ const Dashboard = () => {
           
           <button 
             onClick={() => setActiveTab('estudo')}
-            className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'estudo' ? 'bg-zinc-50 text-black border border-zinc-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+            className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'estudo' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
           >
             <BookOpen size={20} className={activeTab === 'estudo' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
             <span className="uppercase tracking-[0.1em] text-[10px]">Sala de Estudo</span>
@@ -284,7 +285,7 @@ const Dashboard = () => {
 
           <button 
              onClick={() => setActiveTab('redacao')}
-             className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'redacao' ? 'bg-zinc-50 text-black border border-zinc-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+             className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'redacao' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
           >
             <PenTool size={20} className={activeTab === 'redacao' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
             <span className="uppercase tracking-[0.1em] text-[10px]">Lab de Redação</span>
@@ -292,7 +293,7 @@ const Dashboard = () => {
 
           <button 
              onClick={() => setActiveTab('simulados')}
-             className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'simulados' ? 'bg-zinc-50 text-black border border-zinc-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+             className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'simulados' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
           >
             <ClipboardList size={20} className={activeTab === 'simulados' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
             <span className="uppercase tracking-[0.1em] text-[10px]">Simulados TRI</span>
@@ -300,16 +301,16 @@ const Dashboard = () => {
 
           <button 
              onClick={() => setActiveTab('biblioteca')}
-             className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'biblioteca' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+             className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'biblioteca' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
           >
-            <BookOpen size={20} className={activeTab === 'biblioteca' ? 'text-white' : 'text-zinc-300 group-hover:text-blue-600'} />
+            <BookOpen size={20} className={activeTab === 'biblioteca' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
             <span className="uppercase tracking-[0.1em] text-[10px]">Biblioteca Global</span>
           </button>
 
           <div className="pt-6 mt-6 border-t border-zinc-100 space-y-2">
             <button 
               onClick={() => setActiveTab('perfil')}
-              className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'perfil' ? 'bg-zinc-50 text-black border border-zinc-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+              className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'perfil' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
             >
               <User size={20} className={activeTab === 'perfil' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
               <span className="uppercase tracking-[0.1em] text-[10px]">Meu Perfil</span>
@@ -317,7 +318,7 @@ const Dashboard = () => {
 
             <button 
               onClick={() => setActiveTab('suporte')}
-              className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'suporte' ? 'bg-zinc-50 text-black border border-zinc-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+              className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'suporte' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
             >
               <HelpCircle size={20} className={activeTab === 'suporte' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
               <span className="uppercase tracking-[0.1em] text-[10px]">Suporte</span>
@@ -326,9 +327,9 @@ const Dashboard = () => {
             {user?.role === 'admin' && (
               <button 
                 onClick={() => navigate('/admin')}
-                className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'master' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+                className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'master' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
               >
-                <ShieldCheck size={20} className={activeTab === 'master' ? 'text-white' : 'text-zinc-300 group-hover:text-blue-600'} />
+                <ShieldCheck size={20} className={activeTab === 'master' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
                 <span className="uppercase tracking-[0.1em] text-[10px]">Master Panel</span>
               </button>
             )}

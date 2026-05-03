@@ -160,7 +160,7 @@ export default function PerformanceAnalytics() {
         >
           <div className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-600/20">
+              <div className="w-14 h-14 bg-white border-2 border-blue-600 rounded-2xl flex items-center justify-center text-blue-600 shadow-xl shadow-blue-500/10">
                 <Brain size={28} />
               </div>
               <div>

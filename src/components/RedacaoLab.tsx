@@ -59,7 +59,7 @@ export default function RedacaoLab() {
           </div>
           <button 
             onClick={() => setIsTimerRunning(!isTimerRunning)}
-            className="px-6 py-3 bg-zinc-950 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all"
+            className="px-6 py-3 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-blue-600/20"
           >
             {isTimerRunning ? 'Pausar' : 'Retomar'}
           </button>
@@ -127,9 +127,9 @@ export default function RedacaoLab() {
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex gap-1.5 opacity-20">
-                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-950" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-950" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-950" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-blue-600" />
                 </div>
               </div>
             </div>
