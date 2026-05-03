@@ -69,24 +69,21 @@ const Dashboard = () => {
         return (
           <div className="max-w-6xl mx-auto">
             {/* HEADER COM META */}
-            <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-16">
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
               <div>
-                <h1 className="text-4xl font-black text-black tracking-tight mb-2">Bem-vindo, Futuro Universitário! 👋</h1>
-                <p className="text-black font-bold tracking-tight opacity-70">Sua meta de estudos está ativa e o cronômetro não para.</p>
+                <h1 className="text-3xl font-bold text-black tracking-tight mb-1">Bem-vindo, Futuro Universitário! 👋</h1>
+                <p className="text-gray-600 font-medium tracking-tight">Sua meta de estudos está ativa e o cronômetro não para.</p>
               </div>
               
               {goal && (
-                <div className="bg-white border-2 border-blue-600 text-black p-6 rounded-[2.5rem] shadow-xl shadow-blue-500/5 flex items-center gap-6 min-w-[320px]">
-                  <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 border border-blue-100">
-                    <Target size={28} />
+                <div className="bg-white border border-zinc-200 border-left-4 border-l-blue-600 text-black p-5 rounded-md flex items-center gap-4 min-w-[300px]">
+                  <div className="w-12 h-12 bg-blue-50 rounded-md flex items-center justify-center text-blue-600 border border-blue-100">
+                    <Target size={24} />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-1">Meta Definida</p>
-                    <p className="text-xl font-black leading-none">{goal.course}</p>
-                    <p className="text-xs font-bold text-black opacity-60 mt-1">{goal.institution}</p>
-                  </div>
-                  <div className="ml-auto bg-zinc-50 p-2 rounded-full border border-zinc-100">
-                    <ArrowUpRight size={18} className="text-blue-600" />
+                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-blue-600 mb-1">Meta Definida</p>
+                    <p className="text-lg font-bold leading-none">{goal.course}</p>
+                    <p className="text-[10px] font-bold text-gray-400 mt-1">{goal.institution}</p>
                   </div>
                 </div>
               )}
@@ -253,26 +250,26 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-white text-black font-sans selection:bg-blue-600 selection:text-white">
+    <div className="flex h-screen bg-zinc-50 text-black font-sans selection:bg-blue-600 selection:text-white">
       {/* SIDEBAR */}
-      <aside className="w-72 border-r border-zinc-100 flex flex-col p-8 h-full bg-white shrink-0">
-        <div className="flex items-center gap-3 mb-12 px-2">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-xl shadow-blue-600/20">
-            <Zap size={22} fill="white" />
+      <aside className="w-64 border-r border-zinc-200 flex flex-col p-6 h-full bg-white shrink-0">
+        <div className="flex items-center gap-3 mb-10 px-2">
+          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+            <Zap size={20} fill="white" />
           </div>
-          <div className="flex font-black text-2xl tracking-tighter italic">
+          <div className="flex font-black text-xl tracking-tighter">
             <span className="text-blue-600">NEXT</span>
             <span className="text-black">ENEM</span>
           </div>
         </div>
 
-        <nav className="space-y-2 flex-1 overflow-y-auto custom-scrollbar pr-2">
+        <nav className="space-y-1 flex-1 overflow-y-auto custom-scrollbar pr-1">
           <button 
             onClick={() => setActiveTab('inicio')}
-            className={`w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all duration-300 group ${activeTab === 'inicio' ? 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-50 hover:text-black'}`}
+            className={`w-full flex items-center gap-3 p-3 rounded-md font-bold transition-all duration-200 group ${activeTab === 'inicio' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'text-gray-500 hover:bg-zinc-50 hover:text-black'}`}
           >
-            <LayoutDashboard size={20} className={activeTab === 'inicio' ? 'text-blue-600' : 'text-zinc-300 group-hover:text-blue-600'} />
-            <span className="uppercase tracking-[0.1em] text-[10px]">Início</span>
+            <LayoutDashboard size={18} className={activeTab === 'inicio' ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600'} />
+            <span className="uppercase tracking-wider text-[10px]">Início</span>
           </button>
           
           <button 

@@ -54,23 +54,22 @@ export default function CalculadoraTRI() {
   const corteEstimado = 780; // Placeholder para nota de corte baseada na meta
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-8 bg-white border border-zinc-100 rounded-[2.5rem] text-black flex items-center justify-between group hover:bg-zinc-50 transition-all duration-300 shadow-xl shadow-zinc-200/40"
+        className="w-full p-5 bg-white border border-zinc-200 border-l-4 border-l-blue-600 rounded-md text-black flex items-center justify-between group hover:bg-zinc-50 transition-all duration-200"
       >
-        <div className="flex items-center gap-6">
-          <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300 border border-blue-100">
-            <Calculator size={28} />
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-blue-50 rounded flex items-center justify-center text-blue-600 border border-blue-100">
+            <Calculator size={18} />
           </div>
           <div className="text-left">
-            <span className="text-[10px] font-black text-black uppercase tracking-[0.2em] mb-1 block opacity-40">SIMULADOR ELITE NEXT ENEM</span>
-            <h3 className="text-xl font-black tracking-tight uppercase">Simulador de Notas TRI</h3>
-            <p className="text-xs text-black font-medium uppercase tracking-widest mt-1 opacity-50">Calcule sua aprovação em tempo real</p>
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5 block">Simulador Elite</span>
+            <h3 className="text-base font-bold tracking-tight uppercase italic">Simulador de Notas TRI</h3>
           </div>
         </div>
-        <div className={cn("transition-transform duration-500", isOpen ? "rotate-90" : "")}>
-          <ChevronRight size={24} className="text-zinc-300" />
+        <div className={cn("transition-transform duration-300", isOpen ? "rotate-90" : "")}>
+          <ChevronRight size={18} className="text-zinc-300" />
         </div>
       </button>
 
@@ -82,69 +81,63 @@ export default function CalculadoraTRI() {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="p-10 bg-white border-2 border-zinc-50 rounded-[3rem] shadow-2xl shadow-zinc-200/50 space-y-12 backdrop-blur-xl bg-white/80">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div className="space-y-8">
-                  <h4 className="font-black text-black uppercase tracking-widest text-xs flex items-center gap-2">
-                    <BarChart3 size={16} className="text-blue-600" /> Ajuste seus acertos
+            <div className="p-6 bg-white border border-zinc-200 rounded-md space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <h4 className="font-bold text-black uppercase tracking-widest text-[10px] flex items-center gap-2">
+                    <BarChart3 size={14} className="text-blue-600" /> Ajuste seus acertos
                   </h4>
                   
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     {areas.map((area) => (
-                      <div key={area.id} className="space-y-4">
-                        <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
-                          <span className="text-zinc-400">{area.label}</span>
-                          <span className="text-black bg-zinc-50 px-3 py-1 rounded-full border border-zinc-100">
+                      <div key={area.id} className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+                          <span className="text-gray-500">{area.label}</span>
+                          <span className="text-black bg-zinc-50 px-2 py-0.5 rounded border border-zinc-100 italic">
                             {scores[area.id]} {area.id === 'red' ? 'pts' : 'acertos'}
                           </span>
                         </div>
-                        <div className="relative flex items-center">
-                          <input 
-                            type="range" 
-                            min="0" 
-                            max={area.max} 
-                            value={scores[area.id]}
-                            onChange={(e) => setScores({...scores, [area.id]: parseInt(e.target.value)})}
-                            className="w-full h-2 bg-zinc-100 rounded-full appearance-none cursor-pointer accent-blue-600"
-                          />
-                        </div>
+                        <input 
+                          type="range" 
+                          min="0" 
+                          max={area.max} 
+                          value={scores[area.id]}
+                          onChange={(e) => setScores({...scores, [area.id]: parseInt(e.target.value)})}
+                          className="w-full h-1.5 bg-zinc-100 rounded-full appearance-none cursor-pointer accent-blue-600"
+                        />
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-8">
-                  <div className="bg-zinc-50 p-10 rounded-[2.5rem] border border-zinc-100 relative overflow-hidden h-full flex flex-col justify-center">
-                    <div className="absolute top-0 right-0 p-8 opacity-10">
-                      <TrendingUp size={120} />
-                    </div>
-                    
-                    <div className="relative z-10 space-y-6">
+                <div className="space-y-6">
+                  <div className="bg-zinc-50 p-8 rounded-md border border-zinc-100 flex flex-col justify-center h-full">
+                    <div className="space-y-6">
                       <div>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Sparkles size={18} className="text-amber-500" />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Nota Final Estimada</span>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Sparkles size={14} className="text-blue-600" />
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Nota Final Estimada</span>
                         </div>
-                        <div className="flex items-end gap-3">
-                          <span className="text-8xl font-black text-blue-600 tracking-tighter">{notaTotal}</span>
-                          <span className="text-2xl font-bold text-zinc-300 mb-4 uppercase tracking-widest">pts</span>
+                        <div className="flex items-end gap-2">
+                          <span className="text-6xl font-bold text-blue-600 tracking-tighter">{notaTotal}</span>
+                          <span className="text-lg font-bold text-gray-300 mb-2 uppercase tracking-widest font-mono">pts</span>
                         </div>
                       </div>
 
-                      <div className="space-y-4">
-                         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-black opacity-40">
-                            <span>Sua Chance em {goal?.institution || 'SIU'}</span>
-                            <span>{Math.round((notaTotal / corteEstimado) * 100)}%</span>
+                      <div className="space-y-3">
+                         <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                            <span>Sua Chance em {goal?.institution || 'SISU'}</span>
+                            <span className="text-black">{Math.round((notaTotal / corteEstimado) * 100)}%</span>
                          </div>
-                         <div className="h-3 bg-zinc-200 rounded-full overflow-hidden">
+                         <div className="h-2 bg-zinc-200 rounded-full overflow-hidden">
                             <div 
-                              className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(37,99,235,0.4)]" 
+                              className="h-full bg-blue-600 transition-all duration-1000" 
                               style={{ width: `${Math.min((notaTotal / corteEstimado) * 100, 100)}%` }}
                             />
                          </div>
-                         <div className="flex items-center gap-2 text-[10px] font-bold text-black opacity-40 mt-2">
+                         <div className="flex items-center gap-2 text-[9px] font-bold text-gray-400 mt-2 uppercase tracking-wide">
                            <Info size={12} />
-                           <span>Nota de corte base estimada: {corteEstimado} pts</span>
+                           <span>Corte estimado: {corteEstimado} pts</span>
                          </div>
                       </div>
                     </div>
